@@ -115,7 +115,7 @@ radio/network backend; peripheral register access follows the supplied BSP.
 See [WIRING.md](docs/WIRING.md) before connecting power.
 
 1. Flash diagnostics with wheels raised and motor supply disconnected. Check
-   every GPIO and supply against the wiring table. Record the physical IMU
+   every GPIO and supply against the visual wiring guide. Record the physical IMU
    marking. This driver supports **LSM303DLHC accelerometer at 0x19**, not
    LSM303D or MPU-6050. A device responding at another address is not compatible.
 2. Sweep each IR sensor over white and black at its final height. Record

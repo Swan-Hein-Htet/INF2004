@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1600" height="1100" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1600 1100" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>Robo Pico wiring: 01-overview</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1600" height="1100"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-1100)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="1600" height="1100" style="stroke: rgb(96%,97%,98%); stroke-linecap: butt; stroke-width: 2; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<text x="60" y="1030" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 42px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,2060) scale(1,-1)">01  /  What connects where</text>
+			<text x="60" y="980" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 25px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,1960) scale(1,-1)">Start here. Each group has its own detailed sheet.</text>
+			<text x="60" y="70" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 21px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,140) scale(1,-1)">Follow printed pin labels. Contacts are grouped by function, not physical position.</text>
+			<text x="60" y="29" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 18px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,58) scale(1,-1)">ROBO-PICO datasheet pp. 3–4 + PicoCar slides + current board.c assignments</text>
+			<rect x="560" y="105" width="480" height="795" rx="18" ry="18" style="stroke: rgb(70%,69%,87%); stroke-linecap: butt; stroke-width: 2; fill: rgb(91%,90%,98%); fill-rule: evenodd;"/>
+			<text x="690.283203125" y="852" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 35px;fill: rgb(47%,29%,69%); stroke:none;" transform="translate(0,1704) scale(1,-1)">ROBO PICO</text>
+			<text x="669.140625" y="820" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 20px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,1640) scale(1,-1)">Carrier holding the Pico W</text>
+			<rect x="60" y="575" width="430" height="230" rx="18" ry="18" style="stroke: rgb(80%,84%,89%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="85" y="760" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1520) scale(1,-1)">Three ST188 IR sensors</text>
+			<text x="85" y="707" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1414) scale(1,-1)">Left line  ·  A0</text>
+			<polyline points="490 715, 560 715" style="stroke: rgb(14%,36%,76%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="490" cy="715" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(14%,36%,76%); fill-rule: evenodd;"/>
+			<circle cx="560" cy="715" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(14%,36%,76%); fill-rule: evenodd;"/>
+			<text x="580" y="707" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 21px;fill: rgb(14%,36%,76%); stroke:none;" transform="translate(0,1414) scale(1,-1)">Grove 5 / GP26</text>
+			<text x="85" y="652" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1304) scale(1,-1)">Right line  ·  A0</text>
+			<polyline points="490 660, 560 660" style="stroke: rgb(14%,36%,76%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="490" cy="660" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(14%,36%,76%); fill-rule: evenodd;"/>
+			<circle cx="560" cy="660" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(14%,36%,76%); fill-rule: evenodd;"/>
+			<text x="580" y="652" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 21px;fill: rgb(14%,36%,76%); stroke:none;" transform="translate(0,1304) scale(1,-1)">Grove 6 / GP27</text>
+			<text x="85" y="597" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1194) scale(1,-1)">Barcode  ·  A0</text>
+			<polyline points="490 605, 560 605" style="stroke: rgb(14%,36%,76%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="490" cy="605" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(14%,36%,76%); fill-rule: evenodd;"/>
+			<circle cx="560" cy="605" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(14%,36%,76%); fill-rule: evenodd;"/>
+			<text x="580" y="597" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 21px;fill: rgb(14%,36%,76%); stroke:none;" transform="translate(0,1194) scale(1,-1)">Grove 7 / GP28</text>
+			<rect x="60" y="370" width="430" height="125" rx="18" ry="18" style="stroke: rgb(80%,84%,89%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="85" y="452" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,904) scale(1,-1)">GY-511 / OKY3231-2</text>
+			<text x="85" y="407" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 25px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,814) scale(1,-1)">SDA + SCL</text>
+			<polyline points="490 422, 560 422" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="490" cy="422" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="560" cy="422" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<text x="580" y="436" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 22px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,872) scale(1,-1)">Grove 3</text>
+			<text x="580" y="400" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 22px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,800) scale(1,-1)">GP4 / GP5</text>
+			<rect x="60" y="160" width="430" height="125" rx="18" ry="18" style="stroke: rgb(80%,84%,89%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="85" y="242" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,484) scale(1,-1)">HC-SR04 ultrasonic</text>
+			<text x="85" y="197" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 25px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,394) scale(1,-1)">TRIG + divided ECHO</text>
+			<polyline points="490 212, 560 212" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="490" cy="212" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="560" cy="212" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<text x="580" y="225" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 22px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,450) scale(1,-1)">Grove 2</text>
+			<text x="580" y="189" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 22px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,378) scale(1,-1)">GP2 / GP3</text>
+			<rect x="1110" y="575" width="430" height="230" rx="18" ry="18" style="stroke: rgb(80%,84%,89%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="1135" y="760" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1520) scale(1,-1)">Two encoder motors</text>
+			<text x="932.5" y="707" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 20px;fill: rgb(47%,29%,69%); stroke:none;" transform="translate(0,1414) scale(1,-1)">Grove 4</text>
+			<polyline points="1040 715, 1110 715" style="stroke: rgb(47%,29%,69%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="1040" cy="715" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(47%,29%,69%); fill-rule: evenodd;"/>
+			<circle cx="1110" cy="715" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(47%,29%,69%); fill-rule: evenodd;"/>
+			<text x="1135" y="707" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 23px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1414) scale(1,-1)">A: GP16 / GP17</text>
+			<text x="855.439453125" y="652" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 20px;fill: rgb(47%,29%,69%); stroke:none;" transform="translate(0,1304) scale(1,-1)">GPIO breakout</text>
+			<polyline points="1040 660, 1110 660" style="stroke: rgb(47%,29%,69%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="1040" cy="660" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(47%,29%,69%); fill-rule: evenodd;"/>
+			<circle cx="1110" cy="660" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(47%,29%,69%); fill-rule: evenodd;"/>
+			<text x="1135" y="652" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 23px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1304) scale(1,-1)">B: GP13 / GP19</text>
+			<text x="816.9921875" y="597" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 20px;fill: rgb(47%,29%,69%); stroke:none;" transform="translate(0,1194) scale(1,-1)">M1 / M2 terminals</text>
+			<polyline points="1040 605, 1110 605" style="stroke: rgb(47%,29%,69%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="1040" cy="605" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(47%,29%,69%); fill-rule: evenodd;"/>
+			<circle cx="1110" cy="605" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(47%,29%,69%); fill-rule: evenodd;"/>
+			<text x="1135" y="597" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 23px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1194) scale(1,-1)">Motor power leads</text>
+			<rect x="1110" y="370" width="430" height="125" rx="18" ry="18" style="stroke: rgb(80%,84%,89%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="1135" y="452" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,904) scale(1,-1)">SG90 scanner servo</text>
+			<text x="1135" y="407" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 25px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,814) scale(1,-1)">Signal + V+ + GND</text>
+			<polyline points="1040 422, 1110 422" style="stroke: rgb(47%,29%,69%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="1040" cy="422" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(47%,29%,69%); fill-rule: evenodd;"/>
+			<circle cx="1110" cy="422" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(47%,29%,69%); fill-rule: evenodd;"/>
+			<text x="866.0751953125" y="436" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 22px;fill: rgb(47%,29%,69%); stroke:none;" transform="translate(0,872) scale(1,-1)">Servo port 1</text>
+			<text x="889.6220703125" y="400" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 22px;fill: rgb(47%,29%,69%); stroke:none;" transform="translate(0,800) scale(1,-1)">GP12 signal</text>
+			<rect x="1110" y="160" width="430" height="125" rx="18" ry="18" style="stroke: rgb(80%,84%,89%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="1135" y="242" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 25px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,484) scale(1,-1)">UART adapter (optional)</text>
+			<text x="1135" y="197" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 25px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,394) scale(1,-1)">3.3 V logic only</text>
+			<polyline points="1040 212, 1110 212" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="1040" cy="212" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="1110" cy="212" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<text x="923.75" y="225" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 22px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,450) scale(1,-1)">Grove 1</text>
+			<text x="909.978515625" y="189" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 22px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,378) scale(1,-1)">GP0 / GP1</text>
+			<text x="601.142578125" y="131" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 20px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,262) scale(1,-1)">Buttons GP20 / GP21 are already wired.</text>
+			<text x="60" y="920" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,1840) scale(1,-1)">Signal overview only. Follow sheet 07 for power and common ground.</text>
+		</g>
+	</g>
+</svg>

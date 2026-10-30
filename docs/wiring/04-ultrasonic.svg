@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1600" height="1100" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1600 1100" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>Robo Pico wiring: 04-ultrasonic</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1600" height="1100"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-1100)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="1600" height="1100" style="stroke: rgb(96%,97%,98%); stroke-linecap: butt; stroke-width: 2; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<text x="60" y="1030" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 42px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,2060) scale(1,-1)">04  /  HC-SR04: ECHO needs two resistors</text>
+			<text x="60" y="980" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 25px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,1960) scale(1,-1)">HC-SR04 supply = regulated nominal 5 V. Pico signal level = 3.3 V.</text>
+			<text x="60" y="70" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 21px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,140) scale(1,-1)">Follow printed pin labels. Contacts are grouped by function, not physical position.</text>
+			<text x="60" y="29" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 18px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,58) scale(1,-1)">HC-SR04 datasheet: 5 V supply; RP2040/Robo Pico input limits; divider 15 / (10 + 15)</text>
+			<rect x="70" y="450" width="425" height="425" rx="18" ry="18" style="stroke: rgb(80%,84%,89%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="95" y="830" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 30px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1660) scale(1,-1)">HC-SR04 module</text>
+			<rect x="1110" y="450" width="420" height="425" rx="18" ry="18" style="stroke: rgb(66%,74%,90%); stroke-linecap: butt; stroke-width: 2; fill: rgb(91%,94%,100%); fill-rule: evenodd;"/>
+			<text x="1135" y="830" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1660) scale(1,-1)">Robo Pico · Grove 2</text>
+			<text x="405.86181640625" y="747" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 27px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1494) scale(1,-1)">TRIG</text>
+			<text x="1135" y="747" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 27px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1494) scale(1,-1)">GP2</text>
+			<polyline points="495 755, 1110 755" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="495" cy="755" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="1110" cy="755" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<text x="392.533203125" y="637" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 27px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1274) scale(1,-1)">ECHO</text>
+			<text x="1135" y="637" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 27px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1274) scale(1,-1)">GP3</text>
+			<polyline points="495 645, 610 645" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="495" cy="645" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="610" cy="645" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<rect x="610" y="622" width="165" height="46" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="655.330078125" y="634" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 25px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1268) scale(1,-1)">10 kΩ</text>
+			<polyline points="775 645, 1110 645" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="775" cy="645" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="1110" cy="645" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<polyline points="925 645, 925 585" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="925" cy="645" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="925" cy="585" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<rect x="900" y="485" width="50" height="100" style="stroke: rgb(20%,25%,32%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="974" y="525" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 25px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,1050) scale(1,-1)">15 kΩ</text>
+			<text x="413.82470703125" y="527" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 27px;fill: rgb(70%,35%,3%); stroke:none;" transform="translate(0,1054) scale(1,-1)">VCC</text>
+			<polyline points="495 535, 550 535" style="stroke: rgb(70%,35%,3%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="495" cy="535" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(70%,35%,3%); fill-rule: evenodd;"/>
+			<circle cx="550" cy="535" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(70%,35%,3%); fill-rule: evenodd;"/>
+			<rect x="550" y="505" width="315" height="65" rx="18" ry="18" style="stroke: rgb(88%,70%,38%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,95%,86%); fill-rule: evenodd;"/>
+			<text x="570" y="542" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 23px;fill: rgb(70%,35%,3%); stroke:none;" transform="translate(0,1084) scale(1,-1)">REGULATED +5 V</text>
+			<text x="570" y="515" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 19px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,1030) scale(1,-1)">Supply output</text>
+			<polyline points="750 505, 750 485" style="stroke: rgb(20%,25%,32%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="750" cy="505" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<circle cx="750" cy="485" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<text x="1135" y="477" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 27px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,954) scale(1,-1)">GND</text>
+			<text x="408.08984375" y="477" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 27px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,954) scale(1,-1)">GND</text>
+			<polyline points="495 485, 1110 485" style="stroke: rgb(20%,25%,32%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="495" cy="485" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<circle cx="1110" cy="485" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<polyline points="925 485, 925 485" style="stroke: rgb(20%,25%,32%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="925" cy="485" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<circle cx="925" cy="485" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<text x="680" y="397" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,794) scale(1,-1)">COMMON GROUND</text>
+			<text x="344.04150390624994" y="310" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 26px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,620) scale(1,-1)">Supply GND, sensor GND and Robo Pico GND are connected together.</text>
+			<text x="1135" y="460" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 21px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,920) scale(1,-1)">+3V3: leave unused</text>
+			<text x="539.22265625" y="693" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1386) scale(1,-1)">At this junction: 5.0 V ECHO becomes 3.0 V</text>
+			<rect x="60" y="94" width="1480" height="96" rx="18" ry="18" style="stroke: rgb(88%,70%,38%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,95%,86%); fill-rule: evenodd;"/>
+			<text x="85" y="155" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 25px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,310) scale(1,-1)">ECHO → 10 kΩ → GP3 junction; 15 kΩ from that same junction to GND.</text>
+			<text x="85" y="118" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 22px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,236) scale(1,-1)">Do not connect ECHO directly to GP3. Servo V+ is only an alternative if verified as a suitable 5 V supply.</text>
+		</g>
+	</g>
+</svg>

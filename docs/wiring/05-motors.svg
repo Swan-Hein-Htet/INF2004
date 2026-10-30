@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1600" height="1100" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1600 1100" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>Robo Pico wiring: 05-motors</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1600" height="1100"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-1100)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="1600" height="1100" style="stroke: rgb(96%,97%,98%); stroke-linecap: butt; stroke-width: 2; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<text x="60" y="1030" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 42px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,2060) scale(1,-1)">05  /  Encoder motors: six wires per motor</text>
+			<text x="60" y="980" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 25px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,1960) scale(1,-1)">Motor-connector numbers are from the PicoCar diagram. Confirm its orientation on your unit.</text>
+			<text x="60" y="70" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 21px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,140) scale(1,-1)">Follow printed pin labels. Contacts are grouped by function, not physical position.</text>
+			<text x="60" y="29" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 18px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,58) scale(1,-1)">PicoCar slide 2: PH2.0-6P functions; owner marking KH2.0-6P differs; ROBO-PICO M1/M2 mapping</text>
+			<rect x="70" y="530" width="475" height="390" rx="18" ry="18" style="stroke: rgb(80%,84%,89%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="1055" y="530" width="475" height="390" rx="18" ry="18" style="stroke: rgb(66%,74%,90%); stroke-linecap: butt; stroke-width: 2; fill: rgb(91%,94%,100%); fill-rule: evenodd;"/>
+			<text x="95" y="877" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 28px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1754) scale(1,-1)">LEFT motor + encoder</text>
+			<text x="1080" y="877" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1754) scale(1,-1)">Robo Pico carrier</text>
+			<text x="306.203125" y="812" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,1624) scale(1,-1)">1  ·  encoder GND</text>
+			<text x="1080" y="812" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,1624) scale(1,-1)">Grove 4 / GND</text>
+			<polyline points="545 820, 1055 820" style="stroke: rgb(20%,25%,32%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="820" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="820" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<text x="344.81640625" y="757" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1514) scale(1,-1)">2  ·  encoder A</text>
+			<text x="1080" y="757" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1514) scale(1,-1)">Grove 4 / GP16</text>
+			<polyline points="545 765, 1055 765" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="765" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="765" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<text x="344.76953125" y="702" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1404) scale(1,-1)">3  ·  encoder B</text>
+			<text x="1080" y="702" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1404) scale(1,-1)">GPIO breakout / GP13</text>
+			<polyline points="545 710, 1055 710" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="710" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="710" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<text x="282.1796875" y="647" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,1294) scale(1,-1)">4  ·  encoder supply</text>
+			<text x="1080" y="647" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,1294) scale(1,-1)">Grove 4 / +3V3 *</text>
+			<polyline points="545 655, 1055 655" style="stroke: rgb(78%,23%,31%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="655" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(78%,23%,31%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="655" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(78%,23%,31%); fill-rule: evenodd;"/>
+			<text x="307.8203125" y="592" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(47%,29%,69%); stroke:none;" transform="translate(0,1184) scale(1,-1)">5  ·  motor + lead</text>
+			<text x="1080" y="592" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(47%,29%,69%); stroke:none;" transform="translate(0,1184) scale(1,-1)">M1A motor terminal</text>
+			<polyline points="545 600, 1055 600" style="stroke: rgb(47%,29%,69%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="600" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(47%,29%,69%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="600" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(47%,29%,69%); fill-rule: evenodd;"/>
+			<text x="307.8203125" y="537" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(47%,29%,69%); stroke:none;" transform="translate(0,1074) scale(1,-1)">6  ·  motor − lead</text>
+			<text x="1080" y="537" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(47%,29%,69%); stroke:none;" transform="translate(0,1074) scale(1,-1)">M1B motor terminal</text>
+			<polyline points="545 545, 1055 545" style="stroke: rgb(47%,29%,69%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="545" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(47%,29%,69%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="545" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(47%,29%,69%); fill-rule: evenodd;"/>
+			<rect x="70" y="135" width="475" height="390" rx="18" ry="18" style="stroke: rgb(80%,84%,89%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="1055" y="135" width="475" height="390" rx="18" ry="18" style="stroke: rgb(66%,74%,90%); stroke-linecap: butt; stroke-width: 2; fill: rgb(91%,94%,100%); fill-rule: evenodd;"/>
+			<text x="95" y="482" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 28px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,964) scale(1,-1)">RIGHT motor + encoder</text>
+			<text x="1080" y="482" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,964) scale(1,-1)">Robo Pico carrier</text>
+			<text x="306.203125" y="417" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,834) scale(1,-1)">1  ·  encoder GND</text>
+			<text x="1080" y="417" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,834) scale(1,-1)">Grove 4 / GND</text>
+			<polyline points="545 425, 1055 425" style="stroke: rgb(20%,25%,32%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="425" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="425" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<text x="344.81640625" y="362" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,724) scale(1,-1)">2  ·  encoder A</text>
+			<text x="1080" y="362" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,724) scale(1,-1)">Grove 4 / GP17</text>
+			<polyline points="545 370, 1055 370" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="370" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="370" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<text x="344.76953125" y="307" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,614) scale(1,-1)">3  ·  encoder B</text>
+			<text x="1080" y="307" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,614) scale(1,-1)">GPIO breakout / GP19</text>
+			<polyline points="545 315, 1055 315" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="315" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="315" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<text x="282.1796875" y="252" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,504) scale(1,-1)">4  ·  encoder supply</text>
+			<text x="1080" y="252" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,504) scale(1,-1)">Grove 4 / +3V3 *</text>
+			<polyline points="545 260, 1055 260" style="stroke: rgb(78%,23%,31%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="260" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(78%,23%,31%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="260" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(78%,23%,31%); fill-rule: evenodd;"/>
+			<text x="307.8203125" y="197" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(47%,29%,69%); stroke:none;" transform="translate(0,394) scale(1,-1)">5  ·  motor + lead</text>
+			<text x="1080" y="197" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(47%,29%,69%); stroke:none;" transform="translate(0,394) scale(1,-1)">M2A motor terminal</text>
+			<polyline points="545 205, 1055 205" style="stroke: rgb(47%,29%,69%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="205" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(47%,29%,69%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="205" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(47%,29%,69%); fill-rule: evenodd;"/>
+			<text x="307.8203125" y="142" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(47%,29%,69%); stroke:none;" transform="translate(0,284) scale(1,-1)">6  ·  motor − lead</text>
+			<text x="1080" y="142" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(47%,29%,69%); stroke:none;" transform="translate(0,284) scale(1,-1)">M2B motor terminal</text>
+			<polyline points="545 150, 1055 150" style="stroke: rgb(47%,29%,69%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="150" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(47%,29%,69%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="150" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(47%,29%,69%); fill-rule: evenodd;"/>
+			<text x="60" y="98" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 23px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,196) scale(1,-1)">* 3.3 V encoder supply is proposed in the slides; verify the actual encoder's voltage/current rating.</text>
+		</g>
+	</g>
+</svg>

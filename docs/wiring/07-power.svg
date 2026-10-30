@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1600" height="1100" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1600 1100" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>Robo Pico wiring: 07-power</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1600" height="1100"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-1100)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="1600" height="1100" style="stroke: rgb(96%,97%,98%); stroke-linecap: butt; stroke-width: 2; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<text x="60" y="1030" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 42px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,2060) scale(1,-1)">07  /  Power: keep these supplies distinct</text>
+			<text x="60" y="980" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 25px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,1960) scale(1,-1)">All sensor, controller and external-supply grounds must share common GND.</text>
+			<text x="60" y="70" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 21px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,140) scale(1,-1)">Follow printed pin labels. Contacts are grouped by function, not physical position.</text>
+			<text x="60" y="29" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 18px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,58) scale(1,-1)">ROBO-PICO power limits: input 3.6–6 V, Grove 3V3 total 300 mA, motor 1 A continuous / channel</text>
+			<rect x="60" y="635" width="610" height="275" rx="18" ry="18" style="stroke: rgb(87%,63%,67%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,92%,94%); fill-rule: evenodd;"/>
+			<text x="90" y="865" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 32px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,1730) scale(1,-1)">GROVE +3V3</text>
+			<text x="90" y="815" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1630) scale(1,-1)">ST188 VCC × 3 (3.3 V-compatible boards)</text>
+			<text x="90" y="772" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1544) scale(1,-1)">GY-511 VIN (module input rated 3–5 V)</text>
+			<text x="90" y="729" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1458) scale(1,-1)">Encoder pin 4 × 2, only if rated for 3.3 V</text>
+			<text x="90" y="670" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 23px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,1340) scale(1,-1)">Total Grove 3.3 V output budget: 300 mA</text>
+			<rect x="760" y="635" width="780" height="275" rx="18" ry="18" style="stroke: rgb(88%,70%,38%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,95%,86%); fill-rule: evenodd;"/>
+			<text x="790" y="865" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 32px;fill: rgb(70%,35%,3%); stroke:none;" transform="translate(0,1730) scale(1,-1)">REGULATED NOMINAL 5 V</text>
+			<text x="790" y="815" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1630) scale(1,-1)">HC-SR04 VCC</text>
+			<text x="790" y="772" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1544) scale(1,-1)">Use an external regulated supply, OR servo V+ only</text>
+			<text x="790" y="729" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1458) scale(1,-1)">after measuring a suitable voltage under motor load.</text>
+			<text x="790" y="670" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 23px;fill: rgb(70%,35%,3%); stroke:none;" transform="translate(0,1340) scale(1,-1)">Not Grove +3V3. Keep the ECHO divider installed.</text>
+			<rect x="60" y="295" width="610" height="285" rx="18" ry="18" style="stroke: rgb(75%,67%,85%); stroke-linecap: butt; stroke-width: 2; fill: rgb(93%,90%,97%); fill-rule: evenodd;"/>
+			<text x="90" y="535" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 31px;fill: rgb(47%,29%,69%); stroke:none;" transform="translate(0,1070) scale(1,-1)">SERVO V+ / MOTOR DRIVER</text>
+			<text x="90" y="485" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 23px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,970) scale(1,-1)">Servo V+ follows the board's power source.</text>
+			<text x="90" y="445" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 23px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,890) scale(1,-1)">It is not a fixed 5 V regulator output.</text>
+			<text x="90" y="405" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 23px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,810) scale(1,-1)">SG90 must tolerate the measured servo supply.</text>
+			<text x="90" y="365" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 23px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,730) scale(1,-1)">Motor leads go to M1/M2, never directly to GPIO.</text>
+			<rect x="760" y="295" width="780" height="285" rx="18" ry="18" style="stroke: rgb(66%,74%,90%); stroke-linecap: butt; stroke-width: 2; fill: rgb(91%,94%,100%); fill-rule: evenodd;"/>
+			<text x="790" y="535" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 31px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1070) scale(1,-1)">ROBO PICO BOARD INPUT</text>
+			<text x="790" y="485" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 23px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,970) scale(1,-1)">Datasheet input range: 3.6–6 V.</text>
+			<text x="790" y="445" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 23px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,890) scale(1,-1)">Use its intended power connector and correct polarity.</text>
+			<text x="790" y="405" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 23px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,810) scale(1,-1)">M1 / M2: 1 A continuous per channel, 1.5 A &lt;5 s peak.</text>
+			<text x="790" y="365" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 23px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,730) scale(1,-1)">Do not tie an external 5 V output to Grove +3V3.</text>
+			<polyline points="120 225, 1480 225" style="stroke: rgb(20%,25%,32%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="120" cy="225" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<circle cx="1480" cy="225" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<polyline points="150 225, 150 165" style="stroke: rgb(20%,25%,32%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="150" cy="225" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<circle cx="150" cy="165" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<text x="150" y="122" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 22px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,244) scale(1,-1)">ROBO PICO GND</text>
+			<polyline points="600 225, 600 165" style="stroke: rgb(20%,25%,32%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="600" cy="225" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<circle cx="600" cy="165" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<text x="600" y="122" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 22px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,244) scale(1,-1)">ALL MODULES GND</text>
+			<polyline points="1120 225, 1120 165" style="stroke: rgb(20%,25%,32%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="1120" cy="225" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<circle cx="1120" cy="165" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<text x="1120" y="122" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 22px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,244) scale(1,-1)">EXTERNAL 5 V SUPPLY GND</text>
+			<text x="621.157958984375" y="250" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,500) scale(1,-1)">ONE COMMON GROUND</text>
+		</g>
+	</g>
+</svg>

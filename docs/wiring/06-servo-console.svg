@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1600" height="1100" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1600 1100" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>Robo Pico wiring: 06-servo-console</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1600" height="1100"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-1100)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="1600" height="1100" style="stroke: rgb(96%,97%,98%); stroke-linecap: butt; stroke-width: 2; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<text x="60" y="1030" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 42px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,2060) scale(1,-1)">06  /  SG90 servo + optional console</text>
+			<text x="60" y="980" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 25px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,1960) scale(1,-1)">The START/RESET and E-STOP buttons are already connected on the carrier.</text>
+			<text x="60" y="70" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 21px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,140) scale(1,-1)">Follow printed pin labels. Contacts are grouped by function, not physical position.</text>
+			<text x="60" y="29" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 18px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,58) scale(1,-1)">PicoCar slide 3 lead identification + ROBO-PICO servo/UART/button mapping</text>
+			<rect x="70" y="685" width="475" height="240" rx="18" ry="18" style="stroke: rgb(80%,84%,89%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="1055" y="685" width="475" height="240" rx="18" ry="18" style="stroke: rgb(66%,74%,90%); stroke-linecap: butt; stroke-width: 2; fill: rgb(91%,94%,100%); fill-rule: evenodd;"/>
+			<text x="95" y="882" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 28px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1764) scale(1,-1)">SG90 scanner servo</text>
+			<text x="1080" y="882" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1764) scale(1,-1)">Robo Pico · Servo port 1</text>
+			<text x="239.93359375" y="817" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(47%,29%,69%); stroke:none;" transform="translate(0,1634) scale(1,-1)">Orange  ·  signal / PWM</text>
+			<text x="1080" y="817" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(47%,29%,69%); stroke:none;" transform="translate(0,1634) scale(1,-1)">S / GP12</text>
+			<polyline points="545 825, 1055 825" style="stroke: rgb(47%,29%,69%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="825" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(47%,29%,69%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="825" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(47%,29%,69%); fill-rule: evenodd;"/>
+			<text x="254.359375" y="762" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,1524) scale(1,-1)">Red  ·  positive supply</text>
+			<text x="1080" y="762" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,1524) scale(1,-1)">V+  ·  verify servo rating</text>
+			<polyline points="545 770, 1055 770" style="stroke: rgb(78%,23%,31%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="770" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(78%,23%,31%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="770" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(78%,23%,31%); fill-rule: evenodd;"/>
+			<text x="320.55859375" y="707" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,1414) scale(1,-1)">Brown  ·  ground</text>
+			<text x="1080" y="707" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,1414) scale(1,-1)">− / GND</text>
+			<polyline points="545 715, 1055 715" style="stroke: rgb(20%,25%,32%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="715" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="715" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<rect x="70" y="395" width="475" height="240" rx="18" ry="18" style="stroke: rgb(80%,84%,89%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="1055" y="395" width="475" height="240" rx="18" ry="18" style="stroke: rgb(66%,74%,90%); stroke-linecap: butt; stroke-width: 2; fill: rgb(91%,94%,100%); fill-rule: evenodd;"/>
+			<text x="95" y="592" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 28px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1184) scale(1,-1)">UART adapter (optional)</text>
+			<text x="1080" y="592" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1184) scale(1,-1)">Robo Pico · Grove 1</text>
+			<text x="246.44921875" y="527" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1054) scale(1,-1)">RX  ·  adapter receives</text>
+			<text x="1080" y="527" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1054) scale(1,-1)">GP0  ·  Pico TX</text>
+			<polyline points="545 535, 1055 535" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="535" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="535" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<text x="353.48828125" y="472" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,944) scale(1,-1)">TX  ·  optional</text>
+			<text x="1080" y="472" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,944) scale(1,-1)">GP1  ·  Pico RX</text>
+			<polyline points="545 480, 1055 480" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="480" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="480" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<text x="464.96875" y="417" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,834) scale(1,-1)">GND</text>
+			<text x="1080" y="417" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,834) scale(1,-1)">GND</text>
+			<polyline points="545 425, 1055 425" style="stroke: rgb(20%,25%,32%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="425" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="425" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<rect x="60" y="259" width="1480" height="96" rx="18" ry="18" style="stroke: rgb(88%,70%,38%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,95%,86%); fill-rule: evenodd;"/>
+			<text x="85" y="320" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 25px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,640) scale(1,-1)">Servo colours match the slide; verify your unit before inserting its plug.</text>
+			<text x="85" y="283" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 22px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,566) scale(1,-1)">Servo port 2 / GP13 is reserved for encoder B. UART: 115200 baud, 3.3 V logic; leave adapter VCC off.</text>
+			<rect x="60" y="120" width="1480" height="105" rx="18" ry="18" style="stroke: rgb(70%,69%,87%); stroke-linecap: butt; stroke-width: 2; fill: rgb(91%,90%,98%); fill-rule: evenodd;"/>
+			<text x="90" y="182" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,364) scale(1,-1)">ONBOARD GP20 BUTTON</text>
+			<text x="90" y="143" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,286) scale(1,-1)">START / RESET · no jumper needed</text>
+			<text x="860" y="182" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,364) scale(1,-1)">ONBOARD GP21 BUTTON</text>
+			<text x="860" y="143" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,286) scale(1,-1)">E-STOP · no jumper needed</text>
+		</g>
+	</g>
+</svg>

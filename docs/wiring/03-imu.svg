@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1600" height="1100" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1600 1100" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>Robo Pico wiring: 03-imu</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1600" height="1100"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-1100)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="1600" height="1100" style="stroke: rgb(96%,97%,98%); stroke-linecap: butt; stroke-width: 2; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<text x="60" y="1030" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 42px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,2060) scale(1,-1)">03  /  GY-511 / OKY3231-2 IMU</text>
+			<text x="60" y="980" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 25px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,1960) scale(1,-1)">LSM303DLHC accelerometer · I2C address 0x19</text>
+			<text x="60" y="70" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 21px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,140) scale(1,-1)">Follow printed pin labels. Contacts are grouped by function, not physical position.</text>
+			<text x="60" y="29" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 18px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,58) scale(1,-1)">OKY3231-2 module sheet: 3–5 V input + PicoCar slide 5 labels + LSM303DLHC datasheet</text>
+			<rect x="70" y="545" width="475" height="350" rx="18" ry="18" style="stroke: rgb(80%,84%,89%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="1055" y="545" width="475" height="350" rx="18" ry="18" style="stroke: rgb(66%,74%,90%); stroke-linecap: butt; stroke-width: 2; fill: rgb(91%,94%,100%); fill-rule: evenodd;"/>
+			<text x="95" y="852" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 28px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1704) scale(1,-1)">GY-511 module</text>
+			<text x="1080" y="852" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1704) scale(1,-1)">Robo Pico · Grove 3</text>
+			<text x="291.98828125" y="787" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,1574) scale(1,-1)">VIN  ·  supply input</text>
+			<text x="1080" y="787" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,1574) scale(1,-1)">+3V3</text>
+			<polyline points="545 795, 1055 795" style="stroke: rgb(78%,23%,31%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="795" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(78%,23%,31%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="795" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(78%,23%,31%); fill-rule: evenodd;"/>
+			<text x="464.96875" y="732" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,1464) scale(1,-1)">GND</text>
+			<text x="1080" y="732" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,1464) scale(1,-1)">GND</text>
+			<polyline points="545 740, 1055 740" style="stroke: rgb(20%,25%,32%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="740" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="740" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<text x="377.6640625" y="677" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1354) scale(1,-1)">SDA  ·  data</text>
+			<text x="1080" y="677" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1354) scale(1,-1)">GP4  ·  I2C0 SDA</text>
+			<polyline points="545 685, 1055 685" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="685" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="685" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<text x="374.8515625" y="622" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1244) scale(1,-1)">SCL  ·  clock</text>
+			<text x="1080" y="622" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1244) scale(1,-1)">GP5  ·  I2C0 SCL</text>
+			<polyline points="545 630, 1055 630" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="630" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="630" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<rect x="60" y="389" width="1480" height="96" rx="18" ry="18" style="stroke: rgb(77%,85%,92%); stroke-linecap: butt; stroke-width: 2; fill: rgb(91%,95%,98%); fill-rule: evenodd;"/>
+			<text x="85" y="450" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 25px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,900) scale(1,-1)">Leave these module pins unconnected:</text>
+			<text x="85" y="413" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 22px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,826) scale(1,-1)">3.3 pad, INT1, INT2 and DRDY. VIN and the separate 3.3 pad are not interchangeable labels.</text>
+			<rect x="60" y="259" width="1480" height="96" rx="18" ry="18" style="stroke: rgb(88%,70%,38%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,95%,86%); fill-rule: evenodd;"/>
+			<text x="85" y="320" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 25px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,640) scale(1,-1)">Use this module's VIN input with the 3.3 V arrangement shown.</text>
+			<text x="85" y="283" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 22px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,566) scale(1,-1)">Verify operation and pull-up voltage. Do not feed 5 V onto SDA or SCL; do not attach two supplies.</text>
+			<text x="85" y="180" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 25px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,360) scale(1,-1)">The module has an accelerometer and magnetometer, not a gyroscope.</text>
+			<text x="85" y="144" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 25px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,288) scale(1,-1)">Use the printed SDA/SCL/VIN/GND labels; do not count positions from the drawing.</text>
+		</g>
+	</g>
+</svg>

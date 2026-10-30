@@ -189,3 +189,8 @@ See [the test report](../testing/revalidation-2026-10-30/REPORT.md) for executed
 checks, logs, fresh firmware builds and limitations. This later step **does**
 change firmware behaviour. Use the current `build_make/` UF2s or rebuild the
 current sources; the original ZIP in `recovered-artifacts/` predates the fixes.
+
+The owner subsequently requested visual wiring instructions. WIRING.md now
+uses seven labelled diagrams instead of tables, with a printable A4-landscape
+PDF at `docs/wiring/WIRING.pdf` and SVG/PNG sheets beside it. The newly uploaded
+Datasheets.zip again matched the original hash. No firmware assignments changed.

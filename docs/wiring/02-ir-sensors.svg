@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1600" height="1100" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1600 1100" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>Robo Pico wiring: 02-ir-sensors</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1600" height="1100"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-1100)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="1600" height="1100" style="stroke: rgb(96%,97%,98%); stroke-linecap: butt; stroke-width: 2; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<text x="60" y="1030" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 42px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,2060) scale(1,-1)">02  /  ST188 sensors: three wires each</text>
+			<text x="60" y="980" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 25px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,1960) scale(1,-1)">Use A0 (analogue). Leave D0 (digital) disconnected.</text>
+			<text x="60" y="70" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 21px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,140) scale(1,-1)">Follow printed pin labels. Contacts are grouped by function, not physical position.</text>
+			<text x="60" y="29" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 18px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,58) scale(1,-1)">PicoCar slide 4 labels + ROBO-PICO Grove mapping + IR manual supply limits</text>
+			<rect x="70" y="695" width="475" height="230" rx="18" ry="18" style="stroke: rgb(80%,84%,89%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="1055" y="695" width="475" height="230" rx="18" ry="18" style="stroke: rgb(66%,74%,90%); stroke-linecap: butt; stroke-width: 2; fill: rgb(91%,94%,100%); fill-rule: evenodd;"/>
+			<text x="95" y="882" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 28px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1764) scale(1,-1)">LEFT line sensor</text>
+			<text x="1080" y="882" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1764) scale(1,-1)">Robo Pico · Grove 5</text>
+			<text x="470.06640625" y="817" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,1634) scale(1,-1)">VCC</text>
+			<text x="1080" y="817" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,1634) scale(1,-1)">+3V3</text>
+			<polyline points="545 825, 1055 825" style="stroke: rgb(78%,23%,31%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="825" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(78%,23%,31%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="825" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(78%,23%,31%); fill-rule: evenodd;"/>
+			<text x="464.96875" y="762" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,1524) scale(1,-1)">GND</text>
+			<text x="1080" y="762" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,1524) scale(1,-1)">GND</text>
+			<polyline points="545 770, 1055 770" style="stroke: rgb(20%,25%,32%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="770" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="770" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<text x="338.98046875" y="707" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(14%,36%,76%); stroke:none;" transform="translate(0,1414) scale(1,-1)">A0  ·  analogue</text>
+			<text x="1080" y="707" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(14%,36%,76%); stroke:none;" transform="translate(0,1414) scale(1,-1)">GP26  ·  ADC0</text>
+			<polyline points="545 715, 1055 715" style="stroke: rgb(14%,36%,76%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="715" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(14%,36%,76%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="715" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(14%,36%,76%); fill-rule: evenodd;"/>
+			<rect x="70" y="450" width="475" height="230" rx="18" ry="18" style="stroke: rgb(80%,84%,89%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="1055" y="450" width="475" height="230" rx="18" ry="18" style="stroke: rgb(66%,74%,90%); stroke-linecap: butt; stroke-width: 2; fill: rgb(91%,94%,100%); fill-rule: evenodd;"/>
+			<text x="95" y="637" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 28px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1274) scale(1,-1)">RIGHT line sensor</text>
+			<text x="1080" y="637" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1274) scale(1,-1)">Robo Pico · Grove 6</text>
+			<text x="470.06640625" y="572" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,1144) scale(1,-1)">VCC</text>
+			<text x="1080" y="572" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,1144) scale(1,-1)">+3V3</text>
+			<polyline points="545 580, 1055 580" style="stroke: rgb(78%,23%,31%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="580" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(78%,23%,31%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="580" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(78%,23%,31%); fill-rule: evenodd;"/>
+			<text x="464.96875" y="517" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,1034) scale(1,-1)">GND</text>
+			<text x="1080" y="517" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,1034) scale(1,-1)">GND</text>
+			<polyline points="545 525, 1055 525" style="stroke: rgb(20%,25%,32%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="525" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="525" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<text x="338.98046875" y="462" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(14%,36%,76%); stroke:none;" transform="translate(0,924) scale(1,-1)">A0  ·  analogue</text>
+			<text x="1080" y="462" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(14%,36%,76%); stroke:none;" transform="translate(0,924) scale(1,-1)">GP27  ·  ADC1</text>
+			<polyline points="545 470, 1055 470" style="stroke: rgb(14%,36%,76%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="470" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(14%,36%,76%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="470" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(14%,36%,76%); fill-rule: evenodd;"/>
+			<rect x="70" y="205" width="475" height="230" rx="18" ry="18" style="stroke: rgb(80%,84%,89%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="1055" y="205" width="475" height="230" rx="18" ry="18" style="stroke: rgb(66%,74%,90%); stroke-linecap: butt; stroke-width: 2; fill: rgb(91%,94%,100%); fill-rule: evenodd;"/>
+			<text x="95" y="392" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 28px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,784) scale(1,-1)">BARCODE sensor</text>
+			<text x="1080" y="392" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,784) scale(1,-1)">Robo Pico · Grove 7</text>
+			<text x="470.06640625" y="327" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,654) scale(1,-1)">VCC</text>
+			<text x="1080" y="327" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,654) scale(1,-1)">+3V3</text>
+			<polyline points="545 335, 1055 335" style="stroke: rgb(78%,23%,31%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="335" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(78%,23%,31%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="335" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(78%,23%,31%); fill-rule: evenodd;"/>
+			<text x="464.96875" y="272" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,544) scale(1,-1)">GND</text>
+			<text x="1080" y="272" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,544) scale(1,-1)">GND</text>
+			<polyline points="545 280, 1055 280" style="stroke: rgb(20%,25%,32%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="280" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="280" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
+			<text x="338.98046875" y="217" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(14%,36%,76%); stroke:none;" transform="translate(0,434) scale(1,-1)">A0  ·  analogue</text>
+			<text x="1080" y="217" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(14%,36%,76%); stroke:none;" transform="translate(0,434) scale(1,-1)">GP28  ·  ADC2</text>
+			<polyline points="545 225, 1055 225" style="stroke: rgb(14%,36%,76%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="225" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(14%,36%,76%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="225" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(14%,36%,76%); fill-rule: evenodd;"/>
+			<rect x="60" y="94" width="1480" height="96" rx="18" ry="18" style="stroke: rgb(88%,70%,38%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,95%,86%); fill-rule: evenodd;"/>
+			<text x="85" y="155" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 25px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,310) scale(1,-1)">Disconnect unused signal wires; use a repinned/breakout cable.</text>
+			<text x="85" y="118" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 22px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,236) scale(1,-1)">Grove 5: no GP6 wire. Grove 6: no GP26 wire. Grove 7: no GP7 wire. Open GP28 VBAT jumper.</text>
+		</g>
+	</g>
+</svg>
