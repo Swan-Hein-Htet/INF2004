@@ -153,3 +153,24 @@ accuracy, latency and timing targets remain unverified.
    from host model results and update VALIDATION.md only with supporting evidence.
 
 The recovery itself changed packaging and documentation, not firmware behaviour.
+
+## Subsequent wiring clarification
+
+The owner later confirmed **ST188** IR sensors, an **SG90** servo and the motor
+connector marking **KH2.0-6P**, then supplied
+[PicoCar.pptx](recovered-context/picocar/PicoCar.pptx) as context for editing the
+wiring guide. This supplemental deck and relevant embedded reference images
+are preserved in `docs/recovered-context/picocar/`.
+
+Its slide 2 instead labels the motor connector **PH2.0-6P** and assigns
+1 encoder GND, 2 encoder A, 3 encoder B, 4 encoder supply, 5 motor +,
+6 motor −. The KH/PH marking difference and actual hardware ratings remain
+unverified. Slide 4 shows IR contacts VCC/GND/D0/A0; use A0 for this firmware.
+Slide 5 distinguishes the IMU VIN input from its separate 3.3 pad. Slide 7
+shows the Robo Pico carrier's GPIO breakout female headers, which provide
+GP19 without soldering directly to the Pico W.
+
+The deck's generic GPIO choices do not override firmware assignments, and its
+HC-SR04 3.3 V supply annotation conflicts with the supplied 5 V module datasheet.
+WIRING.md retains the 5 V supply and ECHO divider, and now explains these
+differences. No firmware changes or new hardware qualification were performed.

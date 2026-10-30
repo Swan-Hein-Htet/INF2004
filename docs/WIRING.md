@@ -18,19 +18,21 @@ colours or assume the module's pin order matches a Grove socket.**
 | Controller | Raspberry Pi Pico W + Cytron **ROBO-PICO** | These tables use the supplied ROBO-PICO datasheet. |
 | Ultrasonic distance module | **HC-SR04**, nominal 5 V | Not HC-SR04P. Use its labelled VCC, TRIG, ECHO, GND pins. |
 | IMU module | **OKY3231-2 / GY-511**, containing **LSM303DLHC** | OKY3231-2 is the product module number in the supplied sheet. Check the installed board matches. |
-| Three IR sensors: left line, right line, barcode | **ST188**, confirmed by owner | Supplied Waveshare manual describes an ST188 + LM393 board. ST188 identifies the sensing element; confirm the installed board's pin labels before using that manual's numbered pinout. TCRT5000 is a separate reference, not the owner-confirmed sensor. |
+| Three IR sensors: left line, right line, barcode | **ST188**, confirmed by owner | PicoCar slide 4 shows a board labelled **VCC, GND, D0, A0**. Use those labels; the older Waveshare manual has a different numbered layout. |
 | Scanner servo | **SG90**, confirmed by owner | The exact manufacturer's sheet, supply rating, stall current and connector orientation are still needed for the fitted unit. |
-| Left and right encoder gearmotors | Owner-provided marking: **KH2.0-6P** | This appears to identify the six-pin connector rather than the motor model. Record it as the connector marking; the motor part number, numbered pinout and encoder logic voltage remain unverified. |
+| Left and right encoder gearmotors | Owner-provided marking: **KH2.0-6P**; slide diagram: **PH2.0-6P** | PicoCar slide 2 supplies pin functions 1–6, mapped below. The two connector markings differ; match the pictured connector/orientation to the actual unit. Exact motor model and voltage/current ratings remain unverified. |
 | Optional UART adapter | Model **unconfirmed**; must use 3.3 V logic | Use labelled RX, TX and GND. |
 
-Do not assign numbered module pins to an unidentified board. The tables use
-module **pin labels**. For the documented Waveshare IR board specifically, its
-manual numbers the pins **1 DOUT, 2 AOUT, 3 GND, 4 VCC**. Those numbers apply
-only if your board matches that module; they are not a generic TCRT5000 pinout.
+The tables use **module pin labels**, with numbered motor contacts from the
+newly supplied slide diagram. The IR board in PicoCar slide 4 is labelled
+**VCC, GND, D0, A0**. Do not transfer the older Waveshare manual's numbered
+pinout to this board: that manual lists **1 DOUT, 2 AOUT, 3 GND, 4 VCC**.
+Use the labels on the actual board rather than counting pins from a photo.
 
 Owner confirmation received on 30 October 2026: **IR Sen: ST188; Servo: SG90;
-Enc Motor: KH2.0-6P**. These identifications do not establish a motor connector
-pin order or prove the IR board uses the Waveshare layout.
+Enc Motor: KH2.0-6P**. The subsequently supplied **PicoCar.pptx** provides the
+motor pin-function diagram and module photos used in this revision. These
+are reference diagrams, not measurements of the installed hardware.
 
 ## Where each connection is on the Robo Pico
 
@@ -48,7 +50,7 @@ itself. Each also provides +3V3 and GND; these are power contacts, not GPIOs.
 | Grove 7 | GP7, GP28 | Barcode analogue output on GP28 only; GP7 left disconnected |
 | Servo port 1 | Signal GP12, V+, GND | Scanner servo |
 | Servo port 2 | Signal GP13, V+, GND | Signal contact used for left encoder B; **not a second servo** |
-| Pico W GP19 header/breakout connection | GP19 | Right encoder B; no Grove socket carries GP19 |
+| Robo Pico GPIO breakout female header | GP19 | Right encoder B; no Grove socket carries GP19 |
 | Motor terminals M1 / M2 | Motor power outputs | Left / right motor leads; not sensor or GPIO sockets |
 | Onboard buttons | GP20, GP21 | START/RESET and E-STOP; already wired on carrier |
 
@@ -59,12 +61,15 @@ digital output must not accidentally connect to another sensor's analogue line.
 The Maker Port shares GP2/GP3 with Grove 2; do not attach another device there
 while these signals are used for the HC-SR04.
 
-GP19 is a **direct GPIO connection**, outside the Grove system. Use an accessible
-GP19-labelled Pico header/breakout contact verified against the board pinout.
-If no contact is accessible with the Pico installed, a suitable breakout/header
-is needed; do not substitute a different Grove pin. There is no need to wire
-the other modules directly to Pico W header pins when using the carrier
-connectors listed here.
+GP19 is on the **Robo Pico carrier's GPIO breakout female header**, outside
+the Grove system. PicoCar slide 7 labels these header rows “GPIO Breakout
+(Female pin headers)”. Use the **GP19-labelled contact** verified against the
+board pinout; you do not need to solder to the smaller Pico W board. The same
+breakout also exposes GP13 if that is more convenient than servo port 2's signal
+contact; these are two access points to the same GP13 signal, not separate pins
+you can allocate independently.
+
+![Robo Pico carrier connectors and GPIO breakout, from PicoCar slide 7](recovered-context/picocar/robo-pico-connectors.png)
 
 ## Module pin → GP signal → board connector
 
@@ -87,54 +92,71 @@ its power contacts supply the ultrasonic module.
 | --- | --- | --- | --- |
 | SDA | GP4 | Robo Pico **Grove 3**, GP4 signal contact | I2C0 data. |
 | SCL | GP5 | Robo Pico **Grove 3**, GP5 signal contact | I2C0 clock. |
-| VCC (verify supply label on fitted board) | +3V3 | Robo Pico **Grove 3 +3V3** | Supplied module sheet permits 3–5 V; use 3.3 V and ensure bus pull-ups go to 3.3 V. |
+| VIN, labelled “Vin Pin” in slide 5 | +3V3 | Robo Pico **Grove 3 +3V3** | Module sheet permits 3–5 V input; verify correct operation at 3.3 V and bus pull-ups at 3.3 V. |
 | GND | GND | Robo Pico **Grove 3 GND** | Common ground. |
-| Interrupt / data-ready pins, if present | None | Leave unconnected | Firmware polls the accelerometer; it does not use these pins. |
+| 3.3, labelled “3.3 Pin” in slide 5 | None in this arrangement | Leave unconnected | Separate from VIN. Do not connect two supply sources or assume this is another VIN; confirm its regulator-rail function from the actual module schematic before using it. |
+| INT1, INT2, DRDY | None | Leave unconnected | Firmware polls the accelerometer; it does not use these pins. |
+
+![GY-511 module pin labels, from PicoCar slide 5](recovered-context/picocar/imu-pin-labels.jpg)
 
 ### Three ST188 IR modules: use analogue output
 
-The owner identifies all three IR sensors as ST188. For the
-Waveshare ST188/LM393 board documented above, **AOUT = pin 2, GND = pin 3,
-VCC = pin 4; pin 1 DOUT stays disconnected**. On other boards use the verified
-analogue output label AO/AOUT and their own pinout.
+The owner identifies all three IR sensors as ST188. The module photo in
+**PicoCar slide 4** labels the four contacts **VCC, GND, D0, A0**. Here **A0**
+(A-zero, often called AO/AOUT) is the analogue output; **D0** (D-zero, also
+called DO/DOUT) is the comparator's digital output. **Use A0 and leave D0
+disconnected on all three modules.** The firmware samples ADC values; the
+slide's generic “pick one” advice does not make D0 interchangeable with A0
+for this firmware.
+
+![IR module VCC, GND, D0 and A0 labels, from PicoCar slide 4](recovered-context/picocar/ir-pin-labels.jpg)
 
 | Module / role | Module pin | GP / power destination | Where to connect |
 | --- | --- | --- | --- |
-| Left line IR | AO / AOUT | GP26 / ADC0 | Robo Pico **Grove 5**, GP26 signal contact |
+| ST188 left line IR | A0 (analogue) | GP26 / ADC0 | Robo Pico **Grove 5**, GP26 signal contact |
 | Left line IR | VCC | +3V3, only for a 3.3 V-compatible module | Robo Pico **Grove 5 +3V3** |
 | Left line IR | GND | GND | Robo Pico **Grove 5 GND** |
-| Right line IR | AO / AOUT | GP27 / ADC1 | Robo Pico **Grove 6**, GP27 signal contact |
+| ST188 right line IR | A0 (analogue) | GP27 / ADC1 | Robo Pico **Grove 6**, GP27 signal contact |
 | Right line IR | VCC | +3V3, only for a 3.3 V-compatible module | Robo Pico **Grove 6 +3V3** |
 | Right line IR | GND | GND | Robo Pico **Grove 6 GND** |
-| Barcode IR | AO / AOUT | GP28 / ADC2 | Robo Pico **Grove 7**, GP28 signal contact; **open GP28 VBAT sense jumper** |
+| ST188 barcode IR | A0 (analogue) | GP28 / ADC2 | Robo Pico **Grove 7**, GP28 signal contact; **open GP28 VBAT sense jumper** |
 | Barcode IR | VCC | +3V3, only for a 3.3 V-compatible module | Robo Pico **Grove 7 +3V3** |
 | Barcode IR | GND | GND | Robo Pico **Grove 7 GND** |
-| All three IR modules | DO / DOUT, if present | None | Leave disconnected; this firmware reads analogue outputs |
+| All three ST188 IR modules | D0 (digital) | None | Leave disconnected; this firmware reads analogue outputs |
 
 This arrangement uses one analogue signal per sensor. It does **not** connect
 a four-pin IR module straight to a four-pin Grove cable: their pin functions
 and order must be adapted. Keep GP6 (Grove 5), GP26 (Grove 6) and GP7 (Grove 7)
 unused by those modules. GP26 is already driven by the left sensor via Grove 5.
 
-### Left and right encoder motors: KH2.0-6P connector marking
+### Left and right encoder motors: six-pin connector
 
-The owner supplied **KH2.0-6P** as the encoder motor identification. Treat that
-as a connector marking until a motor datasheet confirms otherwise; it does not
-specify which contact is motor power, encoder power, ground, A or B. Motor part
-numbers and connector pin numbers remain unknown. Identify the actual motor's
-M+/M−, encoder VCC, GND, A and B from its vendor pinout before wiring. The table
-below names those functions; it does not assign them to connector positions.
+The owner supplied **KH2.0-6P**; the image in **PicoCar slide 2** instead says
+**PH2.0-6P**. The diagram specifies the following pin functions, now mapped to
+the existing firmware. Confirm the actual connector matches the diagram before
+applying power. Numbers refer to the **motor module connector**, not the Pico.
+Use the diagram's orientation and traces to identify contact 1; do not assume
+the order is the same when looking into the mating cable plug.
+
+![Motor connector contacts 1–6, from PicoCar slide 2](recovered-context/picocar/motor-pinout.png)
 
 | Module / role | Module pin / lead | GP / power destination | Where to connect |
 | --- | --- | --- | --- |
-| Left motor | Two motor power leads M+/M− | Driver outputs M1A / M1B | Robo Pico **M1 motor terminals**; verify forward direction during calibration |
-| Right motor | Two motor power leads M+/M− | Driver outputs M2A / M2B | Robo Pico **M2 motor terminals**; verify forward direction during calibration |
-| Left encoder | A | GP16 | Robo Pico **Grove 4**, GP16 signal contact |
-| Right encoder | A | GP17 | Robo Pico **Grove 4**, GP17 signal contact |
-| Left encoder | B | GP13 | Robo Pico **servo port 2 signal** contact; do not use its V+ contact for this signal |
-| Right encoder | B | GP19 | **Direct Pico W GP19 header/breakout**, not a Grove port |
-| Both encoders | Encoder VCC | Supply required by actual encoder | +3V3 from Grove 4 only if the identified encoder permits it; otherwise use its specified supply and appropriate logic interface |
-| Both encoders | Encoder GND | GND | Robo Pico **Grove 4 GND** / common ground |
+| Left motor | **5: motor +** | M1A driver output | Robo Pico **M1A motor terminal**, already controlled by GP8 |
+| Left motor | **6: motor −** | M1B driver output | Robo Pico **M1B motor terminal**, already controlled by GP9 |
+| Right motor | **5: motor +** | M2A driver output | Robo Pico **M2A motor terminal**, already controlled by GP10 |
+| Right motor | **6: motor −** | M2B driver output | Robo Pico **M2B motor terminal**, already controlled by GP11 |
+| Left encoder | **2: output A phase** | GP16 | Robo Pico **Grove 4**, GP16 signal contact |
+| Right encoder | **2: output A phase** | GP17 | Robo Pico **Grove 4**, GP17 signal contact |
+| Left encoder | **3: output B phase** | GP13 | Robo Pico **servo port 2 signal**, or **GPIO breakout GP13**; do not use V+ for this signal |
+| Right encoder | **3: output B phase** | GP19 | Robo Pico **GPIO breakout female header GP19**, not Grove |
+| Both encoders | **4: encoder power supply** | +3V3 proposed in slide 1 | Robo Pico **Grove 4 +3V3**, subject to confirming actual encoder voltage/current requirements |
+| Both encoders | **1: encoder ground** | GND | Robo Pico **Grove 4 GND** / common ground |
+
+Pins 5/6 carry switched motor power; pin 4 supplies only the encoder electronics.
+Do not join pin 4 to a motor terminal. M+/M− are lead labels, not instructions
+to tie M− to ground: both motor leads go to the driver. Check forward direction
+with wheels raised and calibrate motor/encoder signs for the mirrored mounting.
 
 Grove 4 needs a split harness: GP16 goes to the left motor's A pin and GP17 to
 the right motor's A pin. Power and ground may be distributed only after checking
@@ -149,9 +171,9 @@ do not run the motor power leads to the Pico GP8–GP11 header pins.
 
 | Module / role | Module pin / contact | GP / power destination | Where to connect |
 | --- | --- | --- | --- |
-| SG90 scanner servo | Signal / PWM | GP12 | Robo Pico **servo port 1 signal** |
-| SG90 scanner servo | V+ | Supply within actual servo rating | Robo Pico **servo port 1 V+**, only if board input voltage meets servo rating |
-| SG90 scanner servo | GND | GND | Robo Pico **servo port 1 GND** |
+| SG90 scanner servo | Signal / PWM, **orange in slide 3** | GP12 | Robo Pico **servo port 1 signal**, marked S |
+| SG90 scanner servo | V+, **red in slide 3** | Supply within actual servo rating | Robo Pico **servo port 1 V+**, only if board input voltage meets servo rating |
+| SG90 scanner servo | GND, **brown in slide 3** | GND | Robo Pico **servo port 1 GND**, marked − |
 | Onboard START/RESET button | Switch signal | GP20 | **Already wired on Robo Pico**; no external jumper |
 | Onboard E-STOP button | Switch signal | GP21 | **Already wired on Robo Pico**; no external jumper |
 | 3.3 V UART adapter | RX | GP0, Pico console TX | Robo Pico **Grove 1**, GP0 signal contact |
@@ -159,7 +181,8 @@ do not run the motor power leads to the Pico GP8–GP11 header pins.
 | 3.3 V UART adapter | GND | GND | Robo Pico **Grove 1 GND** |
 | 3.3 V UART adapter | VCC / 5V / 3V3 power output | None | Leave disconnected when the Robo Pico has its own power |
 
-Verify servo signal/V+/GND by its actual datasheet, not by wire colour. The
+The slide identifies these servo lead colours; verify that your unit matches
+before inserting the plug. Do not reverse signal and ground. The
 two onboard buttons are active-low and firmware enables pull-ups. UART is
 115200 baud, 3.3 V logic; do not use an RS-232 voltage-level adapter.
 
@@ -171,9 +194,9 @@ Do not confuse Pico W GP25 with the external GP19 encoder connector.
 
 Connect the left motor's two power leads to **M1**, right motor leads to **M2**.
 Do not connect motor power to a Pico GPIO or 3V3 output. The six-pin motor encoder
-connector's exact pin order and voltage rating are not present in the supplied
-datasheets. Identify M+/M−, encoder VCC/GND/A/B from the actual motor marking or
-vendor pinout before applying power; **wire colour is not a reliable pinout**.
+connector's numbered functions are supplied by PicoCar slide 2 above, but its
+voltage/current ratings are not established by that image. Confirm that the
+actual connector matches before applying power; **wire colour is not a reliable pinout**.
 Only encoder **logic** A/B connect to the four GPIOs above. Confirm encoder supply
 and output amplitude. Use proper level shifting if powered from 5 V; a bare
 5 V push-pull encoder output must never reach a Pico input. Open-collector
@@ -226,7 +249,7 @@ allowing for the brief's 20 mm gap between line and barcode. The review's
 “20 mm from line centre” is ambiguous relative to the 18 mm line and illustrated
 gap; use the actual printed track geometry, not that inferred centre offset.
 
-GY-511: VCC to an appropriate 3.3 V-compatible supply, GND common, SDA GP4,
+GY-511: **VIN** to Grove 3 +3V3 as above, GND common, SDA GP4,
 SCL GP5. Pull-ups must terminate at 3.3 V. The code expects the LSM303DLHC
 accelerometer address 0x19, mounted X forward / Y left / Z up. Magnetometer pins
 and interrupt outputs are unused. Do not substitute LSM303D (different register
@@ -248,8 +271,28 @@ multi-cell battery directly into this board. Confirm polarity and ensure the
 battery protection and independent power switch remain accessible.
 
 Physical prototype inspection, load-voltage tests and polarity tests remain
-required. This document cannot determine the pin order of an unidentified motor
-or guarantee that a particular harness matches its colour scheme.
+required. The slide supplies a reference motor pinout, not confirmation that
+every motor or mating harness uses the same contact order.
+
+## How PicoCar.pptx is used here
+
+The uploaded deck is retained as [PicoCar.pptx](recovered-context/picocar/PicoCar.pptx).
+The pictures clarify component pin labels and connector locations. They do not
+change the firmware's GPIO assignments or establish component ratings.
+
+| Slide | Detail used / clarification |
+| --- | --- |
+| 1–2 | Encoder connector functions: 1 GND, 2 A, 3 B, 4 encoder supply, 5 motor +, 6 motor −. Slide 1 proposes 3.3 V encoder power; actual ratings still need verification. Slide 2 labels the connector PH2.0-6P, differing from the owner's KH2.0-6P marking. |
+| 3 | Servo diagram identifies brown GND, red positive supply, orange PWM. This guide uses GP12 / servo port 1. The picture alone does not establish voltage/current limits. |
+| 4: ultrasonic | Picture identifies HC-SR04 VCC/TRIG/ECHO/GND. Its 3.3 V supply annotation conflicts with the supplied 5 V HC-SR04 datasheet. Retain nominal 5 V power and the 10 kΩ / 15 kΩ ECHO divider here. |
+| 4: IR | Photo labels VCC/GND/D0/A0. Firmware requires **A0**, not the slide's generic choice of either output. Do not reuse the other manual's pin numbers. |
+| 5 | IMU photo distinguishes VIN, 3.3, GND, SCL, SDA, INT1, INT2 and DRDY. Use VIN as the module supply input; leave the separate 3.3 pad and interrupts unused in this arrangement. |
+| 6–7 | Pico pinout and Robo Pico layout. GP19 is accessible through the **carrier's GPIO breakout female header**; no direct Pico soldering is required. The board picture's Pico 2 compatibility label does not change this project's Pico W / RP2040 firmware target. |
+
+The slides' “can use any GPIO” notes describe possible hardware choices.
+With this firmware, encoder A/B, TRIG/ECHO and other signals must use the GP
+assignments in the tables. Choosing another GPIO requires a corresponding code
+change and verification.
 
 ## Sources for the connector and module labels
 
@@ -258,8 +301,9 @@ or guarantee that a particular harness matches its colour scheme.
 - [HC-SR04 sheet](recovered-context/reference-text/HCSR04.txt): module pin labels and 5 V supply requirement.
 - [Waveshare IR module manual](recovered-context/reference-text/Infrared-Reflective-Sensor-UserManual.txt): ST188/LM393 identity, numbered DOUT/AOUT/GND/VCC pins and supply range; verify this is the installed module before using its numbered pinout.
 - [Board adapter source](../app_program/subsystem2/board.c): actual firmware GPIO assignments, I2C address and ADC channels.
+- [PicoCar.pptx](recovered-context/picocar/PicoCar.pptx): owner-supplied visual reference, seven slides; pinout and photos above extracted unchanged from its embedded images.
 
-The electrical map is unchanged by this clarification. ST188 and SG90 are
-owner-confirmed. The exact ST188 carrier-board pin order, SG90 unit ratings,
-and motor model / KH2.0-6P contact assignments still need verification before
-this can serve as a fully identified module-to-module assembly drawing.
+The firmware's electrical map is unchanged. ST188 and SG90 are owner-confirmed;
+motor connector functions and board pin labels are now documented from the
+slides. Actual motor model/ratings, the KH-versus-PH connector identification,
+module/harness orientation and SG90 unit ratings still require confirmation.
