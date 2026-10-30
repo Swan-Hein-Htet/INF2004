@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1600" height="1100" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1600 1100" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>Robo Pico wiring: 05b-encoder-options</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1600" height="1100"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-1100)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="1600" height="1100" style="stroke: rgb(96%,97%,98%); stroke-linecap: butt; stroke-width: 2; fill: rgb(96%,97%,98%); fill-rule: evenodd;"/>
+			<text x="60" y="1030" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 42px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,2060) scale(1,-1)">05B  /  One Grove socket, or individual jumpers</text>
+			<text x="60" y="980" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 25px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,1960) scale(1,-1)">GPIO breakout = the GP-labelled female header sockets on the Robo Pico carrier.</text>
+			<text x="60" y="70" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 21px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,140) scale(1,-1)">Follow printed pin labels. Contacts are grouped by function, not physical position.</text>
+			<text x="60" y="29" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 18px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,58) scale(1,-1)">Grove 4 exposes GP16/GP17; the carrier GPIO headers expose those same electrical signals.</text>
+			<rect x="70" y="715" width="475" height="205" rx="18" ry="18" style="stroke: rgb(80%,84%,89%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="1055" y="715" width="475" height="205" rx="18" ry="18" style="stroke: rgb(66%,74%,90%); stroke-linecap: butt; stroke-width: 2; fill: rgb(91%,94%,100%); fill-rule: evenodd;"/>
+			<text x="95" y="877" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 28px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1754) scale(1,-1)">Grove 4 · ONE socket</text>
+			<text x="1080" y="877" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1754) scale(1,-1)">Two separate encoder A wires</text>
+			<text x="280.328125" y="812" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1624) scale(1,-1)">GP16 signal contact</text>
+			<text x="1080" y="812" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1624) scale(1,-1)">Left encoder A · pin 2</text>
+			<polyline points="545 820, 1055 820" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="820" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="820" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<text x="280.328125" y="757" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1514) scale(1,-1)">GP17 signal contact</text>
+			<text x="1080" y="757" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1514) scale(1,-1)">Right encoder A · pin 2</text>
+			<polyline points="545 765, 1055 765" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="765" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="765" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<text x="80" y="670" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1340) scale(1,-1)">A Grove breakout cable sends the two different signal contacts to different motors.</text>
+			<rect x="70" y="325" width="475" height="300" rx="18" ry="18" style="stroke: rgb(80%,84%,89%); stroke-linecap: butt; stroke-width: 2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="1055" y="325" width="475" height="300" rx="18" ry="18" style="stroke: rgb(66%,74%,90%); stroke-linecap: butt; stroke-width: 2; fill: rgb(91%,94%,100%); fill-rule: evenodd;"/>
+			<text x="95" y="582" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 28px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1164) scale(1,-1)">No harness: encoder wires</text>
+			<text x="1080" y="582" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1164) scale(1,-1)">Robo Pico · GPIO headers</text>
+			<text x="287.40625" y="517" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1034) scale(1,-1)">Left A · motor pin 2</text>
+			<text x="1080" y="517" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1034) scale(1,-1)">GP16</text>
+			<polyline points="545 525, 1055 525" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="525" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="525" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<text x="287.359375" y="462" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,924) scale(1,-1)">Left B · motor pin 3</text>
+			<text x="1080" y="462" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,924) scale(1,-1)">GP13</text>
+			<polyline points="545 470, 1055 470" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="470" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="470" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<text x="270.203125" y="407" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,814) scale(1,-1)">Right A · motor pin 2</text>
+			<text x="1080" y="407" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,814) scale(1,-1)">GP17</text>
+			<polyline points="545 415, 1055 415" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="415" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="415" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<text x="270.15625" y="352" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,704) scale(1,-1)">Right B · motor pin 3</text>
+			<text x="1080" y="352" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,704) scale(1,-1)">GP19</text>
+			<polyline points="545 360, 1055 360" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
+			<circle cx="545" cy="360" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<circle cx="1055" cy="360" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
+			<rect x="60" y="189" width="1480" height="96" rx="18" ry="18" style="stroke: rgb(77%,85%,92%); stroke-linecap: butt; stroke-width: 2; fill: rgb(91%,95%,98%); fill-rule: evenodd;"/>
+			<text x="85" y="250" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 25px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,500) scale(1,-1)">With individual jumper wires, you can leave Grove 4 EMPTY. No firmware change.</text>
+			<text x="85" y="213" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 22px;fill: rgb(32%,40%,49%); stroke:none;" transform="translate(0,426) scale(1,-1)">Both encoder pin 1 wires share GND. Both pin 4 wires need their rated encoder supply.</text>
+			<text x="80" y="145" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,290) scale(1,-1)">Distribute encoder power/GND through a small breadboard or terminal block; use 3.3 V only if rated.</text>
+			<text x="80" y="109" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,218) scale(1,-1)">Keep motor power (pins 5/6) on M1/M2. Never join left A and right A together.</text>
+		</g>
+	</g>
+</svg>

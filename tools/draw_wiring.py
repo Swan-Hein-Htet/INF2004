@@ -73,7 +73,8 @@ def note(d, y, title, detail, warn=False):
 def sheet(number, title, subtitle, source):
     d = Drawing(W, H)
     box(d, 0, 0, W, H, "#f5f8fc", "#f5f8fc", 0)
-    text(d, 60, 70, f"{number:02d}  /  {title}", 42, INK, True)
+    label = f"{number:02d}" if isinstance(number, int) else number
+    text(d, 60, 70, f"{label}  /  {title}", 42, INK, True)
     text(d, 60, 120, subtitle, 25, MUTED)
     text(d, 60, 1030, "Follow printed pin labels. Contacts are grouped by function, not physical position.", 21, INK)
     text(d, 60, 1071, source, 18, MUTED)
@@ -227,14 +228,34 @@ def motors():
         (180, "LEFT motor + encoder", 16, 13, "M1"),
         (575, "RIGHT motor + encoder", 17, 19, "M2")]:
         pair(d, y, title, "Robo Pico carrier",
-             [("1  ·  encoder GND", "Grove 4 / GND", GND),
-              ("2  ·  encoder A", f"Grove 4 / GP{a}", SIGNAL),
+             [("1  ·  encoder GND", "GND · shared encoder rail", GND),
+              ("2  ·  encoder A", f"GP{a} · Grove 4 / GPIO", SIGNAL),
               ("3  ·  encoder B", f"GPIO breakout / GP{b}", SIGNAL),
-              ("4  ·  encoder supply", "Grove 4 / +3V3 *", RED),
+              ("4  ·  encoder supply", "+3V3 * · shared encoder rail", RED),
               ("5  ·  motor + lead", f"{driver}A motor terminal", PURPLE),
               ("6  ·  motor − lead", f"{driver}B motor terminal", PURPLE)], height=390)
     text(d, 60, 1002, "* 3.3 V encoder supply is proposed in the slides; verify the actual encoder's voltage/current rating.", 23, RED)
     save("05-motors", d)
+
+
+def encoder_options():
+    d = sheet("05B", "One Grove socket, or individual jumpers",
+              "GPIO breakout = the GP-labelled female header sockets on the Robo Pico carrier.",
+              "Grove 4 exposes GP16/GP17; the carrier GPIO headers expose those same electrical signals.")
+    pair(d, 180, "Grove 4 · ONE socket", "Two separate encoder A wires",
+         [("GP16 signal contact", "Left encoder A · pin 2", SIGNAL),
+          ("GP17 signal contact", "Right encoder A · pin 2", SIGNAL)], height=205)
+    text(d, 80, 430, "A Grove breakout cable sends the two different signal contacts to different motors.", 27, INK)
+    pair(d, 475, "No harness: encoder wires", "Robo Pico · GPIO headers",
+         [("Left A · motor pin 2", "GP16", SIGNAL),
+          ("Left B · motor pin 3", "GP13", SIGNAL),
+          ("Right A · motor pin 2", "GP17", SIGNAL),
+          ("Right B · motor pin 3", "GP19", SIGNAL)], height=300)
+    note(d, 815, "With individual jumper wires, you can leave Grove 4 EMPTY. No firmware change.",
+         "Both encoder pin 1 wires share GND. Both pin 4 wires need their rated encoder supply.")
+    lines(d, 80, 955, ["Distribute encoder power/GND through a small breadboard or terminal block; use 3.3 V only if rated.",
+                        "Keep motor power (pins 5/6) on M1/M2. Never join left A and right A together."], 24, INK, 36)
+    save("05b-encoder-options", d)
 
 
 def servo_uart():
@@ -294,6 +315,7 @@ def main():
     imu()
     ultrasonic()
     motors()
+    encoder_options()
     servo_uart()
     power()
     page_width, page_height = landscape(A4)

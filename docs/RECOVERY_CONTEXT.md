@@ -203,3 +203,10 @@ odometry was not rejected by navigation; a zero-speed motion-library request
 could apply heading correction; END could mask a critical FAULT mode (while
 wheel targets remained zero). All profiles were rebuilt. These host tests do not
 establish physical performance, real RTOS integration or live network operation.
+
+Further wiring clarification: GPIO breakout means the carrier's individual
+GP-labelled female headers. Grove 4 has two different signal contacts, GP16 and
+GP17, assigned to the two encoder A outputs. A new sheet 05B also shows the
+no-harness option: leave Grove 4 empty and use GPIO header jumpers for GP16,
+GP13, GP17 and GP19, with separate distribution of encoder power/common ground.
+The visual guide PDF now contains eight pages. No firmware changes were needed.

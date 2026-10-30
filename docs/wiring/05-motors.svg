@@ -20,12 +20,12 @@
 			<text x="95" y="877" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 28px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1754) scale(1,-1)">LEFT motor + encoder</text>
 			<text x="1080" y="877" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,1754) scale(1,-1)">Robo Pico carrier</text>
 			<text x="306.203125" y="812" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,1624) scale(1,-1)">1  ·  encoder GND</text>
-			<text x="1080" y="812" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,1624) scale(1,-1)">Grove 4 / GND</text>
+			<text x="1080" y="812" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,1624) scale(1,-1)">GND · shared encoder rail</text>
 			<polyline points="545 820, 1055 820" style="stroke: rgb(20%,25%,32%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
 			<circle cx="545" cy="820" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
 			<circle cx="1055" cy="820" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
 			<text x="344.81640625" y="757" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1514) scale(1,-1)">2  ·  encoder A</text>
-			<text x="1080" y="757" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1514) scale(1,-1)">Grove 4 / GP16</text>
+			<text x="1080" y="757" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,1514) scale(1,-1)">GP16 · Grove 4 / GPIO</text>
 			<polyline points="545 765, 1055 765" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
 			<circle cx="545" cy="765" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
 			<circle cx="1055" cy="765" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
@@ -35,7 +35,7 @@
 			<circle cx="545" cy="710" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
 			<circle cx="1055" cy="710" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
 			<text x="282.1796875" y="647" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,1294) scale(1,-1)">4  ·  encoder supply</text>
-			<text x="1080" y="647" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,1294) scale(1,-1)">Grove 4 / +3V3 *</text>
+			<text x="1080" y="647" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,1294) scale(1,-1)">+3V3 * · shared encoder rail</text>
 			<polyline points="545 655, 1055 655" style="stroke: rgb(78%,23%,31%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
 			<circle cx="545" cy="655" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(78%,23%,31%); fill-rule: evenodd;"/>
 			<circle cx="1055" cy="655" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(78%,23%,31%); fill-rule: evenodd;"/>
@@ -54,12 +54,12 @@
 			<text x="95" y="482" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 28px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,964) scale(1,-1)">RIGHT motor + encoder</text>
 			<text x="1080" y="482" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(9%,16%,25%); stroke:none;" transform="translate(0,964) scale(1,-1)">Robo Pico carrier</text>
 			<text x="306.203125" y="417" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,834) scale(1,-1)">1  ·  encoder GND</text>
-			<text x="1080" y="417" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,834) scale(1,-1)">Grove 4 / GND</text>
+			<text x="1080" y="417" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(20%,25%,32%); stroke:none;" transform="translate(0,834) scale(1,-1)">GND · shared encoder rail</text>
 			<polyline points="545 425, 1055 425" style="stroke: rgb(20%,25%,32%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
 			<circle cx="545" cy="425" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
 			<circle cx="1055" cy="425" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(20%,25%,32%); fill-rule: evenodd;"/>
 			<text x="344.81640625" y="362" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,724) scale(1,-1)">2  ·  encoder A</text>
-			<text x="1080" y="362" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,724) scale(1,-1)">Grove 4 / GP17</text>
+			<text x="1080" y="362" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(0%,49%,47%); stroke:none;" transform="translate(0,724) scale(1,-1)">GP17 · Grove 4 / GPIO</text>
 			<polyline points="545 370, 1055 370" style="stroke: rgb(0%,49%,47%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
 			<circle cx="545" cy="370" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
 			<circle cx="1055" cy="370" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
@@ -69,7 +69,7 @@
 			<circle cx="545" cy="315" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
 			<circle cx="1055" cy="315" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(0%,49%,47%); fill-rule: evenodd;"/>
 			<text x="282.1796875" y="252" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,504) scale(1,-1)">4  ·  encoder supply</text>
-			<text x="1080" y="252" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,504) scale(1,-1)">Grove 4 / +3V3 *</text>
+			<text x="1080" y="252" style="font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 24px;fill: rgb(78%,23%,31%); stroke:none;" transform="translate(0,504) scale(1,-1)">+3V3 * · shared encoder rail</text>
 			<polyline points="545 260, 1055 260" style="stroke: rgb(78%,23%,31%); stroke-linecap: butt; stroke-width: 5; fill: none; fill-rule: evenodd;"/>
 			<circle cx="545" cy="260" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(78%,23%,31%); fill-rule: evenodd;"/>
 			<circle cx="1055" cy="260" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(78%,23%,31%); fill-rule: evenodd;"/>

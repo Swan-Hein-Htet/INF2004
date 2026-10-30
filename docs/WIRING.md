@@ -3,7 +3,7 @@
 Start with the overview, then wire **one module at a time** using its own diagram.
 Every wire is labelled at both ends. Click an image for a larger view.
 
-**[Open the seven-page PDF](wiring/WIRING.pdf)** ·
+**[Open the eight-page PDF](wiring/WIRING.pdf)** ·
 [Overview](#1-overview) · [IR sensors](#2-three-st188-ir-sensors) ·
 [IMU](#3-gy-511-imu) · [Ultrasonic](#4-hc-sr04-ultrasonic) ·
 [Motors](#5-two-encoder-motors) · [Servo and console](#6-sg90-servo-and-optional-console) ·
@@ -69,6 +69,39 @@ leave it unused while those signals serve the ultrasonic module.
 
 ## 5. Two encoder motors
 
+### What is a GPIO breakout?
+
+It is the row of **individually GP-labelled female header sockets on the
+purple Robo Pico carrier**, alongside the plugged-in Pico W. A jumper wire's
+male end plugs into the required GP socket. These headers make the Pico signals
+accessible from the carrier; you do not need to solder onto the Pico W.
+
+### How can one Grove 4 socket connect two encoders?
+
+Grove 4 has **four contacts: GP16, GP17, +3V3 and GND**. GP16 carries the left
+encoder's A signal; GP17 carries the right encoder's A signal. A custom split
+harness takes each signal to its own motor. The two A outputs are never joined.
+Power and ground may be distributed to both encoder circuits if their ratings
+permit it. The GP16 and GP17 contacts are separate GPIOs inside one socket.
+
+### No split harness? Leave Grove 4 empty
+
+Use individual jumper wires on the **carrier GPIO headers** instead: left
+encoder A to GP16, left B to GP13, right A to GP17, right B to GP19.
+The GPIO headers and Grove contacts expose the same signals, so this needs
+**no firmware change**. The diagram below shows both options.
+
+![One Grove 4 socket with two signal contacts, and the no-harness alternative using individual GPIO headers](wiring/05b-encoder-options.png)
+
+Both encoder pin 1 wires still need common GND, and both pin 4 wires need the
+encoder's specified supply. Use individual jumpers plus a small breadboard or
+terminal block to distribute **encoder logic power/GND**. Use the carrier's
++3V3 rail only after confirming both encoders accept 3.3 V and fit the current
+budget. Don't force two jumper plugs into one header socket. Motor power wires
+remain on M1/M2; keep them out of a small logic breadboard.
+
+### All six wires on each motor
+
 ![Six numbered wires on each encoder motor](wiring/05-motors.png)
 
 These numbers belong to the **motor connector**, not the Pico. PicoCar slide 2
@@ -82,7 +115,7 @@ rating remain unverified. Confirm them before connecting that supply. If encoder
 logic requires 5 V, use a suitable logic interface; never feed a 5 V push-pull
 encoder output directly to a GP input.
 
-Grove 4 needs a **split harness** for left A and right A. The B wires use the
+When using Grove 4, it needs a **split harness** for left A and right A. The B wires use the
 **Robo Pico GPIO breakout header**, GP13 and GP19. GP13 is also accessible at
 servo port 2's signal contact; that is the same signal, not an extra allocation.
 Do not plug a second servo into port 2.
