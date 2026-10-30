@@ -26,7 +26,11 @@ static bool g_enforce_pwm = false;
 static bool g_reset_ok = true;
 static UINT g_delay_limit = 20U;
 static UINT g_delays = 0U;
-static UINT g_led_states[32];
+static UINT g_led_states[512];
+static char const *g_scenario = "";
+static UINT g_motor_pulses[2];
+static bool g_motor_live[2];
+static UW g_motor_start[2];
 static bool g_sensor_log_seen = false;
 static PRI g_diagnostic_priority = 0;
 static bool g_fail_priority_change = false;
@@ -52,6 +56,23 @@ UW in_w(UW address)
 void out_w(UW address, UW value)
 {
     UINT i = 0U;
+    if ((3 == APP_SERVO_TEST) &&
+        ((UINT32_C(0x4005005c) == address) || (UINT32_C(0x40050070) == address)))
+    {
+        UINT motor = (UINT32_C(0x4005005c) == address) ? 0U : 1U;
+        if ((0U != value) && (!g_motor_live[motor]))
+        {
+            assert(!g_motor_live[motor ^ 1U]);
+            g_motor_start[motor] = g_clock;
+            g_motor_live[motor] = true;
+        }
+        if ((0U == value) && g_motor_live[motor])
+        {
+            assert(306000U >= g_clock - g_motor_start[motor]);
+            g_motor_live[motor] = false;
+            ++g_motor_pulses[motor];
+        }
+    }
     if (UINT32_C(0x40058000) == address) { ++g_watchdog_starts; }
     if (UINT32_C(0x40058004) == address) { ++g_watchdog_loads; }
     if ((UINT32_C(0x40044000) <= address) && (UINT32_C(0x40044100) > address))
@@ -67,7 +88,24 @@ void clr_w(UW address, UW mask) { out_w(address, in_w(address) & ~mask); }
 void EnableInt(UINT number, UINT priority) { (void)number; (void)priority; }
 ER gpio_set_pin(UINT pin, UINT mode) { assert(30U > pin); g_pin_mode[pin] = mode; return E_OK; }
 ER gpio_set_val(UINT pin, UINT value) { assert(30U > pin); g_pin_level[pin] = value; return E_OK; }
-UINT gpio_get_val(UINT pin) { (void)pin; return 1U; }
+UINT gpio_get_val(UINT pin)
+{
+    if (3 == APP_SERVO_TEST)
+    {
+        if ((21U == pin) && (0 == strcmp(g_scenario, "bench-estop")) && (120U <= g_delays))
+            return 0U;
+        if (20U == pin)
+        {
+            if (0 == strcmp(g_scenario, "bench-held")) return 0U;
+            if ((0 == strcmp(g_scenario, "bench-release")) ||
+                (0 == strcmp(g_scenario, "bench-estop")))
+                return ((110U <= g_delays) && (120U > g_delays)) ? 0U : 1U;
+            return (((110U <= g_delays) && (210U > g_delays)) ||
+                    ((320U <= g_delays) && (420U > g_delays))) ? 0U : 1U;
+        }
+    }
+    return 1U;
+}
 ER pwm_set_pin(UINT pin) { g_pin_mode[pin] = 2U; return E_OK; }
 ER pwm_set_wrap(UINT pin, UW top)
 {
@@ -98,7 +136,7 @@ ER pwm_set_enabled(UINT pin, INT enabled)
 ER tk_dly_tsk(UW delay)
 {
     g_clock += delay * 1000U;
-    assert(32U > g_delays);
+    assert(512U > g_delays);
     g_led_states[g_delays++] = g_pin_level[7];
     if (g_delays >= g_delay_limit) { longjmp(g_exit, 1); }
     return E_OK;
@@ -178,6 +216,8 @@ static void check_blinks(UINT expected)
 int main(int argc, char **argv)
 {
     assert(2 == argc);
+    g_scenario = argv[1];
+    if (3 == APP_SERVO_TEST) g_delay_limit = 430U;
     if (0 == strcmp(argv[1], "pwm"))
     {
         g_enforce_pwm = true;
@@ -201,6 +241,22 @@ int main(int argc, char **argv)
     g_fail_priority_change = (0 == strcmp(argv[1], "diagnostic-priority-fail"));
     g_reset_ok = (0 != strcmp(argv[1], "isolation-reset-fail"));
     run_main_once();
+    if (3 == APP_SERVO_TEST)
+    {
+        bool b_none = (0 == strcmp(g_scenario, "bench-held")) || (!g_imu_ok);
+        bool b_one = (0 == strcmp(g_scenario, "bench-release")) ||
+                     (0 == strcmp(g_scenario, "bench-estop"));
+        assert((b_none ? 0U : 1U) == g_motor_pulses[0]);
+        assert((b_none || b_one ? 0U : 1U) == g_motor_pulses[1]);
+        assert(!g_motor_live[0] && !g_motor_live[1]);
+        assert(0U == g_created && 0U == g_pwm_enabled[6]);
+        assert(0U == in_w(UINT32_C(0x4005005c)));
+        assert(0U == in_w(UINT32_C(0x40050070)));
+        if (0 == strcmp(g_scenario, "bench-estop"))
+            assert(0U != (robot_fault_get() & ROBOT_FAULT_STOP));
+        printf("%s: bounded alternating pulses, release interlock, stop and startup inhibition passed\n", argv[1]);
+        return 0;
+    }
     if ((0 == strcmp(argv[1], "isolation")) || (!g_reset_ok))
     {
         assert(0U == g_created && 0U == g_i2c_writes);

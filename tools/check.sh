@@ -5,3 +5,4 @@ cd "$(dirname "$0")/.."
 python3 tests/test_barcode_oracle.py
 python3 tests/test_barcode_stream.py
 python3 tests/test_protocol.py
+python3 tests/test_guided_calibration.py

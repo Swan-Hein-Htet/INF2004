@@ -93,12 +93,18 @@ endif
 
 # Isolation images have no sensor/car tasks and always inhibit wheel outputs.
 SERVO_TEST ?= 0
-ifneq ($(filter $(SERVO_TEST),0 1 2),$(SERVO_TEST))
-$(error Unknown SERVO_TEST '$(SERVO_TEST)'; use 0, 1 (off), or 2 (centre hold))
+ifneq ($(filter $(SERVO_TEST),0 1 2 3),$(SERVO_TEST))
+$(error Unknown SERVO_TEST '$(SERVO_TEST)'; use 0, 1 (off), 2 (centre hold), or 3 (motor bench))
 endif
 ifneq ($(SERVO_TEST),0)
+ifeq ($(SERVO_TEST),3)
+ifneq ($(TEST)$(WIFI)$(CONSOLE),1noneusb_cdc)
+$(error Motor bench requires TEST=1 WIFI=none CONSOLE=usb_cdc)
+endif
+else
 ifneq ($(TEST)$(WIFI)$(CONSOLE),1noneuart)
 $(error Servo isolation requires TEST=1 WIFI=none CONSOLE=uart)
+endif
 endif
 endif
 ifeq ($(SERVO_TEST),1)
@@ -106,6 +112,21 @@ SERVO_SUFFIX := _servo_off
 endif
 ifeq ($(SERVO_TEST),2)
 SERVO_SUFFIX := _servo_hold
+endif
+ifeq ($(SERVO_TEST),3)
+SERVO_SUFFIX := _motor_bench
+endif
+
+# Explicitly requested assumed-value demo, separate from calibrated releases.
+DEMO ?= 0
+ifneq ($(filter $(DEMO),0 1),$(DEMO))
+$(error Unknown DEMO '$(DEMO)'; use 0 or 1)
+endif
+ifeq ($(DEMO),1)
+ifneq ($(TEST)$(SERVO_TEST)$(WIFI)$(CONSOLE),00noneuart)
+$(error Assumed demo requires TEST=0 SERVO_TEST=0 WIFI=none CONSOLE=uart)
+endif
+DEMO_SUFFIX := _assumed_demo
 endif
 
 # CRASH_REPORT=1 also copies every console line to UART0 on GP0 (TX) /
@@ -133,7 +154,7 @@ endif
 # a live hazard: an SMP=1 build was once flashed in place of an SMP=0 one and
 # only the banner in the log revealed it.
 #
-EXE_FILE := mtk3pico_smp$(SMP)_$(CONSOLE)$(WIFI_SUFFIX)$(NET_SUFFIX)$(MQTT_SUFFIX)$(CRASH_SUFFIX)$(TEST_SUFFIX)$(SERVO_SUFFIX)
+EXE_FILE := mtk3pico_smp$(SMP)_$(CONSOLE)$(WIFI_SUFFIX)$(NET_SUFFIX)$(MQTT_SUFFIX)$(CRASH_SUFFIX)$(TEST_SUFFIX)$(SERVO_SUFFIX)$(DEMO_SUFFIX)
 
 GCC := arm-none-eabi-gcc
 AS := arm-none-eabi-gcc
@@ -195,6 +216,7 @@ ASFLAGS += -DCNF_SMP=1
 endif
 CFLAGS  += -DAPP_TEST=$(TEST)
 CFLAGS  += -DAPP_SERVO_TEST=$(SERVO_TEST)
+CFLAGS  += -DAPP_ASSUMED_DEMO=$(DEMO)
 CFLAGS  += -DTM_CONSOLE_UART=$(CRASH_REPORT)
 ifeq ($(CRASH_REPORT),0)
 CFLAGS  += -DBOARD_UART0_FREE=1
@@ -227,7 +249,7 @@ endif
 # before any recipe executes.
 ################################################################################
 
-PROFILE_ID := smp$(SMP)-$(CONSOLE)-wifi$(WIFI)-net$(NET)-mqtt$(MQTT)-crash$(CRASH_REPORT)-test$(TEST)-servo$(SERVO_TEST)
+PROFILE_ID := smp$(SMP)-$(CONSOLE)-wifi$(WIFI)-net$(NET)-mqtt$(MQTT)-crash$(CRASH_REPORT)-test$(TEST)-servo$(SERVO_TEST)-demo$(DEMO)
 PROFILE_FILE := .build_profile
 
 ifneq ($(strip $(shell cat $(PROFILE_FILE) 2>/dev/null)),$(PROFILE_ID))

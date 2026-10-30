@@ -9,6 +9,18 @@ micro T-Kernel 3.0 template and its Pico C SDK / CYW43 / lwIP integration.
 The original kernel, BSP, build tree and five subsystem folders are retained.
 Tutorial LED/producer/consumer tasks have been replaced with car firmware.
 
+An explicitly requested [assumed-value autonomous demo](docs/DEMO_START.md) is
+available as `PicoCar-autonomous-DEMO.uf2`. It enables an unmeasured configuration
+at a 100mm/s target and 30% motor duty cap. It is a supervised trial image with
+runtime faults retained, not a calibrated or physically qualified release.
+Build it with `./tools/build.sh assumed-demo`; ordinary profiles remain inhibited.
+
+For an autonomous UF2 personalized without installing a compiler, use the
+[guided autonomous package](docs/AUTONOMOUS_QUICKSTART.md). It records IR and
+encoder measurements over Pico USB, verifies motor direction with a raised-wheel
+button-controlled bench image, and creates `PicoCar-autonomous.uf2` locally.
+The included template stays inhibited until the wizard completes.
+
 **This is compiled and host-tested firmware, not hardware-qualified firmware.**
 The supplied documents leave encoder scale, dimensions, motor polarity, sensor
 calibration, mounting, servo speed and obstacle depth unmeasured. Motors are

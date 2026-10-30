@@ -17,3 +17,8 @@ cc -std=c11 -g -O1 -Wall -Wextra -Werror -Wconversion -Wshadow \
     app_program/subsystem1/protocol.c -o tests/build/test_mqtt
 ASAN_OPTIONS=detect_leaks=0 ./tests/build/test_mqtt
 sh tests/run_startup.sh
+cc -std=c11 -Wall -Wextra -Werror -DAPP_ASSUMED_DEMO=1 -DAPP_TEST=0 \
+    -ffunction-sections -fdata-sections -Itests/stubs -Iapp_program \
+    tests/test_assumed_demo.c app_program/robot_config.c \
+    app_program/subsystem2/motion.c -Wl,--gc-sections -lm -o tests/build/test_assumed_demo
+./tests/build/test_assumed_demo

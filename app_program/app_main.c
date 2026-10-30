@@ -13,6 +13,15 @@
 #ifndef APP_SERVO_TEST
 #define APP_SERVO_TEST 0
 #endif
+#ifndef APP_ASSUMED_DEMO
+#define APP_ASSUMED_DEMO 0
+#endif
+
+#if APP_ASSUMED_DEMO
+#define APP_MAX_DUTY 0.30f
+#else
+#define APP_MAX_DUTY 0.8f
+#endif
 
 static ID g_h_state = 0;
 static ID g_h_sample = 0;
@@ -420,7 +429,8 @@ static void app_motion_task(INT code, void *p_context)
             speeds[index] = travel[index] * 1000000.0f / (float)(elapsed + 1U);
             duties[index] = robot_pid_step(&controllers[index], targets[index],
                                            speeds[index],
-                                           (float)elapsed / 1000000.0f, 0.8f);
+                                           (float)elapsed / 1000000.0f,
+                                           APP_MAX_DUTY);
             stalled[index] = ((50.0f < fabsf(targets[index])) && (0 == delta))
                                  ? stalled[index] + elapsed
                                  : 0U;
@@ -540,6 +550,32 @@ static void app_obstacle_task(INT code, void *p_context)
     }
 }
 
+#if APP_ASSUMED_DEMO
+static void app_demo_led(uint32_t now_ms, robot_mode_t mode, uint16_t faults)
+{
+    uint32_t pulses = 7U;
+    if (0U != (faults & ROBOT_CRITICAL_MASK))
+    {
+        if (0U != (faults & ROBOT_FAULT_IMU)) { pulses = 1U; }
+        else if (0U != (faults & ROBOT_FAULT_RANGE)) { pulses = 2U; }
+        else if (0U != (faults & ROBOT_FAULT_ENCODER)) { pulses = 3U; }
+        else if (0U != (faults & ROBOT_FAULT_STALL)) { pulses = 4U; }
+        else if (0U != (faults & ROBOT_FAULT_LINE)) { pulses = 5U; }
+        else if (0U != (faults & ROBOT_FAULT_TIMING)) { pulses = 6U; }
+        uint32_t phase = (now_ms / 150U) % (pulses * 2U + 8U);
+        board_status_led((phase < pulses * 2U) && (0U == (phase & 1U)));
+    }
+    else if (ROBOT_IDLE == mode)
+    {
+        board_status_led(0U == ((now_ms / 500U) & 1U));
+    }
+    else
+    {
+        board_status_led(ROBOT_FINISHED != mode);
+    }
+}
+#endif
+
 static void app_vehicle_task(INT code, void *p_context)
 {
     uint32_t deadline = board_micros();
@@ -594,6 +630,9 @@ static void app_vehicle_task(INT code, void *p_context)
         input.faults = robot_fault_get();
         robot_nav_step(&nav, &input, &g_robot_config);
         robot_fault_set(nav.fault_request);
+#if APP_ASSUMED_DEMO
+        app_demo_led(input.now_ms, nav.mode, robot_fault_get());
+#endif
         app_lock();
         if ((ROBOT_IDLE == g_nav.mode) && (ROBOT_FOLLOW == nav.mode))
         {
@@ -635,6 +674,77 @@ static ID app_create_task(FP p_entry, PRI priority)
     return h_task;
 }
 
+/* Dedicated raised-wheel bench image. No autonomous tasks are started. */
+static void app_motor_bench(void)
+{
+    bool b_ready = board_init();
+    bool b_released = false;
+    bool b_running = false;
+    uint32_t started = 0U;
+    uint32_t release_since = 0U;
+    uint32_t wheel = 0U;
+    uint16_t before[2] = {0U, 0U};
+    board_servo_off();
+    board_force_off();
+    if (!b_ready)
+    {
+        robot_fault_set(ROBOT_FAULT_IMU);
+    }
+    board_watchdog_start();
+    tm_printf((UB *)"MOTOR BENCH: wheels raised; hold GP20 for one <=300ms pulse; GP21 stops.\n");
+    for (;;)
+    {
+        uint32_t now = board_micros();
+        bool b_pressed = (0U == gpio_get_val(20U));
+        bool b_stop = (0U == gpio_get_val(21U));
+        if (b_stop)
+        {
+            robot_fault_set(ROBOT_FAULT_STOP);
+        }
+        if (b_running && ((!b_pressed) || (300000U <= now - started) ||
+                          (0U != (robot_fault_get() & ROBOT_CRITICAL_MASK))))
+        {
+            uint16_t after[2] = {0U, 0U};
+            board_force_off();
+            board_encoder(&after[0], &after[1]);
+            tm_printf((UB *)"BENCH wheel=%u before=%u,%u after=%u,%u FAULT=%04x\n",
+                      (unsigned int)wheel, before[0], before[1], after[0], after[1],
+                      robot_fault_get());
+            b_running = false;
+            wheel ^= 1U;
+        }
+        if (!b_pressed)
+        {
+            if (0U == release_since)
+            {
+                release_since = now;
+            }
+            if (500000U <= now - release_since)
+            {
+                b_released = true;
+            }
+        }
+        else
+        {
+            release_since = 0U;
+        }
+        if (b_ready && b_pressed && b_released && (!b_running) &&
+            (0U == (robot_fault_get() & ROBOT_CRITICAL_MASK)))
+        {
+            board_encoder(&before[0], &before[1]);
+            b_released = false;
+            started = now;
+            b_running = true;
+            board_arm(true);
+            board_motor((0U == wheel) ? 0.25f : 0.0f,
+                        (1U == wheel) ? 0.25f : 0.0f);
+        }
+        board_status_led(b_running);
+        board_watchdog_feed();
+        (void)tk_dly_tsk(5U);
+    }
+}
+
 static void app_servo_test(void)
 {
     uint32_t step = 0U;
@@ -664,6 +774,11 @@ INT usermain(void)
     uint32_t status_pulses = 1U;
     bool b_ready = true;
     bool b_safety_ready = false;
+    if (3 == APP_SERVO_TEST)
+    {
+        app_motor_bench();
+        return 0;
+    }
     if (0 != APP_SERVO_TEST)
     {
         app_servo_test();
@@ -728,6 +843,9 @@ INT usermain(void)
 #endif
     tm_printf((UB *)"Car boot: faults=%04x, calibration=%d startup=%u\n",
               robot_fault_get(), robot_config_valid(&g_robot_config), status_pulses);
+#if APP_ASSUMED_DEMO
+    tm_printf((UB *)"ASSUMED DEMO: unmeasured configuration; 30 percent maximum duty; GP20 starts, GP21 stops.\n");
+#endif
     for (;;)
     {
 #if APP_TEST

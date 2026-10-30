@@ -1,5 +1,10 @@
 # From servo test to an integrated run
 
+The [guided autonomous package](AUTONOMOUS_QUICKSTART.md) now automates IR capture,
+wrapping encoder-count collection, direction checks and UF2 personalization.
+Use that path if you want to avoid editing C and rebuilding locally. Chassis
+dimensions and maximum permitted obstacle depth still need a ruler measurement.
+
 The servo-HOLD image is identified by its filename and two-blink GP7 pattern.
 It sends a fixed centre pulse; it does not run sensors or the mission. A steady
 servo there is a useful partial result, not an integrated functional test.
