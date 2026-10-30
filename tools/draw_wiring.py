@@ -167,7 +167,7 @@ def infrared():
 
 
 def imu():
-    d = sheet(3, "GY-511 / OKY3231-2 IMU", "LSM303DLHC accelerometer · I2C address 0x19", 
+    d = sheet(3, "GY-511 / OKY3231-2 IMU", "LSM303DLHC accelerometer · I2C address 0x19",
               "OKY3231-2 module sheet: 3–5 V input + PicoCar slide 5 labels + LSM303DLHC datasheet")
     pair(d, 205, "GY-511 module", "Robo Pico · Grove 3",
          [("VIN  ·  supply input", "+3V3", RED), ("GND", "GND", GND),
@@ -268,7 +268,7 @@ def power():
     text(d, 90, 430, "Total Grove 3.3 V output budget: 300 mA", 23, RED, True)
     box(d, 760, 190, 780, 275, "#fff3dd", "#e1b461")
     text(d, 790, 235, "REGULATED NOMINAL 5 V", 32, ORANGE, True)
-    lines(d, 790, 285, ["HC-SR04 VCC", "Use an external regulated supply, OR servo V+ only", 
+    lines(d, 790, 285, ["HC-SR04 VCC", "Use an external regulated supply, OR servo V+ only",
                          "after measuring a suitable voltage under motor load."], 24, INK, 43)
     text(d, 790, 430, "Not Grove +3V3. Keep the ECHO divider installed.", 23, ORANGE, True)
     box(d, 60, 520, 610, 285, "#eee8f8", "#c0acd9")
