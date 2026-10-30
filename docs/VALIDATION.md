@@ -1,9 +1,14 @@
 # Validation record
 
-Latest revalidation: [extended test report](../testing/extended-2026-10-30/REPORT.md).
+Latest startup/servo investigation: [startup test report](../testing/servo-startup-2026-10-30/REPORT.md).
+It tests the real application/board startup against a host backend, corrects
+initialization failure/PWM ordering, and builds two isolated no-serial servo-test
+images. No physical servo or power measurement was made.
+
+Earlier revalidation: [extended test report](../testing/extended-2026-10-30/REPORT.md).
 That run adds exhaustive/adversarial checks, a streaming barcode oracle and host
 MQTT callback tests, fixes three further issues, and rebuilds all three profiles.
-Its image sizes supersede the original packaging sizes below. The earlier
+The latest build logs supersede the original packaging sizes below. The earlier
 [navigation revalidation](../testing/revalidation-2026-10-30/REPORT.md) is retained.
 The bench qualification checklist below remains unexecuted.
 

@@ -1,0 +1,81 @@
+{
+  "starting_commit": "7a9f36cc28c93f83025cfe5b91258da68b02e949",
+  "date": "2026-10-30",
+  "sources": [
+    {
+      "path": "app_program/app_main.c",
+      "sha256": "1c018f9847f3b5bedd48b28af953a2f557eb67830c22ef3902757dcedb26ffc6"
+    },
+    {
+      "path": "app_program/board.h",
+      "sha256": "e0009d1194a8f346ad7176ea96142858cd7e6ddea204ed952ca9bbf9fe9c55ec"
+    },
+    {
+      "path": "app_program/subsystem2/board.c",
+      "sha256": "254fa8dbd90560ab570c27787046f33d5a41d34914f0337314384c04d212142a"
+    },
+    {
+      "path": "app_program/robot_config.c",
+      "sha256": "e940c4351e7e92527d2c8f13937cdaeb781844ec59f6a8790884ce2d66f9be5b"
+    },
+    {
+      "path": "build_make/pico_rp2040.mk",
+      "sha256": "3a9a829aa75e8c2af231868138bde31891a11036d0d6355b3a21cba1c74e5786"
+    },
+    {
+      "path": "tools/build.sh",
+      "sha256": "23c94e722c4f42c3e73545c6245e058f84e236ff1b551306727802e15e8dcb25"
+    },
+    {
+      "path": "tests/run.sh",
+      "sha256": "cd0f17101d8e354d8f581d23607d23f0f884b494c85d02600ee7d83720634e46"
+    },
+    {
+      "path": "tests/run_startup.sh",
+      "sha256": "01c53f0271e4cc355db01894f9272fc4955068d067c9853c8f27c82f1e33f93f"
+    },
+    {
+      "path": "tests/test_startup.c",
+      "sha256": "1681f4bd175517dd5865fdba1f81e4f6d1b4adbe4893117d4422ed199802100a"
+    },
+    {
+      "path": "tests/stubs/tk/tkernel.h",
+      "sha256": "31f0542b5e612b3d15a5d274093152a39bb8740f215151a23b7ef9ebb675c9f7"
+    },
+    {
+      "path": "tests/stubs/tm/tmonitor.h",
+      "sha256": "ac08054ac53d44393ceef4c13da46156e3cef991234ff77c8a4530b1013cbac8"
+    },
+    {
+      "path": "tests/stubs/bsp/libbsp.h",
+      "sha256": "463ac19c16d359710a82c991cda9b8ee62b39689236e966a7ca1f2eb4f2608c3"
+    }
+  ],
+  "firmware": [
+    {
+      "path": "build_make/mtk3pico_smp0_uart.uf2",
+      "sha256": "e16db3f87ce8d77ceff4ddbd6082525eb6e7d3c700f9fdc6b575efb3e0422039",
+      "bytes": 134144
+    },
+    {
+      "path": "build_make/mtk3pico_smp0_uart_test.uf2",
+      "sha256": "5d0b5cf0e9ab6e7757c0bcd89718b82438fb38bf5f610b8c6a8580c7bf562e36",
+      "bytes": 134656
+    },
+    {
+      "path": "build_make/mtk3pico_smp0_uart_test_servo_hold.uf2",
+      "sha256": "201b687029257a83304d0fbf0e9e05986b4322fce3c755033b996a7884e3745c",
+      "bytes": 126464
+    },
+    {
+      "path": "build_make/mtk3pico_smp0_uart_test_servo_off.uf2",
+      "sha256": "ff81b568d4dfe6af21bcdf940d4386484980c415b3fffc8f7f1ac729359c1132",
+      "bytes": 126464
+    },
+    {
+      "path": "build_make/mtk3pico_smp0_uart_wifi_lwip_mqtt.uf2",
+      "sha256": "06c6a0bb57e14c802456960406b5a885973fd9bf46d77ee050a212e92f9736b9",
+      "bytes": 672768
+    }
+  ]
+}

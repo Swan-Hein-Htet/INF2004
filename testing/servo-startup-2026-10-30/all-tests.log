@@ -1,0 +1,34 @@
+barcode: 26 letters, 23 widths, both directions, stream + malformed frames passed
+mission: pending junction command, expiry, unknown letter, bypass, STOP/reset passed
+bypass: full route, heading restoration, pending freeze, false-line rejection, proximity and END passed
+bypass: full route, heading restoration, pending freeze, false-line rejection, proximity and END passed
+recovery: ordinary line reacquisition resumes without a bypass turn passed
+junction: isolated black noise does not consume a pending turn passed
+safety: STOP in every mode, separate RESET/START, proximity and timer wrap passed
+motion API: source ownership, reverse, right turn, bounds and timeout passed
+sensors: calibration gate, line, PID limits, terrain, scan rejection passed
+protocol: bounded packing, version, command duplicate/length rejection passed
+extended motion: 131072 request/owner combinations passed
+extended protocol: all 256 bytes, duplicates, four sequence wraps, 7936 invalid lengths and 65 buffer capacities passed
+extended odometry: NaN and +/-infinity rejected in all eight modes (48 cases)
+extended zero-speed: no rotation for 25 heading offsets
+extended command priority: all ten critical fault bits beat END in eight modes (80 cases)
+extended sensors: 1000000 streaming ticks, 10000 scan profiles and 10000 injected invalid ranges passed (sanitizers)
+extended navigation: 100000 deterministic mixed-input steps passed
+MQTT callbacks: retry deadlines/wrap, last will, subscription, online status, telemetry timer and publish errors passed (stub backend)
+MQTT framing: all 256 bytes plus duplicates, wrong topics, multi-byte and empty/unfinished callback sequences passed (stub backend)
+startup healthy: watchdog/safety policy, servo shutdown, LED code and zero motor targets passed
+startup imu-fail: watchdog/safety policy, servo shutdown, LED code and zero motor targets passed
+startup mutex-fail: watchdog/safety policy, servo shutdown, LED code and zero motor targets passed
+startup safety-fail: watchdog/safety policy, servo shutdown, LED code and zero motor targets passed
+startup safety-start-fail: watchdog/safety policy, servo shutdown, LED code and zero motor targets passed
+startup task-fail: watchdog/safety policy, servo shutdown, LED code and zero motor targets passed
+startup PWM: divider, period, centre compare and counter configured before enabling GP12
+servo: out-of-range request clamped to 2000 us
+isolation: no sensor initialization or car tasks; watchdog fed; motor outputs zero; servo policy correct
+isolation: no sensor initialization or car tasks; watchdog fed; motor outputs zero; servo policy correct
+isolation: no sensor initialization or car tasks; watchdog fed; motor outputs zero; servo policy correct
+isolation: no sensor initialization or car tasks; watchdog fed; motor outputs zero; servo policy correct
+barcode oracle: 7280 independent jittered forward/reverse symbols; 10000 noise frames rejected
+barcode stream oracle: 7280 jittered forward/reverse symbols; 1456 line-departure, trailing-mark, partial-frame and short-quiet cases rejected
+protocol: 2000 independently decoded C packets; bad version/length, all six reserved bits and all five invalid barcode values rejected

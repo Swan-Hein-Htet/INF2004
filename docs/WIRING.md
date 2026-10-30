@@ -164,9 +164,13 @@ socket. Use the GP13/GP19 contacts there; no soldering directly to the Pico W
 is required. The picture's Pico 2 compatibility label does not change this
 firmware's Pico W / RP2040 target.
 
-GP6, GP7, GP14 and GP15 are unused by this wiring. GP18's RGB LED and GP22's
+GP6, GP14 and GP15 are unused by this wiring. GP18's RGB LED and GP22's
 buzzer are not driven. GP23/24/25/29 are reserved for Pico W radio functions;
 do not use them for these modules.
+
+Diagnostic firmware uses the carrier's **GP7 status LED** for blink codes;
+leave the GP7 Grove contact disconnected. See [servo troubleshooting without UART](SERVO_TROUBLESHOOTING.md)
+for isolated servo-off/centre-hold images and startup indicators.
 
 ## Sources and editable diagrams
 

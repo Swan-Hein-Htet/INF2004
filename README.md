@@ -72,6 +72,13 @@ and missed sample releases every 200 ms. TEST=1 is a calibration logger, not a
 claim that on-target self-tests ran. UF2s supplied here retain the calibration
 inhibit and cannot drive the car until rebuilt with measured configuration.
 
+For SG90 twitching without UART access, use the [no-serial servo troubleshooting guide](docs/SERVO_TROUBLESHOOTING.md).
+`tools/build.sh servo-off` and `servo-hold` produce isolated images that hold
+wheel outputs low and omit application sensor initialization. The carrier GP7
+status LED shows their mode; leave GP7's Grove signal disconnected. Full
+diagnostics also provides startup blink codes. See the [startup test report](testing/servo-startup-2026-10-30/REPORT.md)
+for the watchdog/init and PWM-order fixes and their verification limits.
+
 ## Layout and ownership
 
 | Folder | Responsibilities |

@@ -16,3 +16,4 @@ cc -std=c11 -g -O1 -Wall -Wextra -Werror -Wconversion -Wshadow \
     -Itests/stubs -Iapp_program tests/test_mqtt.c \
     app_program/subsystem1/protocol.c -o tests/build/test_mqtt
 ASAN_OPTIONS=detect_leaks=0 ./tests/build/test_mqtt
+sh tests/run_startup.sh

@@ -1,0 +1,10 @@
+mtk3pico_smp0_uart.uf2: 262 valid RP2040 UF2 blocks; sha256 e16db3f87ce8d77ceff4ddbd6082525eb6e7d3c700f9fdc6b575efb3e0422039
+mtk3pico_smp0_uart_test.uf2: 263 valid RP2040 UF2 blocks; sha256 5d0b5cf0e9ab6e7757c0bcd89718b82438fb38bf5f610b8c6a8580c7bf562e36
+mtk3pico_smp0_uart_test_servo_hold.uf2: 247 valid RP2040 UF2 blocks; sha256 201b687029257a83304d0fbf0e9e05986b4322fce3c755033b996a7884e3745c
+mtk3pico_smp0_uart_test_servo_off.uf2: 247 valid RP2040 UF2 blocks; sha256 ff81b568d4dfe6af21bcdf940d4386484980c415b3fffc8f7f1ac729359c1132
+mtk3pico_smp0_uart_wifi_lwip_mqtt.uf2: 1314 valid RP2040 UF2 blocks; sha256 06c6a0bb57e14c802456960406b5a885973fd9bf46d77ee050a212e92f9736b9
+diagnostics-build.log: zero compiler warnings/errors
+network-build.log: zero compiler warnings/errors
+offline-build.log: zero compiler warnings/errors
+servo-hold-build.log: zero compiler warnings/errors
+servo-off-build.log: zero compiler warnings/errors

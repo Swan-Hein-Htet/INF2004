@@ -10,6 +10,9 @@
 
 #define APP_STACK_BYTES 3072U
 #define APP_HEALTH_TASKS 6U
+#ifndef APP_SERVO_TEST
+#define APP_SERVO_TEST 0
+#endif
 
 static ID g_h_state = 0;
 static ID g_h_sample = 0;
@@ -615,12 +618,40 @@ static ID app_create_task(FP p_entry, PRI priority)
     return h_task;
 }
 
+static void app_servo_test(void)
+{
+    uint32_t step = 0U;
+    uint32_t pulses = (2 == APP_SERVO_TEST) ? 2U : 1U;
+    if (!board_servo_test_init(2 == APP_SERVO_TEST))
+    {
+        pulses = 3U;
+    }
+    board_watchdog_start();
+    for (;;)
+    {
+        board_status_led((step < pulses * 2U) && (0U == (step & 1U)));
+        board_watchdog_feed();
+        (void)tk_dly_tsk(100U);
+        step = (step + 1U) % (pulses * 2U + 8U);
+    }
+}
+
 INT usermain(void)
 {
     T_CMTX mutex_definition = {0};
     T_CCYC cycle_definition = {0};
     uint32_t index = 0U;
+#if APP_TEST
+    uint32_t status_step = 0U;
+#endif
+    uint32_t status_pulses = 1U;
     bool b_ready = true;
+    bool b_safety_ready = false;
+    if (0 != APP_SERVO_TEST)
+    {
+        app_servo_test();
+        return 0;
+    }
     mutex_definition.mtxatr = TA_INHERIT;
     g_h_state = tk_cre_mtx(&mutex_definition);
     b_ready = (0 < g_h_state) && board_init();
@@ -631,13 +662,16 @@ INT usermain(void)
     if (!b_ready)
     {
         robot_fault_set(ROBOT_FAULT_IMU);
+        status_pulses = 3U;
     }
     for (index = 0U; APP_HEALTH_TASKS > index; ++index)
     {
         g_health[index] = board_micros();
     }
-    b_ready = b_ready && (0 < app_create_task((FP)app_safety_task, 2));
-    g_h_sample = app_create_task((FP)app_line_task, 5);
+    /* Safety must exist even when peripheral initialization has failed. */
+    b_safety_ready = (0 < app_create_task((FP)app_safety_task, 2));
+    b_ready = b_ready && b_safety_ready;
+    g_h_sample = b_ready ? app_create_task((FP)app_line_task, 5) : E_SYS;
     b_ready = b_ready && (0 < g_h_sample);
     b_ready = b_ready && (0 < app_create_task((FP)app_terrain_task, 6));
     b_ready = b_ready && (0 < app_create_task((FP)app_motion_task, 7));
@@ -657,19 +691,31 @@ INT usermain(void)
     {
         robot_fault_set(ROBOT_FAULT_TIMING);
         board_force_off();
+        board_servo_off();
+        status_pulses = (3U == status_pulses) ? 3U : 2U;
     }
-    board_watchdog_start();
-    tm_printf((UB *)"Car boot: faults=%04x, calibration=%d\n",
-              robot_fault_get(), robot_config_valid(&g_robot_config));
+    /* If safety cannot start, stay disarmed without a watchdog reboot loop. */
+    if (b_safety_ready)
+    {
+        board_watchdog_start();
+    }
+    tm_printf((UB *)"Car boot: faults=%04x, calibration=%d startup=%u\n",
+              robot_fault_get(), robot_config_valid(&g_robot_config), status_pulses);
     for (;;)
     {
 #if APP_TEST
         uint16_t raw[3] = {0U, 0U, 0U};
         uint16_t counts[2] = {0U, 0U};
-        app_lock();
-        memcpy(raw, g_adc_raw, sizeof(raw));
-        memcpy(counts, g_counts, sizeof(counts));
-        app_unlock();
+        if (0 < g_h_state)
+        {
+            app_lock();
+            memcpy(raw, g_adc_raw, sizeof(raw));
+            memcpy(counts, g_counts, sizeof(counts));
+            app_unlock();
+        }
+        board_status_led((status_step < status_pulses * 2U) &&
+                         (0U == (status_step & 1U)));
+        status_step = (status_step + 1U) % (status_pulses * 2U + 8U);
         tm_printf((UB *)"ADC=%u,%u,%u ENC=%u,%u FAULT=%04x OVERRUN=%u\n",
                   raw[0], raw[1], raw[2], counts[0], counts[1],
                   robot_fault_get(), g_overruns);

@@ -1,0 +1,1 @@
+test_startup: tests/test_startup.c:165: main: Assertion `NULL != g_safety' failed.

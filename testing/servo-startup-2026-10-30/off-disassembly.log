@@ -1,0 +1,38 @@
+
+build_make/mtk3pico_smp0_uart_test_servo_off.elf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+10008cd4 <usermain>:
+10008cd4:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+10008cd6:	2000      	movs	r0, #0
+10008cd8:	f000 ff5c 	bl	10009b94 <board_servo_test_init>
+10008cdc:	4243      	negs	r3, r0
+10008cde:	4158      	adcs	r0, r3
+10008ce0:	0045      	lsls	r5, r0, #1
+10008ce2:	002e      	movs	r6, r5
+10008ce4:	1e73      	subs	r3, r6, #1
+10008ce6:	419e      	sbcs	r6, r3
+10008ce8:	3505      	adds	r5, #5
+10008cea:	00b6      	lsls	r6, r6, #2
+10008cec:	f000 fe42 	bl	10009974 <board_watchdog_start>
+10008cf0:	2400      	movs	r4, #0
+10008cf2:	2701      	movs	r7, #1
+10008cf4:	3602      	adds	r6, #2
+10008cf6:	006d      	lsls	r5, r5, #1
+10008cf8:	e00d      	b.n	10008d16 <usermain+0x42>
+10008cfa:	0038      	movs	r0, r7
+10008cfc:	43a0      	bics	r0, r4
+10008cfe:	f000 ff3d 	bl	10009b7c <board_status_led>
+10008d02:	f000 fe53 	bl	100099ac <board_watchdog_feed>
+10008d06:	2064      	movs	r0, #100	@ 0x64
+10008d08:	f7fd fb1e 	bl	10006348 <tk_dly_tsk>
+10008d0c:	1c60      	adds	r0, r4, #1
+10008d0e:	0029      	movs	r1, r5
+10008d10:	f004 fb3c 	bl	1000d38c <__aeabi_uidivmod>
+10008d14:	000c      	movs	r4, r1
+10008d16:	42a6      	cmp	r6, r4
+10008d18:	d8ef      	bhi.n	10008cfa <usermain+0x26>
+10008d1a:	2000      	movs	r0, #0
+10008d1c:	e7ef      	b.n	10008cfe <usermain+0x2a>

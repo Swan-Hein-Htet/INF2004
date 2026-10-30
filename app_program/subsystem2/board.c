@@ -161,8 +161,63 @@ uint16_t board_adc(uint32_t channel)
 
 void board_servo(uint16_t degrees)
 {
+    degrees = (180U < degrees) ? 180U : degrees;
     uint32_t pulse = 1000U + (uint32_t)degrees * 1000U / 180U;
     (void)pwm_set_cc(12U, pulse);
+}
+
+void board_servo_off(void)
+{
+    (void)pwm_set_enabled(12U, FALSE);
+    (void)gpio_set_val(12U, 0U);
+    (void)gpio_set_pin(12U, GPIO_MODE_OUT);
+}
+
+static void board_servo_init(bool b_enable)
+{
+    board_servo_off();
+    /* Configure slice 6 completely while its output is disabled. */
+    out_w(BOARD_PWM_BASE + 6U * 0x14U, 0U);
+    out_w(BOARD_PWM_BASE + 6U * 0x14U + 4U, 125U << 4U);
+    out_w(BOARD_PWM_BASE + 6U * 0x14U + 8U, 0U);
+    (void)pwm_set_wrap(12U, 19999U);
+    board_servo(90U);
+    if (b_enable)
+    {
+        (void)pwm_set_pin(12U);
+        (void)pwm_set_enabled(12U, TRUE);
+    }
+}
+
+void board_status_led(bool b_on)
+{
+    /* GP7's carrier status LED; its Grove signal must remain unconnected. */
+    (void)gpio_set_pin(7U, GPIO_MODE_OUT);
+    (void)gpio_set_val(7U, b_on ? 1U : 0U);
+}
+
+bool board_servo_test_init(bool b_enable)
+{
+    uint32_t pin = 0U;
+    uint32_t started = board_micros();
+    board_force_off();
+    for (pin = 8U; 12U > pin; ++pin)
+    {
+        (void)gpio_set_val(pin, 0U);
+        (void)gpio_set_pin(pin, GPIO_MODE_OUT);
+    }
+    clr_w(RESETS_RESET, 1U << 14U);
+    while (0U == (in_w(RESETS_RESET_DONE) & (1U << 14U)))
+    {
+        if (10000U < board_micros() - started)
+        {
+            board_servo_off();
+            robot_fault_set(ROBOT_FAULT_TIMING);
+            return false;
+        }
+    }
+    board_servo_init(b_enable);
+    return true;
 }
 
 void board_ping(void)
@@ -279,15 +334,14 @@ bool board_init(void)
             return false;
         }
     }
-    for (pin = 8U; 13U > pin; ++pin)
+    for (pin = 8U; 12U > pin; ++pin)
     {
         (void)pwm_set_pin(pin);
-        (void)pwm_set_wrap(pin, (12U == pin) ? 19999U : 6249U);
+        (void)pwm_set_wrap(pin, 6249U);
         (void)pwm_set_cc(pin, 0U);
         (void)pwm_set_enabled(pin, TRUE);
     }
-    out_w(BOARD_PWM_BASE + 6U * 0x14U + 4U, 125U << 4U);
-    board_servo(90U);
+    board_servo_init(false);
     for (pin = 26U; 29U > pin; ++pin)
     {
         out_w(GPIO_CTRL(pin), 31U);
@@ -316,5 +370,10 @@ bool board_init(void)
         return false;
     }
     setting = 0x88U;
-    return board_iic(0x23U, &setting, 1U, false);
+    if (!board_iic(0x23U, &setting, 1U, false))
+    {
+        return false;
+    }
+    board_servo_init(true);
+    return true;
 }

@@ -210,3 +210,13 @@ GP17, assigned to the two encoder A outputs. A new sheet 05B also shows the
 no-harness option: leave Grove 4 empty and use GPIO header jumpers for GP16,
 GP13, GP17 and GP19, with separate distribution of encoder power/common ground.
 The visual guide PDF now contains eight pages. No firmware changes were needed.
+
+The owner later reported continuous SG90 twitching on battery power, confirmed
+the GP12 port location with a photo, and could not obtain UART output. The
+[startup investigation](../testing/servo-startup-2026-10-30/REPORT.md) reproduced
+a missing safety-task/watchdog-feed path on failed board initialization and
+servo PWM being enabled before configuration. These paths were corrected;
+servo-off/hold isolation images and GP7 startup/mode blink codes were added.
+See [the no-serial procedure](SERVO_TROUBLESHOOTING.md). Battery voltage and the
+actual physical cause remain unconfirmed; neither software tests nor these
+images establish power quality or hardware qualification.

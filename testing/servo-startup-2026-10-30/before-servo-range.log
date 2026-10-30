@@ -1,0 +1,1 @@
+test_startup: tests/test_startup.c:128: main: Assertion `2000U == in_w(UINT32_C(0x40050084))' failed.
