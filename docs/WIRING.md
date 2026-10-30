@@ -11,22 +11,26 @@ the module has a different connector. Locate each contact by the Robo Pico
 pinout/silkscreen and continuity-check it with power off. **Do not match cable
 colours or assume the module's pin order matches a Grove socket.**
 
-## Module identification: what the supplied files actually confirm
+## Module identification: supplied files and owner confirmation
 
 | Device | Model / module number | Identification limit |
 | --- | --- | --- |
 | Controller | Raspberry Pi Pico W + Cytron **ROBO-PICO** | These tables use the supplied ROBO-PICO datasheet. |
 | Ultrasonic distance module | **HC-SR04**, nominal 5 V | Not HC-SR04P. Use its labelled VCC, TRIG, ECHO, GND pins. |
 | IMU module | **OKY3231-2 / GY-511**, containing **LSM303DLHC** | OKY3231-2 is the product module number in the supplied sheet. Check the installed board matches. |
-| Three IR sensors: left line, right line, barcode | Installed model **unconfirmed** | Supplied references include a **Waveshare Infrared Reflective Sensor, ST188 + LM393**, and a **TCRT5000** component sheet. They do not prove which assembled boards are installed. LM393 alone is a comparator chip number, not a complete module number. |
-| Scanner servo | Installed model **unconfirmed** | SG90 is mentioned as a design assumption in the tribunal, but no supplied servo datasheet confirms the fitted model or pin order. |
-| Left and right encoder gearmotors | Installed model **unconfirmed** | Review describes six-wire A/B encoder motors, without an exact part number, numbered connector pinout or confirmed logic voltage. |
+| Three IR sensors: left line, right line, barcode | **ST188**, confirmed by owner | Supplied Waveshare manual describes an ST188 + LM393 board. ST188 identifies the sensing element; confirm the installed board's pin labels before using that manual's numbered pinout. TCRT5000 is a separate reference, not the owner-confirmed sensor. |
+| Scanner servo | **SG90**, confirmed by owner | The exact manufacturer's sheet, supply rating, stall current and connector orientation are still needed for the fitted unit. |
+| Left and right encoder gearmotors | Owner-provided marking: **KH2.0-6P** | This appears to identify the six-pin connector rather than the motor model. Record it as the connector marking; the motor part number, numbered pinout and encoder logic voltage remain unverified. |
 | Optional UART adapter | Model **unconfirmed**; must use 3.3 V logic | Use labelled RX, TX and GND. |
 
 Do not assign numbered module pins to an unidentified board. The tables use
 module **pin labels**. For the documented Waveshare IR board specifically, its
 manual numbers the pins **1 DOUT, 2 AOUT, 3 GND, 4 VCC**. Those numbers apply
 only if your board matches that module; they are not a generic TCRT5000 pinout.
+
+Owner confirmation received on 30 October 2026: **IR Sen: ST188; Servo: SG90;
+Enc Motor: KH2.0-6P**. These identifications do not establish a motor connector
+pin order or prove the IR board uses the Waveshare layout.
 
 ## Where each connection is on the Robo Pico
 
@@ -87,9 +91,9 @@ its power contacts supply the ultrasonic module.
 | GND | GND | Robo Pico **Grove 3 GND** | Common ground. |
 | Interrupt / data-ready pins, if present | None | Leave unconnected | Firmware polls the accelerometer; it does not use these pins. |
 
-### Three IR modules: use analogue output
+### Three ST188 IR modules: use analogue output
 
-The installed IR module model must be confirmed from its marking. For the
+The owner identifies all three IR sensors as ST188. For the
 Waveshare ST188/LM393 board documented above, **AOUT = pin 2, GND = pin 3,
 VCC = pin 4; pin 1 DOUT stays disconnected**. On other boards use the verified
 analogue output label AO/AOUT and their own pinout.
@@ -112,10 +116,14 @@ a four-pin IR module straight to a four-pin Grove cable: their pin functions
 and order must be adapted. Keep GP6 (Grove 5), GP26 (Grove 6) and GP7 (Grove 7)
 unused by those modules. GP26 is already driven by the left sensor via Grove 5.
 
-### Left and right encoder motors
+### Left and right encoder motors: KH2.0-6P connector marking
 
-Module part numbers and connector pin numbers are unknown. Identify the actual
-motor's M+/M−, encoder VCC, GND, A and B from its vendor pinout before wiring.
+The owner supplied **KH2.0-6P** as the encoder motor identification. Treat that
+as a connector marking until a motor datasheet confirms otherwise; it does not
+specify which contact is motor power, encoder power, ground, A or B. Motor part
+numbers and connector pin numbers remain unknown. Identify the actual motor's
+M+/M−, encoder VCC, GND, A and B from its vendor pinout before wiring. The table
+below names those functions; it does not assign them to connector positions.
 
 | Module / role | Module pin / lead | GP / power destination | Where to connect |
 | --- | --- | --- | --- |
@@ -141,9 +149,9 @@ do not run the motor power leads to the Pico GP8–GP11 header pins.
 
 | Module / role | Module pin / contact | GP / power destination | Where to connect |
 | --- | --- | --- | --- |
-| Scanner servo, model unconfirmed | Signal / PWM | GP12 | Robo Pico **servo port 1 signal** |
-| Scanner servo | V+ | Supply within actual servo rating | Robo Pico **servo port 1 V+**, only if board input voltage meets servo rating |
-| Scanner servo | GND | GND | Robo Pico **servo port 1 GND** |
+| SG90 scanner servo | Signal / PWM | GP12 | Robo Pico **servo port 1 signal** |
+| SG90 scanner servo | V+ | Supply within actual servo rating | Robo Pico **servo port 1 V+**, only if board input voltage meets servo rating |
+| SG90 scanner servo | GND | GND | Robo Pico **servo port 1 GND** |
 | Onboard START/RESET button | Switch signal | GP20 | **Already wired on Robo Pico**; no external jumper |
 | Onboard E-STOP button | Switch signal | GP21 | **Already wired on Robo Pico**; no external jumper |
 | 3.3 V UART adapter | RX | GP0, Pico console TX | Robo Pico **Grove 1**, GP0 signal contact |
@@ -226,8 +234,9 @@ map) or MPU-6050 without changing and testing the driver.
 
 ## Servo and power distribution
 
-Servo signal to GP12, V+ to a supply within the **actual servo's** rating, ground
-common. The supplied files do not identify a servo model or its stall current.
+The owner confirms an **SG90** servo. Signal goes to GP12, V+ to a supply within
+the **fitted SG90's** rating, ground common. The supplied files do not establish
+its manufacturer's voltage rating or stall current.
 Check its datasheet; 1000–2000 µs is a conservative starting pulse range, not a
 proof of mechanical travel. Use strain relief and avoid hard-stop current.
 
@@ -250,6 +259,7 @@ or guarantee that a particular harness matches its colour scheme.
 - [Waveshare IR module manual](recovered-context/reference-text/Infrared-Reflective-Sensor-UserManual.txt): ST188/LM393 identity, numbered DOUT/AOUT/GND/VCC pins and supply range; verify this is the installed module before using its numbered pinout.
 - [Board adapter source](../app_program/subsystem2/board.c): actual firmware GPIO assignments, I2C address and ADC channels.
 
-The electrical map is unchanged by this clarification. Exact installed IR,
-servo and motor part numbers still need confirmation before this can serve as
-a fully identified module-to-module assembly drawing.
+The electrical map is unchanged by this clarification. ST188 and SG90 are
+owner-confirmed. The exact ST188 carrier-board pin order, SG90 unit ratings,
+and motor model / KH2.0-6P contact assignments still need verification before
+this can serve as a fully identified module-to-module assembly drawing.
