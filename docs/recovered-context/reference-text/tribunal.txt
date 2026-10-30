@@ -1,0 +1,988 @@
+Week 8 Tribunal 1 — Completed Submission
+INF2004 Embedded Systems Programming · Architecture Defence & Integration Readiness
+Item
+Details
+Purpose
+Defend Week 6 architecture, justify changes, and show readiness for partial integration.
+Core workflow
+Pre-submission AI ideation → live Zoom-updated version → final AI-vetted gap check
+Assessment focus
+Evidence, engineering judgement, negotiation, and ability to identify missing work
+Submission format
+Completed document plus Zoom recording and evidence links
+Team Information
+Item
+Details
+Group ID
+P5-IS20
+Repository Link
+https://github.com/Danish2567/inf2004-p5-is20.git
+Zoom recording
+Week 8 Tribunal 1 session, 60 minutes (see transcript, timestamps used as evidence below)
+
+Buddy
+Student ID
+Primary subsystem / persona
+Buddy 1 — Swan Hein Htet
+2501984
+Network Gatekeeper: WiFi, MQTT, telemetry (task T7 Telemetry)
+Buddy 2 — Charmaine Wong Shi Qi
+2503058
+Real-Time Taskmaster: motors, encoders, PID (task T4 MotionCtrl, both encoder ISRs)
+Buddy 3 — Yun Cong
+2500226
+Track Purist: IR sensors, line following, barcode (task T2 LineBarcode)
+Buddy 4 — Toh You Yang
+2500136
+Physics Watchdog: IMU, terrain, hump and motion events (task T3 ImuTerrain)
+Buddy 5 — Danish Hazwan
+2500803
+Spatial Optimizer: ultrasonic, servo, obstacle profiling (task T5 ObstacleScan, ISR_ECHO)
+Task ownership after this tribunal (new): T1 SafetyMonitor — Buddy 4 (the motor_force_off() primitive it calls is owned by Buddy 2). T6 VehicleCtrl — Buddy 1 (state behaviour for S4/S5 specified by Buddy 3, for S7 by Buddy 5). Shared GPIO interrupt dispatcher — Buddy 2.
+
+Version A: Pre-Tribunal AI Ideation
+(Completed before the Zoom session; reproduced unchanged so that Version B can be read against it.)
+Buddy
+AI prompt used
+Useful AI ideas
+Weak / unrealistic AI ideas
+Position before Zoom
+Buddy 1
+Asked how to prove, before any integration, that confining lwIP and the cyw43 driver to a single μT-Kernel task is actually safe, and what the rest of the system does when the link drops mid-run.
+Validate A1 first, in a standalone build, before any other subsystem is integrated: bring the link up, publish at 5 Hz and measure the longest blocking call inside the polling cyw43_arch variant. Keep the publish path outside mtx_state by copying the state under the lock and formatting after releasing it (NFR17). Version the telemetry record so late additions do not break the consumer.
+Moving the network stack to core 1 — the Week 6 freeze is core 0 only, so this is a redesign, not a tweak. A reconnect loop with exponential backoff inside the publish path, which could block T7 well past its 200 ms period. MQTT QoS 2, which buys nothing for 5 Hz best-effort telemetry.
+Defend T7 as sole owner of the stack and the 200 ms period. A1 is still unvalidated and the tutor review ranks it risk 1, so ask for the first bench slot and run it alongside the 1 ms T2 task, not alone. Accept that MQTT topics, payload schema and command validation are undefined, leaving FR23 untestable; bring a draft schema. Raise a gap: flg_sys has no bit for an MQTT STOP or RESET, so FR22 and NFR6 have no path through Figure 2.
+Buddy 2
+Asked how to de-risk a 20 ms PID loop and encoder odometry before any other subsystem exists, and whether the 20-slot encoder assumption in A2 is safe to build on.
+Measure edges per wheel revolution empirically rather than trusting the 20-slot figure, because distance, turns and hump height all inherit the error. Test the motion API against a stub caller before T5 and T6 exist. Keep deriving speed from edge intervals rather than counts per control period.
+Auto-tuning the PID by Ziegler-Nichols, which needs sustained oscillation with no instrumentation to catch it before the gearbox suffers. A Kalman filter over wheel odometry — more machinery than a 20 ms loop on this hardware needs.
+Defend the cascaded loop and the 20 ms period. Flag A2 as the most load-bearing assumption. The kit motors have a six-pin A/B phase connector, not a 20-slot disc, so A2 must be re-measured. Accept three tutor corrections: ISRs increment a count rather than timestamp into a ring; encoders move to Grove 4 (GP16/GP17); T4 must re-check ESTOP immediately before every PWM write.
+Buddy 3
+Asked how to de-risk a Code 39 decoder when neither printed symbols nor the real track are available yet, and how to prove the 1 ms sampling requirement in NFR1.
+Print test symbols and measure the narrow element with calipers before writing any decoder, so A3 is closed by measurement. Write the decoder as a pure function over an array of element widths so it can be unit-tested off-hardware. Store calibrated black and white thresholds per channel.
+Adding a camera or a second sensor for redundancy — neither is in the kit and all three ADC channels are allocated. Re-adapting the threshold on every 1 ms sample, which costs time in the tightest loop for no gain after calibration.
+Defend the 1 ms period and ratio-based decode (NFR8). A3 stays open until a physical symbol is measured. Accept three tutor points as real design work: the 1 ms release needs a 1 ms kernel tick and a stated drift-free mechanism; the turn executes at the barcode rather than the junction and needs a pending-command state; the sustained all-black end marker is indistinguishable from L2 JUNCTION. Keep the duty to clear LINE_LOST promptly during a bypass.
+Buddy 4
+Asked how to validate hump peak height to within the 5 mm of NFR13 when the measurement depends on another buddy’s odometry, and what to test first.
+Keep the 2 s stationary bias average. Test the hump algorithm by pushing the car over a hump by hand at steady speed, which removes the motor and PID variables. Log raw pitch and raw distance rather than only the computed height.
+Adding a magnetometer for heading — indoor magnetic noise near the motors makes it unreliable. Returning to double integration of vertical acceleration, already rejected with arithmetic. A Madgwick filter, costing more compute for no gain at 100 Hz.
+Defend the complementary filter and the pitch-times-distance method; A6 is accepted as a risk needing a wheel-slip test with Buddy 2. Raise the blocking gap first: Week 6 designs around an MPU-6050 but the kit supplies an LSM303DLHC/GY-511 with no gyroscope; if so, the I2 FLAT filter and FR13 need redesigning, not retuning. Also raise that T1 at priority 4 may sit at or below the kernel WiFi/USB service tasks.
+Buddy 5
+Asked AI to attack the Week 6 obstacle design rather than extend it: where the bypass geometry breaks, what the scan timing costs, and which interfaces to T4 and T6 are undefined.
+The 15° beam makes every obstacle read wider than it is, so the width estimate needs a beam-spread correction before NFR22 is achievable. Servo settling time scales with move size, so a flat 50 ms per angle understates the scan. The bypass distance must be derived from the measured width. T5 can reuse mbf_motion and a spare flg_sys bit instead of a new kernel object.
+Switching to an HC-SR04P at 3.3 V — the kit board is a 5 V HC-SR04. Pinging every 20 ms, which the datasheet rules out. A smooth bypass curve, untestable one leg at a time. A second ultrasonic sensor for side clearance.
+Defend the two-stage scan and three-leg bypass. Concede band A (under 3 s) is unreachable and ask the team to accept NFR23 at band B. Accept that NFR22 is ambitious and depth = width is a guess, so A9 must be measured. Accept that O9 REACQUIRE could latch onto a barcode bar or a branch. Need robot width and length measured. Raise one gap: an obstacle detected mid-manoeuvre must not halt the vehicle mid-turn, and mbf_motion should be flushed on the S3→S7 handover.
+Week 6 Architecture Defence Snapshot Before Zoom
+Week 6 artefact
+What the team claimed in Week 6
+Evidence available now
+Still weak or untested
+Buddy defending it
+RTOS task table and CPU utilisation (Section 3)
+Seven tasks on core 0 at ~18.9% utilisation, inside the Liu & Layland bound of ~72.9% for seven periodic tasks, leaving the 40% headroom NFR15 requires.
+Week 6 task table lists every period, priority and estimated WCET; the bound is computed in Section 3 and the tutor review did not dispute the arithmetic. Paper evidence only.
+Every WCET is an estimate. T2 at 1 ms needs a 1 ms kernel tick, finer than the template default, and with the cyclic handler dropped there is no stated drift-free release for T2. T1 at priority 4 may sit at or below the kernel WiFi/USB service tasks.
+Buddy 2
+Single-owner rule for hardware and shared data (Section 9, Figure 2)
+Every device has exactly one owning task, so most shared resources need no mutex.
+The pin table names an owning task for every signal; Figure 2 shows no second writer. The tutor endorsed the short ISRs and the tk_wup_tsk wake of T5. Paper evidence only.
+T1 writes the motor registers directly, never tested while T4 is mid-manoeuvre; T4 can write PWM on its next release after T1 forced the pins low. pico-sdk allows only one GPIO callback per core, so a dispatcher is needed. No owner named for T1 or T6.
+Buddy 2 (T1/T6 ownership to be assigned)
+Pin map and hardware integration sketch (Figure 1, Section 2)
+Every allocated pin has one signal and one owner, with the HC-SR04 at ~5 V from servo port 2 and ECHO divided to 3.33 V.
+Pin table cross-checked against the Robo Pico and HC-SR04 datasheets; the tutor confirmed I2C0 on GP4/GP5, the ECHO divider on GP3, GP28 jumper open and brake-on-zero. Nothing wired yet.
+Confirmed wrong: Grove 4 is GP16/GP17; GP6 shares Grove 5 with GP26 and GP7 shares Grove 7 with GP28, so a Grove cable would collide with a live ADC channel. A wiring change, unmade.
+Buddy 2 and Buddy 5
+Safety path: T1 SafetyMonitor and the fault state (Figure 3, NFR5, NFR6)
+T1 runs above every deadline-derived task and forces PWM off within 50 ms of a critical fault; E-stop de-energises both motors within 100 ms.
+Figure 3 shows S10 FAULT and its entry conditions; the task table shows T1 above every other task. Paper only; the tutor asks for one consolidated fault table.
+The override has never been tested with the other six tasks running, and T4 can overwrite the forced-off PWM on its next release. Recovery from S10 is only a button RESET with no stated safe-reset condition. No buddy assigned to T1.
+Buddy 4 (owner to be confirmed)
+Inter-task coordination: flg_sys, mbf_motion, mbf_nav, mtx_state (Section 4, NFR20)
+All cross-task data passes through a message buffer, an event flag or the state mutex.
+Figure 2 draws every path; Section 4 justifies each mechanism; the tutor accepted the small object set as a strength. Paper only.
+mbf_motion has two senders and is not flushed on the S3→S7 handover. g_vehicle_state is written by T2, T3, T4 and T5 under one mutex, so NFR17 needs measuring. No flag bit for MQTT STOP/RESET. The “T6 leaves MOTION_DONE and LINE_LOST alone during a bypass” rule is untested.
+Buddy 1 and Buddy 5
+Obstacle scanning and bypass (Figure 7, FR14–FR18, NFR14, NFR22, NFR23)
+Coarse-then-fine servo scan profiles the obstacle; bypass distance derived from corrected width so 50 mm clearance always holds; bypass under 5 s.
+Figure 7 gives every state and transition; timings from the HC-SR04 datasheet; geometry written out in Section 6.4. The tutor did not challenge the structure. Paper only.
+Robot width and length unmeasured, so the clearance claim is unchecked. NFR22 is ambitious and depth = width is a guess. O9 REACQUIRE could latch onto a barcode bar or another branch. Bypass time is close to the 5 s limit once turns are counted.
+Buddy 5
+Barcode read-to-manoeuvre chain (FR4–FR7, NFR1, NFR8, NFR9, Figures 3 and 4)
+A side-mounted IR channel sampled at 1000 Hz decodes a Code 39 character by width ratio, so decoding is speed-independent, and invalid reads are rejected.
+Figure 4 shows the decoder states; Section 1.2 derives 10 samples per narrow element. The tutor did not dispute the decoder itself, only when its output is applied. Paper only.
+A3 rests on an inferred narrow element width. The turn executes on BARCODE_VALID, at the barcode rather than the junction. The sustained all-black end marker cannot be told apart from L2 JUNCTION. Figure 3 is too small to read as printed.
+Buddy 3
+Shared Resource Allocation Matrix
+(As taken into the Zoom. Rows added during the session are marked NEW and appear after the Week 6 set.)
+Shared resource
+Used by task(s)
+Owner task / module
+Access type
+Contention risk
+Mitigation
+Evidence needed
+g_vehicle_state, guarded by mtx_state
+T2, T3, T4, T5, T6, T7
+mtx_state (mutex, priority inheritance); T6 VehicleCtrl is the main writer
+Read-modify-write under the mutex
+Six of seven tasks touch it. T7 holds it while copying the telemetry record and T5 writes the obstacle profile into it, so a long hold could delay the 20 ms control loop.
+Copy in or out and release before formatting or publishing; NFR17 caps any hold at 100 µs with priority inheritance. Updated in Zoom: the line error and line state are moved out of the mutex into a single-writer 16-bit word (see packed access rules), which removes the hottest reader-writer pair.
+Logic-analyser or timestamp log of the longest observed hold while T4, T5 and T7 run together.
+flg_sys event flag group
+T1–T7 and ISR_BTN
+T6 VehicleCtrl
+Set, wait and clear individual bits
+Several tasks set bits and T6 wakes on any of them. During a bypass MOTION_DONE and LINE_LOST both fire while T5 owns the behaviour.
+Each bit has exactly one clearer; during S7 only T5 clears MOTION_DONE and only T2 clears LINE_LOST. Updated in Zoom: one new bit RESET_REQ; MQTT STOP sets the existing ESTOP bit; fault detail lives in the new fault mask, not in flg_sys.
+Serial log of every flag set and clear through one full bypass, showing T5 observed MOTION_DONE for each leg.
+mbf_motion message buffer (capacity 4)
+Writers: T6 VehicleCtrl and T5 ObstacleScan. Reader: T4 MotionCtrl.
+T4 MotionCtrl
+Queued copy of motion_req_t
+Two possible senders; an obstacle detected during a barcode manoeuvre could put both T6 and T5 requests in the queue.
+Only one sender at a time. Updated in Zoom: T6 drains the buffer on the S3→S7 handover, and every request carries a 1-bit source field so T4 rejects a T6 request while S7 is active. The flush alone was judged racy.
+Serial log of an obstacle injected during a barcode turn, showing a single accepted sender and the order of requests.
+Motor PWM outputs GP8–GP11
+T4 MotionCtrl normally; T1 SafetyMonitor on a fault
+T4 MotionCtrl
+PWM duty writes
+T1 writes the registers directly. If T1 forces off while T4 is mid-update, T4 could write a non-zero duty back.
+Updated in Zoom: T4 re-reads the ESTOP bit with tk_ref_flg immediately before every PWM write, and the check-and-write pair runs with interrupts masked so T1 cannot preempt between them. T1 still only ever writes zero.
+Timed shutdown test: E-stop during M3/M4 and show both motors de-energised within 100 ms (NFR6), with the PWM registers sampled ten times afterwards.
+GPIO interrupt callback (pico-sdk, core 0)
+ISR_ENC_L, ISR_ENC_R, ISR_ECHO, ISR_BTN
+Buddy 2 (assigned in Zoom)
+Shared interrupt entry point
+pico-sdk allows only one GPIO callback per core but the design draws four sources; registering the second silently replaces the first and the symptom is a sensor that never fires.
+One dispatcher reads the event mask and calls the encoder, echo and button handlers in turn, staying inside the 20 µs of NFR16 (Week 6 cited NFR17 here; corrected).
+Code review of the dispatcher plus a test that drives all four sources and shows every handler still runs.
+Kernel tick and task release timing
+T2 (1 ms), T3 (10 ms), T4 and T1 (20 ms), T5 (70 ms), T7 (200 ms)
+μT-Kernel 3.0 scheduler
+Periodic task release
+T2 needs a 1 ms release, finer than the template default tick, and with the cyclic handler dropped nothing states how T2 is released without drift. T1 at priority 4 may sit at or below the kernel service tasks.
+Resolved in Zoom: kernel tick set to 1 ms and the value documented; a 1 ms cyclic handler whose only action is tk_wup_tsk(T2) gives a drift-free, absolute-time release; T2 sleeps with tk_slp_tsk and logs any queued wake-up above one as an overrun. The kernel service task priority list is to be read from the template config and T1 placed strictly above it.
+Timing log of T2 release jitter over a minute, the configured tick value, the overrun counter, and the kernel task priority list.
+Battery and VIN power rail
+T4 (motors), T5 (servo and ultrasonic), whole board
+Hardware, no owning task
+Shared electrical supply
+A current surge when both motors start could pull servo port V+ below the 5 V the HC-SR04 needs, giving wrong ranges exactly when the car is moving.
+Measure servo port 2 V+ with both motors running under load before integration (A5). If it sags, move the sensor supply or add local decoupling.
+Multimeter or scope reading of servo port V+ during a motor start, in the same session as the divider check.
+NEW — fault mask (g_faults, uint8_t)
+Written by T3, T4, T5, T7 and ISR_BTN; read by T1, T6, T7
+T1 SafetyMonitor (Buddy 4) owns the policy; the byte itself has no single writer
+Bit set/clear, read-modify-write from both tasks and an ISR
+The RP2040 (Cortex-M0+) has no atomic read-modify-write, so an unprotected |= from a task can lose a bit set by an ISR between its load and its store.
+All access through fault_set() / fault_clear() helpers that mask interrupts for the load-OR-store (a few cycles, well inside NFR16). Readers do one aligned byte load, which is atomic. A separate compile-time FAULT_CRITICAL_MASK excludes WiFi loss so NFR19 still holds.
+Stress test: drive all four interrupt sources while three tasks set and clear bits; assert no set bit is ever lost and no cleared bit reappears.
+NEW — packed single-writer words (line word, echo word, encoder counters)
+Line word: written T2, read T4/T6/T7. Echo word: written ISR_ECHO, read T5. Encoder counters: written by each encoder ISR, read T4.
+The single writer named per variable
+One aligned store by the writer; one aligned load by each reader
+A word packing several fields is corrupted if two writers do read-modify-write on it; a reader can also see a half-updated value if the compiler splits the access.
+Exactly one writer per word; volatile with a static assertion on size and alignment; encoder counters are free-running (the ISR only increments, T4 subtracts the previous value) so no clear-race exists. Requires the NFR20 amendment below.
+_Static_assert output in the build log, plus the stress test above; code review confirming one writer per listed variable.
+Subsystem Interface and Code Structure Map
+Module / file / interface
+Provider
+Consumer(s)
+Purpose
+Inputs
+Outputs
+Interface rule
+Validation rule
+telemetry.c / mqtt_link.c
+Buddy 1
+T6 VehicleCtrl (link status), ground-station dashboard
+Publishes the telemetry record and receives remote commands over MQTT
+A copy of g_vehicle_state taken under mtx_state; MQTT subscriptions
+MQTT publish at 5 Hz; flg_sys NET_UP; remote STOP and RESET
+T7 is the only task that may call lwIP or cyw43. It copies the state under the lock and formats and publishes after releasing it. Added: the wire format is an explicit shift-and-mask byte array with a version field — never a C struct — and commands are validated as exactly one byte.
+Link up, publish observed at 5 Hz, and the car completes a run with WiFi switched off entirely (NFR19). Added: dashboard decode of the 20-byte payload matched field by field against a serial print of the same snapshot.
+motion_ctrl.c / motion_req_t
+Buddy 2
+T6 VehicleCtrl, T5 ObstacleScan, T7 Telemetry
+Runs the wheel PID, keeps odometry, executes motion requests
+motion_req_t from mbf_motion; encoder edge counts from the two ISRs; line_error from T2
+Motor PWM on GP8–GP11; distance and wheel speeds into g_vehicle_state; flg_sys MOTION_DONE
+Only T4 writes the motor PWM, with T1’s forced OFF as the one documented exception. Added: T4 re-checks ESTOP immediately before each PWM write; T4 rejects any motion_req_t whose source bit does not match the active owner; T4 also owns motor_force_off(), which T1 calls.
+Distance error under 5% over 2 m (NFR11); a 90° turn within ±5° (NFR12); MOTION_DONE seen by a stub caller before T5 and T6 exist.
+sensor_line.c / barcode.c / nav_cmd_t
+Buddy 3
+T6 VehicleCtrl via mbf_nav; T4 (line_error); T5 (line state during reacquisition)
+Reads the three IR channels, estimates line position, decodes barcodes
+ADC0, ADC1, ADC2 (GP26–GP28)
+Packed line word (line_error, line state, junction/end flags); flg_sys LINE_LOST; nav_cmd_t into mbf_nav
+No direct motor calls; commands only ever leave through mbf_nav. T2 clears LINE_LOST as soon as the line is seen again, including during a bypass. Added: T2 is the sole writer of the line word and also exposes the measured black-run length that T5 uses to distinguish the line from a barcode bar.
+Serial log of line position matched against the real track; at least 95% correct decodes over 20 passes with no false positives (NFR9). Added: 8-bit quantised line error logged beside the raw ADC difference for one full run.
+imu_terrain.c
+Buddy 4
+T6 VehicleCtrl, T7 Telemetry
+Filters IMU data, detects humps and impacts, estimates peak height
+I2C0 burst read from the IMU; distance travelled from g_vehicle_state
+Pitch, motion class, turn rate, hump peak into g_vehicle_state; flg_sys HUMP; fault bits on impact
+T3 is the sole owner of I2C0, so no bus mutex exists. It reads encoder distance but never writes it. Added: if the kit part has no gyroscope, turn rate is supplied by T4’s wheel-speed differential and T3 consumes it rather than measuring it.
+Reported peak height within ±5 mm of the physically measured hump (NFR13), with raw pitch and distance logged for offline re-analysis.
+obstacle_scan.c
+Buddy 5
+T6 VehicleCtrl, T4 MotionCtrl (via mbf_motion), T7 Telemetry
+Sweeps the servo, profiles the obstacle, plans and sequences the bypass
+Echo word from ISR_ECHO; line state and black-run length from T2; flg_sys ESTOP and MOTION_DONE
+Obstacle profile into g_vehicle_state; flg_sys OBSTACLE; TRIG on GP2; servo PWM on GP12; motion_req_t into mbf_motion while S7 is active
+T5 is the sole owner of the servo (GP12) and the HC-SR04 (GP2/GP3) and the only sender to mbf_motion while S7 is active. It never writes motor PWM directly. Added: O9 accepts a black run only if its crossing length is consistent with the 18 mm line at the approach angle.
+Width within ±10% of measured (NFR22); no contact and at least 50 mm clearance (NFR14); bypass under 5 s (NFR23, band B).
+NEW — faults.c / fault_set(), fault_clear(), FAULT_CRITICAL_MASK
+Buddy 4
+T1 (policy), T6 (state), T7 (telemetry), all detectors
+One shared fault bitmask and the single fault table it is generated from
+Fault events from T3, T4, T5, T7, ISR_BTN
+g_faults byte; flg_sys ESTOP when any critical bit is set
+Set and clear only through the helpers, which mask interrupts. No task reads individual booleans; everything reads the byte.
+The packed-data stress test, plus one row per bit in the fault table with its detector, its clear condition and whether it is critical.
+Week 6 Assumption Closure
+ID
+Original assumption
+Current status
+Evidence collected
+Remaining risk
+Next action
+A1
+lwIP and cyw43 can be used safely under μT-Kernel 3.0 provided every network call is made from a single task (T7) using the polling cyw43_arch variant.
+Open / Needs validation
+None on hardware. Supported only by the Week 6 reasoning and the single-owner rule in Figure 2.
+A blocking poll call overruns T7’s 200 ms period; worse, silent corruption of lwIP state showing as random freezes after a long run. Largest redesign cost in the document.
+Standalone WiFi/MQTT image publishing at 5 Hz for one hour, now run against a 1 ms tick and a dummy T2 supplied by Buddy 3, with the longest poll call measured by GPIO toggle. Pass: no missed publishes, no resets, dummy-T2 overrun counter zero. Owner: Buddy 1.
+A2
+The wheel encoders give 20 slots per revolution and the wheels are 65 mm across, so one edge is about 5.1 mm.
+Open / Needs validation — now also a connector/phase question
+None. The figure came from a typical slotted disc, not the supplied motors.
+The kit motors use a six-pin A/B phase connector. If counts per revolution differ, distance (NFR11), turn angle (NFR12) and hump height (NFR13) are wrong together — and the chosen bit widths for the encoder counters and distance fields change with it.
+Mark one wheel, roll a measured 1 m by hand, count edges, five times each direction. Publish the measured counts per revolution so every derived figure updates together. Owner: Buddy 2. First bench slot.
+A3
+Course barcodes are Code 39, single character, delimited by ’*’, 1:3 ratio, 3 mm narrow element derived from the 141 mm symbol length.
+Open / Needs validation
+None. The 3 mm figure is inferred arithmetic, not a measurement.
+If the narrow element is smaller than 3 mm, 1000 Hz no longer gives 10 samples per element and every read fails — silently.
+Print the course symbols, measure the narrow element with calipers, confirm the symbology before writing the decoder. Owner: Buddy 3.
+A4
+The MPU-6050 can be read reliably at 100 Hz over I2C0 at 400 kHz, 14-byte burst under 400 µs.
+Open / Converted into a risk — conditional redesign prepared
+None. Week 6 assumes an MPU-6050; the kit component list supplies an LSM303DLHC datasheet and the tutor names a GY-511.
+The LSM303DLHC has no gyroscope, so the complementary filter and the measured turn rate in FR13 have no source. This is about the wrong device, not an unvalidated number.
+Photograph the marking on the physical IMU board (Buddy 5 holds the kit) and post it. If it is the LSM303DLHC, apply the prepared fallback: gated accelerometer-only pitch and kinematic turn rate from T4. Owner: Buddy 4.
+A5
+HC-SR04 runs from servo port 2 V+ at ~5 V; ECHO divided 10k/20k to 3.33 V stays inside the 3.6 V limit; 70 ms between pings avoids ghost echoes.
+Open / Needs validation
+Datasheet evidence only (HC-SR04 5 V supply and >60 ms cycle; Robo Pico 3.6 V input limit and servo V+ tied to VIN).
+If VIN sags under motor load the sensor drops below 5 V and ranges become unreliable exactly when moving. An undivided 5 V into GP3 would damage the microcontroller.
+With the sensor unplugged, feed 5 V into the divider and confirm 3.0–3.6 V. Measure servo port 2 V+ with both motors running. Measure robot width B and length L in the same session. Owner: Buddy 5.
+A6
+Hump height = Σ sin(pitch) × distance travelled, assuming encoder distance stays valid while climbing.
+Open / Accepted as risk
+None. Defended by arithmetic in Section 6.3; the tutor ranks it risk 4 of 5.
+Wheel slip is most likely on the hump face, exactly where the distance term matters, and the error is silent. If the IMU has no gyro the pitch term also gets noisier.
+Hump traverse with encoder distance logged against a tape measure, at 150 and 250 mm/s. Needs A2 closed first. Owner: Buddy 4 with Buddy 2.
+A7
+Robo Pico Grove ports map to GP0/GP1, GP2/GP3, GP4/GP5, GP6/GP7, GP16/GP17, GP26/GP27 and GP28 for ports 1–7.
+Closed — corrected
+Robo Pico datasheet Grove table, confirmed by the tutor: Grove 4 is GP16/GP17, Grove 5 is GP6 with GP26, Grove 6 is GP26/GP27, Grove 7 is GP7 with GP28.
+None remaining in the mapping itself; the risk moves to executing the rewiring correctly.
+Encoder phase A to Grove 4 (GP16/GP17); phase B to GP13 and GP19 as header wires, which belong to no Grove port; GP6 and GP7 left unallocated. Correct A7, the pin table and Figure 1. Owner: Buddy 2 with Buddy 5.
+A9
+Obstacle width estimable to ±10% by subtracting the 15° beam spread; depth = width; SG90 settles within 50 ms per 30°.
+Open / Needs validation
+Datasheet evidence only for the 15° angle; no servo timing figure in the kit documentation. A9 was missing from the Week 6 Section 7 table; the tidied version restores it.
+Width or depth error breaks the bypass geometry so the car could clip an obstacle (NFR14). Course obstacles are smaller and less smooth than the datasheet’s assumed target.
+Scan blocks of 50, 100 and 150 mm at three distances, ten times each; film 30° and 90° servo steps against a protractor. Owner: Buddy 5.
+A11 (new)
+On the RP2040 (Cortex-M0+) an aligned byte, halfword or word load or store is atomic, and there is no atomic read-modify-write.
+Open / Needs validation (documentary)
+ARMv6-M architecture reference; no exclusive load/store instructions on M0+. Not yet demonstrated on our build.
+If a compiler splits an access to a packed word, or a field straddles a word boundary, the single-writer rule is not sufficient and we would get rare, hard-to-find corruption.
+_Static_assert on the size and alignment of every packed shared word; inspect the generated assembly for one representative store; run the packed-data stress test. Owner: Buddy 2.
+
+Version B: Live Zoom-Updated Version
+AI-use declaration. The team did not ask AI to complete this template. AI was used as a reviewer and challenger. One AI interaction took place during the recorded session (Buddy 1, MQTT payload design at 47:18) and was screen-shared at the point of discussion, with the prompt, the output and the team’s reasons for accepting or rejecting each part stated aloud. All final entries were reviewed, corrected and accepted by the team, and every member can explain the decisions relating to their subsystem.
+Buddy Contributions During Zoom
+Buddy
+Key challenge, concern, or argument raised
+Challenge received
+Decision or compromise reached
+Buddy 1 (Swan)
+FR22 and NFR6 promise an MQTT STOP, but flg_sys has no bit for it and Figure 2 draws no path from T7 to T1, so an MQTT STOP currently goes nowhere (19:28). Also defended A1 as a corruption risk, not merely a timing risk (15:44).
+Buddy 2 challenged that T7 is the lowest-priority task, so a network STOP can be starved and cannot honour NFR6’s 100 ms (20:12). Buddy 5 challenged why A1 is called the largest redesign cost when a slow poll only hurts T7’s own period (15:44).
+MQTT STOP sets the existing ESTOP bit with a source marker, and a new RESET_REQ bit is added — one new bit, not two. NFR6 is reworded so the 100 ms is counted from the moment T7 receives the message; the GP21 button remains the guaranteed path (20:36). A1’s soak test is re-scoped to prove absence of resets and freezes over an hour, not only timing.
+Buddy 2 (Charmaine)
+The A7 correction is not enough on its own: the kit’s six-pin connector implies A and B phases, so two GPIOs do not carry the encoders if direction is wanted (04:24). Also raised the Cortex-M0+ has no atomic read-modify-write, so packed shared data needs explicit rules (35:44).
+Buddy 5 pointed out her first proposal put phase B on GP6, which still sits on Grove 5 with GP26 (05:52). Buddy 5 also challenged that single-writer packed words are exactly the “unsynchronised global” NFR20 forbids (37:14).
+Phase A on Grove 4 (GP16/GP17), phase B on GP13 and GP19, which belong to no Grove port, so no cable can reach GP26 or GP28 (06:22). NFR20 is amended to permit a fourth mechanism — a single-writer, naturally aligned word — with every such variable listed by name and its writer, at Buddy 4’s insistence (37:48).
+Buddy 3 (Yun Cong)
+T2 has no drift-free release: the cyclic handler was dropped in Week 6 and the template’s default tick is coarser than 1 ms, so NFR1’s ±5% cannot be claimed (11:00). Also proposed the pending-command state and a distance-based end-of-course criterion (25:27, 27:18).
+Buddy 5 challenged that reinstating a cyclic handler contradicts the Week 6 decision in Section 8.2 that rejected it (12:15). Buddy 1 challenged what “Go Straight” consumes if it does nothing (25:56).
+The cyclic handler returns for a different job — a drift-free release, not a jitter-free ADC read — so the Week 6 row stands with a new reason recorded (12:25). Commands A, B and C go pending and are consumed at the junction; D (U-turn) executes immediately since it needs no junction (26:15).
+Buddy 4 (You Yang)
+The Week 6 design is built on an MPU-6050 while the kit appears to supply an LSM303DLHC with no gyroscope, which would break I2 FLAT and FR13 (07:55). Also raised that T1’s “highest priority” is only highest among our own tasks, not above the kernel service tasks (13:24).
+Buddy 3 asked why the on-board magnetometer could not be used instead (09:21). Buddy 2 objected to T1 being owned by someone other than the owner of the motor PWM (21:41).
+A conditional redesign is prepared now rather than waiting for the photo: gated accelerometer-only pitch and kinematic turn rate from T4 if the part has no gyro (09:42). The magnetometer is rejected — motor and indoor magnetic noise, and it gives heading, not pitch. T1 goes to Buddy 4 but calls motor_force_off(), which Buddy 2 owns and writes (21:49).
+Buddy 5 (Danish)
+Flushing mbf_motion at the S3→S7 handover is not sufficient on its own, because T4 can take a queued message while T6 is flushing (31:04 — raised by Buddy 2, answered by Buddy 5 with the source bit). Raised the O9 REACQUIRE false-latch criterion and asked the team to accept NFR23 at band B (31:22, 32:08).
+Buddy 4 challenged whether band B is even reachable once three legs and three 60° turns are added to 1.6 s of scanning (32:24). Buddy 2 challenged whether the GPIO dispatcher delays the echo edge behind an encoder edge (23:24).
+Every motion_req_t carries a 1-bit source field and T4 rejects the wrong sender; the flush becomes belt-and-braces (31:14). NFR23 accepted at band B with an explicit priority order: if it does not fit, fine-scan settle time is traded first and clearance (NFR14) is never traded (32:33). Dispatcher latency judged to be a microsecond or two against a 1.2 ms echo pulse — accepted.
+Live Decision Change Log
+Original idea / Week 6 design
+Updated decision
+Change type
+Reason for change
+Evidence link / timestamp
+Owner / follow-up
+Encoders on GP6/GP7 as “Grove 4”, one signal per wheel, 20-slot disc
+Phase A on GP16/GP17 (true Grove 4); phase B on GP13 and GP19 as header wires; GP6/GP7 unallocated; ISRs count edges and read phase B for direction
+Clarified (wiring change)
+The datasheet mapping is different from A7: GP6 shares Grove 5 with GP26 and GP7 shares Grove 7 with GP28, so a Grove cable would land on a live ADC channel. The six-pin kit connector also implies A/B phases, and direction is needed when the wheel moves while commanded to zero.
+Zoom 03:02–06:38; Robo Pico Grove port table; tutor review IS20 bullet 1
+Buddy 2 with Buddy 5; rewire and correct A7, the pin table and Figure 1
+T3 reads an MPU-6050; I2 FLAT runs a gyro/accelerometer complementary filter; FR13 reports a measured turn rate
+Conditional redesign: if the kit part is an LSM303DLHC/GY-511, I2 FLAT becomes low-pass-filtered accelerometer pitch, gated to samples where
+a
+is within ±0.1 g of 1 g, and turn rate comes from T4’s wheel-speed differential. FR11 reworded without “gyroscope”; FR13 may report a kinematic turn rate
+Major redesign (conditional)
+The kit component list supplies an LSM303DLHC datasheet and the tutor names a GY-511, neither of which has a gyroscope. Waiting for the photo before designing would cost a week.
+Cyclic handler dropped (Section 8.2); T2 is “already periodic”
+Kernel tick set to 1 ms and documented; a 1 ms cyclic handler whose only action is tk_wup_tsk(T2); T2 sleeps on tk_slp_tsk and logs any queued wake-up above one as an overrun
+Clarified (reinstated for a different purpose)
+Week 6 rejected the cyclic handler for sampling jitter, which is still the right call. It missed that nothing then provided a drift-free release. A delay-based loop accumulates execution time and preemption, which NFR1’s ±5% cannot absorb.
+Zoom 11:00–13:18; tutor review IS20 bullet 4
+Buddy 3; tick value recorded in the task table, overrun counter in telemetry
+“T4 notices on its next release that its outputs were overridden”
+T4 reads ESTOP with tk_ref_flg immediately before every PWM write, and the check-and-write pair runs with interrupts masked
+Clarified (closes a race)
+T1 can force the pins low after T4 has computed a duty but before it writes it, so the motors come back on for at least one PID period — longer, since T6 at priority 12 is below T4.
+Zoom 18:00–19:10; tutor review IS20 bullet 5
+Buddy 2 writes motor_force_off() and the guarded write; Buddy 4 owns T1
+flg_sys has no bit for an MQTT STOP or RESET
+MQTT STOP sets the ESTOP bit with a source marker in the fault record; a new RESET_REQ bit is added and cleared by T6; NFR6 reworded so 100 ms counts from T7’s receipt
+Clarified
+FR22 and NFR6 promise remote STOP and RESET but no path existed. T7 is the lowest-priority task and the network adds unbounded latency, so the original wording could not be honoured literally.
+Zoom 19:28–20:55
+Buddy 1; schema and bit added to the MQTT spec
+T1 and T6 have no named owner
+T1 SafetyMonitor → Buddy 4, calling motor_force_off() owned by Buddy 2. T6 VehicleCtrl → Buddy 1, with S4/S5 behaviour specified by Buddy 3 and S7 by Buddy 5. GPIO dispatcher → Buddy 2
+Reassigned
+The Week 6 buddy table left the two cross-cutting tasks unowned, which the tutor flagged. Splitting “decision” from “mechanism” keeps the single-owner rule for the motor registers intact.
+Zoom 21:22–22:50
+As assigned
+S4 → S5 on BARCODE_VALID: the turn executes at the barcode
+Pending-command state: on BARCODE_VALID, T6 stores the command plus a distance budget (placeholder 500 mm) and keeps line following; the command executes at the next L2 JUNCTION or expires and is logged. “Go Straight” is consumed at the junction; “U-turn” executes immediately
+Clarified (new state)
+The barcode sits before the junction, so turning at the barcode turns into nothing. The distance between them is a course measurement, so the design must tolerate any value up to a limit. An unconsumed command would otherwise be applied at a later junction.
+Zoom 25:00–26:24; tutor review IS20 bullet 8
+Buddy 3 draws the state; Buddy 1 implements it in T6
+End of course is a “sustained all-black” reading
+END is declared when all-black persists for more than a distance threshold (placeholder 60 mm), measured by encoder; a shorter all-black run is L2 JUNCTION. MQTT END is kept as a backup only
+Clarified
+A junction is also all-black, so the Week 6 criterion matches every junction. Making MQTT the only end marker was rejected because NFR19 requires a complete run with no network at all.
+Zoom 26:41–28:01; tutor review IS20 bullet 9
+Buddy 3; both distances measured on the real course
+mbf_motion has two senders; “T6 posts nothing while S7 is active”
+T6 drains mbf_motion on the S3→S7 handover, and every motion_req_t carries a 1-bit source field that T4 checks against the active owner
+Clarified
+The flush alone is racy: T4 can take a queued message between T6 deciding to flush and the flush happening. The source bit is the actual guarantee; the flush is defence in depth.
+Zoom 30:30–31:22; tutor review IS20 bullet 6
+Buddy 5 (flush in T6 handover), Buddy 2 (source check in T4)
+NFR23: bypass under 5 s, band A (3 s) aspirational
+NFR23 accepted at band B (under 5 s), with a stated trade order: fine-scan settle time is reduced first; NFR14 clearance is never traded
+Simplified (target lowered, explicitly)
+The two scan passes alone take about 1.6 s before any turn or leg, so band A is unreachable. Band B remains unproven until robot width and length are measured.
+Zoom 32:08–32:49; Week 6 Section 6.4 timing budget
+Buddy 5; B and L measured in the A5 bench session
+Application data uses natural C types; telemetry is a text record; faults are separate variables
+Minimum-bit representation across the firmware: 8-bit fault mask with a critical sub-mask, 2-byte motion_req_t, packed line/echo/profile/state words, 29×8-bit element buffer, 20-byte binary MQTT telemetry with a version and sequence field, 1-byte commands. Three packed access rules adopted and NFR20 amended
+Major redesign (injected constraint)
+Change Requirement 1 requires each field to use only the bits its valid range needs, a shared fault bitmask, compact binary MQTT, and race-free access to packed shared data. Adopting it now rather than at Week 13 avoids rework, and it also reduces mtx_state traffic by moving the line error to a single-writer word.
+Zoom 34:00–50:45; Change Requirement 1; repository baseline tag cr1-baseline
+All five; data representation table in the appendix, one section per buddy
+No change — PID loop at 20 ms with a 100 ms rolling speed-averaging window
+Confirmed. The window stays at 100 ms until the measured counts per revolution are known, then it is re-derived rather than guessed
+No change
+The window exists because a 20-slot disc gives about one edge per control period. If the hall encoder is much finer the window can shrink, but changing it before A2 is measured would replace one guess with another.
+Zoom 07:24–07:32
+Buddy 2
+No change — T7 is the lowest-priority task and the sole owner of the lwIP/cyw43 stack; a slow network cannot delay a control loop
+Confirmed. The fallback for a long blocking poll is to split the poll into smaller steps, not to move the stack to core 1
+No change
+Moving to core 1 is a redesign of the Week 6 core-0 freeze. Nothing waits on T7, so NFR19 is a property of the structure.
+Zoom 14:05, 15:15–16:28
+Buddy 1
+No change — single-owner rule for hardware, with exactly one documented exception (T1 forcing the motor PWM off)
+Confirmed. Nobody proposed routing the shutdown through T4
+No change
+Routing the shutdown through T4 would make the safe state depend on T4 being schedulable, which fails in precisely the case the safe state exists for.
+Zoom 24:12
+Buddy 4 / Buddy 2
+No change — ratio-based Code 39 decode with quiet zone, 29-element budget, timeout and explicit reject
+Confirmed. The tutor did not dispute the decoder, only when its output is applied
+No change
+Ratio classification is what makes NFR8 speed-independent, and rejection is cheaper than a wrong turn (FR6, NFR9).
+Zoom 25:00, 28:41–29:04
+Buddy 3
+No change — an obstacle detected mid-manoeuvre is latched in flg_sys and acted on after MOTION_DONE
+Confirmed. ESTOP remains the only pre-empting event
+No change
+Aborting a half-finished encoder-goal turn leaves the heading unknown, which is worse than finishing a 90° turn in place with a 200 mm obstacle margin.
+Zoom 32:54–33:28
+Buddy 5
+No change — during S7, T2 clears LINE_LOST and T5 clears MOTION_DONE; T6 touches neither
+Confirmed
+No change
+One clearer per bit is what prevents T5 waiting forever on a bit someone else consumed.
+Zoom 28:31
+Buddy 3 / Buddy 5
+Resource and Assumption Review
+Item challenged
+Evidence presented
+Decision made
+Impact on other buddies
+A7 Grove port mapping (and therefore the whole pin table)
+Robo Pico datasheet Grove port table, independently confirmed in the tutor review: Grove 4 = GP16/GP17; GP6 on Grove 5 with GP26; GP7 on Grove 7 with GP28
+A7 closed as corrected. Encoder phase A to GP16/GP17, phase B to GP13/GP19 (no Grove port), GP6/GP7 unallocated
+Buddy 5 loses the GP13 servo-port signal pin he had kept free; Buddy 3’s GP26 and GP28 channels are now unreachable by any encoder cable; Figure 1 and the pin table must be reissued
+A2 encoder counts per revolution, and the implied edge distance of 5.1 mm
+None — the 20-slot figure came from a generic slotted disc. The kit motors have a six-pin A/B phase connector
+Remains open; first bench slot. Measured counts to be published in the group channel so every derived figure updates at once
+Buddy 4’s hump height (A6), Buddy 3’s end-marker distance threshold and pending-command budget, Buddy 5’s bypass leg distances, and the chosen bit widths for the encoder counters all inherit this number
+A4 IMU part identity
+Kit component list supplies an LSM303DLHC datasheet; tutor review names a GY-511 module; Week 6 designed around an MPU-6050. Physical board not yet inspected
+Conditional redesign approved now; photograph of the board marking to be posted next morning as the deciding evidence
+Buddy 2 may have to supply a kinematic turn rate from wheel-speed differential; Buddy 1’s telemetry keeps the turn-rate field either way; the hump method (A6) becomes noisier but is not abandoned
+Kernel tick and T2 release
+Template default tick is coarser than 1 ms; Week 6 dropped the cyclic handler and states no release mechanism
+Tick set to 1 ms; 1 ms cyclic handler waking T2; overrun counter added
+Buddy 1’s A1 soak image must now include the 1 ms tick and a dummy T2; the tick interrupt is added as a line in the utilisation table
+T1 priority relative to kernel service tasks
+None yet — the template’s kernel task list has not been read
+NFR5 and NFR6 are not claimed until the service task priorities are read and T1 is placed strictly above them
+Buddy 1 confirms whether the polling cyw43 variant creates a service task at all; Buddy 2’s timed-run configuration already disables USB CDC
+NFR20 (“no unsynchronised global written by one task and read by another”)
+ARMv6-M has no exclusive load/store; aligned byte/halfword/word accesses are atomic
+NFR20 amended to allow a fourth mechanism: a single-writer, naturally aligned word, volatile, with a static assertion, every instance listed by name
+Everyone gains a cheaper path for hot shared data; everyone owes a named entry in the data representation table. Buddy 2 owns the static assertions and the assembly check (A11)
+NFR22 (±10% obstacle width) and depth = width
+HC-SR04 datasheet gives the 15° measuring angle but assumes large, smooth targets; no servo settling figure exists in the kit documentation
+Kept as the target; A9 to be measured rather than argued. Robot B and L measured in the A5 session
+Buddy 2’s motion API receives leg distances derived from the corrected width; Buddy 1 publishes width, closest point and decision as packed fields regardless of accuracy
+NFR23 bypass time
+Week 6 timing budget: ~1.6 s of scanning before any motion
+Accepted at band B (under 5 s), with clearance (NFR14) never traded for time
+If band B fails, Buddy 5 reduces fine-scan settle time, which slightly degrades the width estimate Buddy 1 publishes
+Risk Assessment and Subsystem Test Plan
+Integration Risk Register
+Risk ID
+Risk
+Cause
+Impact
+Likelihood
+Severity
+Mitigation
+Owner
+Status
+R1
+T2 misses its 1 ms release or drifts, so barcode sampling falls outside NFR1
+Template kernel tick coarser than 1 ms; no drift-free release mechanism after the cyclic handler was dropped
+Narrow elements are under-sampled; decodes fail silently and the car drives past every barcode looking healthy
+Medium
+High
+1 ms tick set and documented; cyclic handler wakes T2 from absolute time; T2 counts queued wake-ups and logs any overrun; measured in the A1 soak with a dummy T2
+Buddy 3
+Open
+R2
+Encoder wiring or counts-per-revolution are wrong (A2, A7)
+A7 mapping was wrong; the 20-slot figure came from a generic encoder, not the kit motors
+Distance (NFR11), turn angle (NFR12), hump height (NFR13), bypass geometry and the chosen bit widths are all wrong together, and it looks like a tuning problem for a week
+High
+High
+Rewire to GP16/GP17 plus GP13/GP19; measure counts per revolution over a 1 m roll, five times each direction, before any PID tuning; publish the number so all derived figures update together
+Buddy 2
+Open
+R3
+The kit IMU has no gyroscope (A4)
+Week 6 designed around an MPU-6050; the kit supplies an LSM303DLHC/GY-511
+I2 FLAT’s complementary filter and the measured turn rate in FR13 have no source; Figure 6 needs redesigning, not retuning
+High
+Medium
+Photograph the board marking before any IMU code; conditional design already agreed (gated accelerometer pitch, kinematic turn rate from T4); T3 is the only subsystem that blocks, so the rest can still integrate
+Buddy 4
+Open
+R4
+A stale motion request executes after control changes hands at S3→S7
+mbf_motion has two senders and the handover is not atomic
+T4 executes a line-follow request in the middle of a bypass, or a bypass leg after the bypass ended; the car moves unpredictably next to an obstacle
+Medium
+High
+T6 drains mbf_motion at the handover; every request carries a source bit and T4 rejects requests from the inactive owner; tested by injecting an obstacle during a barcode turn
+Buddy 5 with Buddy 2
+Open
+R5
+Packed shared data is corrupted by a read-modify-write race
+Cortex-M0+ has no atomic read-modify-write; the fault mask is written by four tasks and an ISR
+A fault bit set by an ISR is lost, so a real fault never reaches T1 — the worst possible failure for the safety path
+Medium
+High
+One writer per packed word; fault_set()/fault_clear() mask interrupts; nothing an ISR writes shares a word with task data; static assertions on size and alignment; dedicated stress test
+Buddy 2 with Buddy 4
+Open
+R6
+T1 is preempted by kernel service tasks, so NFR5/NFR6 do not hold
+T1 is at priority 4, which is only the highest among application tasks; the template’s own service tasks may sit at or below it
+An E-stop is delayed by unrelated USB or network service work; the 100 ms guarantee becomes a claim
+Medium
+High
+Read the kernel task list from the template configuration, record it in the task table, and place T1 strictly above every service task; USB CDC logging already disabled for timed runs
+Buddy 4 with Buddy 1
+Open
+R7
+VIN sags when both motors start, taking servo port V+ below the HC-SR04’s 5 V
+Robo Pico ties servo and motor supply to the power input voltage; motor inrush current
+Ranges become wrong exactly when the car is moving, so phantom or missed obstacles appear only during a run and never on the bench
+Medium
+Medium
+Measure servo port 2 V+ with both motors running under load before integration (A5); if it sags, move the sensor supply or add local decoupling
+Buddy 5
+Open
+R8
+The MQTT binary layout on the car and the dashboard disagree
+A new packed wire format with no schema check; C bit-field layout is implementation-defined
+Telemetry decodes into plausible-looking nonsense; Week 13 evidence is wrong without being obviously wrong
+Medium
+Medium
+Explicit shifts and masks on the wire, never a C struct; version field as the first 4 bits; dashboard rejects unknown versions; field-by-field decode test against a serial print of the same snapshot
+Buddy 1
+Open
+Subsystem Test Plan
+Subsystem
+Test case
+Success criteria
+Evidence required
+Owner
+Status
+Safety path (T1, T4, T7) — safety + timing
+Trigger E-STOP from the GP21 button during an M3 turn and during an M4 move, then repeat with an MQTT STOP
+Both motors de-energised within 100 ms of the event (NFR6); PWM registers sampled ten times afterwards all read zero; the car stays stopped until RESET with the fault cleared
+Serial log with timestamps, PWM register dump, video of the manoeuvre, telemetry showing the fault source (button vs network)
+Buddy 4, with Buddy 2 and Buddy 1
+Open
+Network + line task (T7, T2) — timing
+One-hour soak of the standalone WiFi/MQTT image publishing at 5 Hz, with a 1 ms tick and Buddy 3’s dummy T2 performing three ADC reads and the overrun check
+No missed publishes, no resets or freezes, dummy-T2 overrun counter zero for the full hour; longest blocking poll call recorded
+GPIO-toggle trace of the longest poll, broker-side publish log, serial log of the overrun counter, build config showing the tick value
+Buddy 1 with Buddy 3
+Open
+Shared data (all tasks, all ISRs) — shared resource
+Drive all four GPIO interrupt sources continuously while three tasks set and clear fault bits and T2 writes the packed line word, for ten minutes
+No fault bit set by a detector is ever lost; no cleared bit reappears; the line word never reads a value that was not written as a whole; every ISR handler’s counter advances
+Serial log of expected versus observed bit transitions, dispatcher handler counters, _Static_assert output in the build log
+Buddy 2 with Buddy 4
+Open
+Obstacle + motion + mission (T5, T4, T6)
+Inject an obstacle while a barcode manoeuvre is still running, and again exactly at the S3→S7 handover
+The latched OBSTACLE is acted on only after MOTION_DONE; mbf_motion has a single accepted sender throughout; any T6 request arriving during S7 is rejected by its source bit and logged
+Serial log of the request order with source bits, video of the bypass, flg_sys trace
+Buddy 5 with Buddy 2 and Buddy 1
+Open
+Barcode + mission + motion (T2, T6, T4)
+Pass a printed A, B, C and D symbol at 150, 200 and 300 mm/s with a junction at a measured distance after the barcode; also run one pass with no junction within the budget
+The command executes at the junction, not at the barcode; expiry logs and drops the command when no junction appears; D executes immediately; at least 95% correct decodes over 20 passes with no false positives (NFR9)
+Serial log of decode, pending state, junction detection and execution with distances; video synchronised to the log
+Buddy 3 with Buddy 1 and Buddy 2
+Open
+IMU + motion (T3, T4)
+Push the car over a hump of known height ten times by hand at a steady speed, then drive it over at 150 and 250 mm/s
+Reported peak within ±5 mm of the measured height (NFR13); an error that grows with speed indicates wheel slip, an error that does not indicates a scale error in A2
+Raw pitch and raw distance logs for offline re-analysis, tape measurement of the hump, encoder distance against a tape measure
+Buddy 4 with Buddy 2
+Open (blocked on A2)
+Telemetry end to end (T7, all)
+Publish 20-byte telemetry while every subsystem writes its fields; decode on the dashboard and compare against a serial print of the same snapshot; then repeat with the version field altered
+Every field matches exactly; a payload with an unknown version is rejected rather than decoded; a duplicate command with a repeated sequence number is ignored
+Dashboard decode log beside the serial print, broker capture of the raw bytes, MQTT spec document
+Buddy 1 with Buddy 5
+Open
+Constraint Injection / Curveball Response
+Injected constraint, recorded exactly as given: “The robot car firmware must minimise the number of bits used to represent application data. Each data field representing application information must use only the number of bits required to represent its valid range, using C bit-fields or explicit masks and shifts where appropriate.” Examples given: a value ranging from 1 to 5 uses 3 bits; a state machine with up to 8 states uses 3 bits; fault conditions such as motor stall, encoder fault, IMU fault, no echo and Wi-Fi loss use individual bits within a shared fault bitmask rather than separate integer variables. It applies to motion control and encoder data, line and barcode sensing, obstacle detection, hump estimation, vehicle and controller states, data shared between tasks or between an ISR and a task, inter-task queue messages, and MQTT telemetry and command payloads. For MQTT, application data should be represented using compact binary fields rather than sending individual values as text. “When multiple values are packed into the same storage unit and that data is shared between tasks, or between an ISR and a task, access must be implemented safely. Read-modify-write operations on shared packed data must not introduce race conditions, and atomic access or appropriate synchronisation must be used where required.” Week 13 evidence required: a data representation table, a RAM usage comparison, a message size comparison, and evidence of no functional loss or unacceptable timing degradation.
+Injected constraint
+Buddy affected
+Immediate impact
+Adaptation / compromise
+Minimum-bit data representation (as above)
+Buddy 1
+The telemetry record was planned as a text format, which is the opposite of compact binary. FR23’s topic tree, payload schema and command validation were undefined, so there was nothing to shrink. The MQTT STOP path had no flag bit at all.
+Defined the full wire format: 20 bytes, explicit shifts and masks, little-endian, version (4 bits) first so the dashboard can reject an unknown layout, then an 8-bit sequence number for loss detection. Commands are exactly one byte: 2 bits of command (START/STOP/RESET/END) and 6 bits of sequence so QoS 1 duplicates are ignored; anything that is not one byte is rejected. Topics fixed as p5is20/car/telemetry (QoS 0), p5is20/car/cmd (QoS 1) and a retained p5is20/car/status with the last will. AI’s suggestion to publish a packed C struct was rejected because bit-field layout is implementation-defined and the dashboard is in Python; half-precision floats and compression were rejected as larger and slower on a core with no FPU. This also closes FR23.
+
+Buddy 2
+Every motion and odometry field is affected, and the ISR-to-task encoder path is the most dangerous place to pack. The Cortex-M0+ has no atomic read-modify-write, so naive bit-fields in shared words would be a silent corruption source.
+motion_req_t becomes a single uint16_t: 3 bits of command, 12 bits of argument (covering 0–4095 mm, 0–180° and 0–350 mm/s) and 1 source bit — two bytes instead of about twelve, and a message buffer copies it whole, so no sharing question arises. Encoder counters become free-running, one per ISR, each its own storage unit: the ISR only increments (or decrements using phase B), and T4 subtracts the previous value instead of clearing, which removes the clear-race entirely. Authored the three packed access rules the whole team adopted: (1) one writer per packed storage unit, read by an aligned load; (2) any genuinely multi-writer unit goes through a helper that does the read-modify-write in a critical section; (3) nothing an ISR writes shares a storage unit with task-written data. Scope decision defended and recorded: packing applies to data that is stored, shared or transmitted; arithmetic intermediates such as PID integrators and filter accumulators keep native width, listed as a justified deviation.
+
+Buddy 3
+Three ADC channels, the line error, the decoder state and a 29-element capture buffer — the capture buffer is the largest array in the firmware and sits in the 1 ms loop, which is the worst place to add masks and shifts.
+Element durations stored as uint8_t milliseconds, saturating at 255: the longest valid wide element at the slowest speed in NFR8 (100 mm/s) is about 90 ms, so anything that saturates is out of range and already rejected — 29 bytes instead of 58, with no shifting in the tight loop. Line error quantised to 8 bits signed (±127 for a normalised ±1, about 0.8% of span) and packed with the 2-bit line state and junction/end flags into one 16-bit word, written by T2 alone. Last barcode (none/A/B/C/D) is 3 bits — the requirement’s own “1 to 5” example — and the reject reason 3 bits. Accepted the quantisation as an assumption to be checked: the raw ADC difference will be logged beside the 8-bit value on the first track run, and the field widens to 10 bits if it is not enough.
+
+Buddy 4
+Pitch, turn rate, motion class, hump height and the whole fault story. The requirement’s named “shared fault bitmask” is the same artefact as the consolidated fault table the tutor asked for.
+One uint8_t fault mask, one bit per fault, and the fault table in this document has one row per bit: bit 0 E-STOP request, 1 motor stall, 2 encoder fault, 3 IMU fault, 4 impact, 5 no echo, 6 bypass failed, 7 WiFi loss. A compile-time FAULT_CRITICAL_MASK excludes WiFi loss so NFR19 still holds — losing the network must not stop the car — while no-echo was argued up to critical because driving blind into an obstacle is worse than stopping. Because four tasks and an ISR write it, access is only through interrupt-masked helpers. flg_sys keeps a single summary ESTOP bit rather than eight fault bits, so T6 is not woken by conditions that belong to T1. Outputs packed: pitch ±45.0° in tenths (10 bits signed), turn rate ±500 dps (10 bits signed), motion class 3 bits, IMU state 3 bits, hump peak 0–127 mm in whole millimetres — deliberately 1 mm, because NFR13’s tolerance is ±5 mm and half-millimetre resolution would claim a precision the method does not have.
+
+Buddy 5
+The obstacle profile, the echo path from ISR to task, and the scan state. The echo path is ISR-to-task, so it is exactly the case the requirement calls out.
+ISR_ECHO writes one 16-bit word — 15 bits of pulse width in microseconds (covering the ~23 ms maximum) plus a valid bit — as a single aligned store before waking T5, so rule (1) applies and no synchronisation is needed. Obstacle profile packed to 8 bytes instead of about twelve: bearing as a 10°-step index (5 bits), corrected width 0–1023 mm (10 bits), closest point 0–511 mm (9 bits, since profiling only happens under 400 mm), left and right clearance (10 bits each) and the plan decision — continue, left, right, reverse — in 2 bits. Scan state O0–O11 is 4 bits and the retry count 1 bit. Also owns the Week 13 evidence mechanics: tag the repository cr1-baseline before any packing lands, save the build size output against that tag, and print sizeof of every message type at boot so the before-and-after comparison is measured rather than estimated.
+Integration Readiness Self-Assessment
+Readiness area
+Status
+Evidence
+Concern
+Hardware wiring known
+Amber
+Pin table cross-checked against the Robo Pico and HC-SR04 datasheets; A7 corrected against the datasheet Grove table; encoder pins reassigned to GP16/GP17 plus GP13/GP19
+Nothing is wired yet and the IMU part is unconfirmed. Not red only because every remaining check is named with an owner and a method
+RTOS task ownership clear
+Green
+Buddy table plus this tribunal’s reassignments: T1 → Buddy 4 (with motor_force_off() owned by Buddy 2), T6 → Buddy 1 (S4/S5 behaviour Buddy 3, S7 Buddy 5), GPIO dispatcher → Buddy 2. Every task, ISR and shared helper now has a named owner
+The two cross-cutting tasks are owned by people who do not own all of the hardware they touch; mitigated by splitting decision from mechanism
+Shared resources identified
+Green
+Shared Resource Allocation Matrix, including the two rows added today for the fault mask and the single-writer packed words; packed access rules written down; NFR20 amended with every exception listed by name
+Hold times for mtx_state are still unmeasured against NFR17, though moving the line error out of the mutex should reduce them
+Critical statecharts implementable
+Amber
+Figures 3–8 exist with every state and transition; Figure 7 geometry written out; the pending-command state and the end-marker rule were specified today
+Figure 3 must be redrawn larger and gains a state; Figure 6 may be redesigned if the IMU has no gyroscope. Shapes are known, the redraws are not done
+Safety or fault handling defined
+Amber
+Single fault table agreed with one row per bit; ESTOP re-check before every PWM write with interrupts masked; MQTT STOP and RESET_REQ paths defined; GPIO dispatcher assigned
+Nothing has run. T1’s priority relative to the kernel service tasks is unread, so NFR5 and NFR6 are not yet claimed
+Week 10 partial integration feasible
+Amber
+All five subsystems have a defined interface, an owner and a validation rule; the change requirement is absorbed into the types from the start, so there is no rework
+Conditional on the first bench session: A2 counts, the A7 rewiring, the A5 divider and VIN measurement, and the IMU marking. If the IMU has no gyroscope, T3 slips, but nothing except hump reporting depends on T3, so T2, T4, T5 and T6 can still integrate
+Updated readiness position before the Week 10 partial integration demo:
+The architecture survives the tribunal. The seven-task structure, the three kernel object types, the single-owner rule and the statechart shapes are unchanged; the only structural addition is a 1 ms cyclic handler used solely to give T2 a drift-free release, and the only conditional redesign is inside T3, pending identification of the IMU.
+What blocks Week 10 is hardware identification, not design. Four measurements gate everything else: encoder counts per revolution (A2), the corrected encoder wiring (A7), the ECHO divider and servo-port voltage under motor load (A5), and the marking on the IMU board (A4). Three of the four are a single bench session, which is booked as the first slot, and A1’s one-hour network soak runs in parallel because it needs no car.
+Partial integration will be attempted in the order T4 with T2 under T6 first, because that is the line-following loop and it depends only on measurements we will already have; then T5, which needs T4’s motion API and T2’s line state; then T7, once the A1 soak is clean; and T3 last, because it is the only subsystem whose design is conditional. The safety path is integrated with the first pair rather than last, so that every later test runs with a working E-stop.
+Change Requirement 1 does not delay any of this. The packed types are being written from the start, so there is no conversion step, and the cr1-baseline tag is cut before the first packed commit so the Week 13 RAM and message-size comparisons have a real “before”. The one open item it leaves is that several bit widths — the encoder counters, the distance fields — are provisional until A2 is measured.
+
+Version C: Final AI-Vetted Gap Check
+Instructions
+After the live discussion, give the updated Version B content to AI and ask AI to act as a strict embedded systems reviewer.
+Ask AI to identify missing assumptions, weak evidence, unclear interfaces, untested failure modes, and resource conflicts.
+For every AI-identified gap, decide whether to fix, reject or defer it, and explain why.
+AI reviewer prompt used
+Act as a strict embedded systems reviewer for an autonomous line-following robot built on a Raspberry Pi Pico W and a Cytron Robo Pico, running μT-Kernel 3.0 on core 0 with seven tasks, four GPIO interrupt sources and a change requirement that every shared field must use the minimum number of bits. The attached document is our Week 8 integration-readiness submission. Review it, do not rewrite it. Report only defects you can point to in the text: internal contradictions between sections, decisions agreed in the session that were not carried into the tables, bit widths or ranges that cannot hold their stated values, cross-subsystem interactions nobody recorded, and claims with no supporting evidence. For each one, state where it appears and what evidence would close it. Do not propose new features, and do not restate points we have already recorded as open risks.
+
+AI-identified gap
+Team response
+Action taken
+Evidence / reason
+The Live Decision Change Log row for the IMU redesign has a broken table layout. The absolute-value bars around the acceleration term have been read as cell separators, so the Change type cell contains only the letter a, the real change type has slid into Evidence link, the reason has slid into Owner, and the row now has no timestamp and no owner at all.
+Accept. This is the single most consequential change in the log and it is the only row with no owner against it.
+Rewrite the gating condition in words (the acceleration magnitude is within ±0.1 g of 1 g) and re-enter all six cells. Evidence: Zoom 07:55–10:45 plus the kit component list. Owner: Buddy 4, with Buddy 2 supplying the kinematic turn rate.
+Visible in the Live Decision Change Log, row 2. Caused by the bar character, not by a missing decision.
+Buddy 4 asked at 21:41 for two risks to be added, the T1 override window and the kernel service task priority. Only the second one reached the register, as R6. The override window, which the session treated as the sharpest safety finding, has no risk row.
+Accept. The decision to re-check ESTOP before every PWM write is in the change log, but a mitigated defect still needs a register entry or the test plan has nothing to trace to.
+Add R9: T4 restores a PWM duty after T1 has forced the motors off. Likelihood Medium, Severity High. Mitigation is the ESTOP re-check with the check-and-write pair run with interrupts masked, proven by an instrumented E-stop variant. Owner Buddy 2 with Buddy 4.
+Zoom 21:41 against the register, which stops at R8. The 100 ms outcome test passes either way, which is exactly why the defect needs its own row.
+The fault mask is described two different ways in the same document. The Shared Resource Allocation Matrix declares g_faults as a uint8_t and says readers do one aligned byte load. The Appendix row 31 declares 16 bits with nine faults defined and seven reserved.
+Accept. The Appendix is the correct version, because eight bits with eight faults assigned leaves no room and a ninth fault would force a type change in every buddy's code.
+Correct the matrix row to uint16_t and change byte load to halfword load, which is equally atomic on the Cortex-M0+. Confirm nine defined and seven reserved in both places.
+Shared Resource Allocation Matrix against Appendix row 31. Only the wording differs; the agreed design is the 16-bit version.
+The echo word is specified as 15 bits covering 0 to 32,767 microseconds plus a valid flag. The document does not say what the interrupt stores when no object is present, and a no-echo pulse can run longer than the 15-bit field holds. A wrapped value with the valid flag still set would read as a very close obstacle.
+Accept. This is the one packed field where overflow produces a dangerous value rather than a wrong one, because a small range reads as an obstacle directly ahead.
+Add an explicit rule to the Appendix: ISR_ECHO clamps the measured width at 32,767 microseconds, and any measurement at or above the ranging timeout is stored with the valid flag cleared. T5 treats an invalid word as no return, never as a short range.
+Appendix rows 24 and the HC-SR04 datasheet, which gives a 4 m maximum range but no stated behaviour for the no-object case. Closed by logging raw echo widths with no target in front of the sensor.
+Two decisions from the session interact and nobody recorded it. Barcode commands are now latched and applied at the next junction with a distance expiry, and a bypass drives three extra legs before rejoining the line. Those legs add distance, so a valid latched command can expire during a bypass and be silently discarded.
+Accept. Both decisions are individually correct and the combination was never discussed.
+Define the rule in Section 5: the pending command's distance counter is suspended on entry to S7 and resumed on LINE_REACQUIRED, so bypass distance does not count against the expiry. State it in both the barcode and the obstacle sections so one owner cannot change it alone.
+Change log rows 7 and 11 read together. Nothing in the test plan currently exercises a barcode command that survives a bypass.
+NFR23 was relaxed to band B, under 5 seconds, but no written time budget supports it. Buddy 4's challenge at 32:24 about three legs and three turns on top of 1.6 seconds of scanning was answered in discussion and never written down.
+Accept, but defer the figure. The leg distances depend on the robot width and length, which cannot be measured until the car is finished, so a budget written now would be invented.
+Add a time budget line to the obstacle section with the fixed components already known (1.6 s of scanning, 120 mm/s creep in O8 and O9) and the variable components left as formulas in the robot dimensions. Fill the numbers in the same session that measures the car.
+Zoom 32:24 against the obstacle subsystem description. The claim stands unevidenced until the car is measured, which is honest to state rather than hide.
+Buddy Contributions records that Buddy 2 challenged Buddy 5 on whether the shared GPIO dispatcher would delay an echo edge behind an encoder edge. The transcript at 23:24 shows the opposite: Buddy 5 raised the question and Buddy 2 answered it.
+Accept. The table exists to record who raised what, so an inversion in it is a factual error about the session.
+Reword the Buddy 5 row so the question is recorded as raised by Buddy 5 and answered by Buddy 2. Buddy 4's separate challenge about band B stays as written.
+Zoom 23:24 against the Buddy Contributions table, Buddy 5 row, Challenge received column.
+The Constraint Injection table names the injected constraint only in the first row. The remaining four rows leave that cell empty, so four of five buddies appear to have adapted to nothing.
+Accept as a formatting fix. The constraint itself is recorded verbatim above the table, so no content is missing.
+Repeat the constraint in every row: minimum-bit data representation, Change Requirement 1, recorded verbatim above.
+Constraint Injection table, rows 2 to 5.
+Moving encoder phase B to GP13 and GP19 has an unrecorded consequence. GP13 is the signal pin of servo port 2, and the HC-SR04 already draws its 5 V supply from that same port's V+ pin under assumption A5. Encoder phase B will therefore appear on a connector that also carries the sensor supply.
+Accept. It is not an electrical conflict, because nothing drives the signal pin from the port side, but it removes an option the Week 6 document explicitly reserved.
+Record in the Week 6 pin table that servo port 2 can no longer accept a servo, and note the shared connector in the A5 wiring check so nobody plugs one in during testing.
+Change log row 1 against the Week 6 pin table, which stated that GP13 remained free for a second servo.
+The reviewer proposed moving the obstacle profile out of mtx_state into a single-writer word, matching the treatment given to the line error and the echo word, to remove a reader-writer pair from the mutex.
+Reject. The profile is 46 bits across six fields. A single-writer word only works when the whole unit fits one aligned store, and the Cortex-M0+ has no instruction that writes 46 bits atomically.
+No change. The profile stays under mtx_state. The pattern applies only to units of 32 bits or fewer, which is already the stated rule for the line word and the echo word.
+Appendix rows 25 to 29, which total 46 bits. Keeping the rule's boundary explicit prevents the same suggestion being made again.
+
+Final Tribunal Summary
+Final question
+Team answer
+What is the strongest part of the current design?
+The ownership discipline. Every device, every kernel object and now every packed storage unit has exactly one named owner, with exactly one documented exception — T1 forcing the motor PWM off — and that exception is drawn in red, justified, and now guarded on both sides. It is what lets a seven-task system run on one mutex, and it is the reason the change requirement cost us a set of rules rather than a redesign: “one writer per word” is the same idea as “one owner per device”. The tutor review endorsed the small kernel-object set, and nothing in today’s discussion needed a new object.
+What is most likely to fail?
+The hardware facts the arithmetic rests on, with A2 first. Counts per revolution is the single number that distance (NFR11), turn angle (NFR12), hump height (NFR13), the bypass geometry, the end-of-course distance threshold and several bit widths all inherit, and it was taken from a generic slotted disc rather than the supplied motors. Close behind is the IMU part: if the kit board is an LSM303DLHC, the complementary filter and the measured turn rate in FR13 have no source and Figure 6 is redesigned, not retuned. Both failure modes are silent — a wrong scale factor and a missing gyro both look like a tuning problem for a week before anyone checks the number.
+What evidence supports readiness?
+Interface-level: every subsystem has a provider, named consumers, a written interface rule and a validation rule, and after today every task and ISR has an owner. Analytical: the utilisation argument (≈18.9% against a 72.9% bound) stands unchallenged on arithmetic, and the Code 39 element geometry is derived rather than assumed. Procedural: eight integration risks with owners, seven cross-subsystem tests of which three are timing, safety or shared-resource tests, and a cr1-baseline tag cut before any packing lands so the Week 13 comparisons are measurable. What we do not have is measured evidence on hardware, and we have said so in every row rather than rounding it up.
+What did AI miss that human discussion revealed?
+Three things, all of which came out of buddies arguing with each other rather than with a tool. First, that the six-pin kit connector implies A and B phases, so correcting the Grove mapping was necessary but not sufficient — a point raised only when Buddy 3 challenged Buddy 2’s two-GPIO plan. Second, that flushing mbf_motion at the handover is itself racy, which Buddy 2 spotted in Buddy 5’s accepted fix and which produced the source-bit solution. Third, the scope boundary for the change requirement: no tool told us that packing PID integrators and filter accumulators saves nothing and costs time, because that judgement depends on knowing which variables live on a task stack and never leave it. AI also proposed a packed C struct for the MQTT wire format, which would have failed silently against a Python dashboard.
+What did AI correctly identify after discussion?
+The tutor review and our pre-Zoom AI work were right about every structural hole we then confirmed: the T1-to-T4 override window, the single GPIO callback per core, the 1 ms kernel tick and the absent drift-free release for T2, the barcode command being applied at the barcode rather than the junction, the all-black end marker colliding with L2 JUNCTION, the unflushed mbf_motion, and the undefined MQTT schema that left FR23 untestable. Each of those turned into a decision in the change log rather than a wording fix. The final AI-vetted pass then found three things we had genuinely missed: the obstacle profile does not fit the single-writer rule we had just adopted, an exactly-full eight-bit fault mask has no room to grow, and our E-stop test could pass while the race it was meant to catch still fired.
+
+Appendix: Data Representation Table (Change Requirement 1)
+Widths marked provisional (A2) are recomputed once the measured encoder counts per revolution are published; the derivation rule is given so the number can be recalculated rather than re-guessed. Storage type is the C declaration; “packing” says how the field is accessed.
+#
+Field
+Owner
+Valid range
+Bits
+Storage / packing
+Sharing and access rule
+1
+Mission state (S0–S10)
+Buddy 1 (T6)
+11 states
+4
+Bit-field in the state word
+Single writer T6; aligned halfword store
+2
+Motion controller state (M0–M7)
+Buddy 2 (T4)
+8 states
+3
+Bit-field in the state word
+Single writer T4
+3
+Line state (L0–L3)
+Buddy 3 (T2)
+4 states
+2
+Bit-field in the line word
+Single writer T2; readers do one aligned load
+4
+Barcode decoder state (B0–B4)
+Buddy 3 (T2)
+5 states
+3
+Bit-field, T2-private
+Not shared
+5
+IMU state (I0–I7)
+Buddy 4 (T3)
+8 states
+3
+Bit-field in the state word
+Single writer T3
+6
+Scan state (O0–O11)
+Buddy 5 (T5)
+12 states
+4
+Bit-field in the state word
+Single writer T5
+7
+Line error
+Buddy 3 (T2)
+−1.0 to +1.0, scaled ×127
+8 (signed)
+Bit-field in the line word
+Single writer T2; quantisation to be validated against raw ADC on the first track run
+8
+Line word sequence counter
+Buddy 3 (T2)
+0–15, wrapping
+4
+Bit-field in the line word
+Staleness detection by T4 (added in Version C)
+9
+Junction / end-marker flags
+Buddy 3 (T2)
+2 booleans
+2
+Bit-fields in the line word
+Single writer T2
+10
+Barcode element durations
+Buddy 3 (T2)
+0–255 ms, saturating
+8 × 29
+uint8_t[29], T2-private
+Not shared; saturated values are rejected reads
+11
+Last decoded barcode
+Buddy 3 (T2)
+none, A, B, C, D (5 values)
+3
+Bit-field in the nav/telemetry word
+Single writer T2
+12
+Barcode reject reason
+Buddy 3 (T2)
+5 values
+3
+Bit-field
+Single writer T2
+13
+IR calibration threshold and span, per channel
+Buddy 3 (T2)
+0–4095 (12-bit ADC)
+12 + 12
+Bit-fields, T2-private
+Not shared; written once at calibration
+14
+Encoder edge counters, left and right
+Buddy 2 (ISRs)
+free-running, wrapping
+8 or 16 — provisional (A2)
+One storage unit per counter
+Written only by its own ISR; T4 subtracts the previous value and never clears. Width rule: must not wrap twice between two T4 reads at maximum speed
+15
+Wheel speed, left and right
+Buddy 2 (T4)
+±350 mm/s
+10 (signed)
+Bit-field in the motion word
+Single writer T4
+16
+Total distance travelled
+Buddy 2 (T4)
+0–32767 mm, saturating
+15
+Bit-field — provisional (A2)
+Single writer T4; saturation flagged in telemetry
+17
+motion_req_t command
+Buddy 2
+6 values (forward, backward, turn L, turn R, set speed, stop)
+3
+Bit-field in a uint16_t message
+Copied whole by the message buffer; no sharing
+18
+motion_req_t argument
+Buddy 2
+0–4095 (mm, degrees or mm/s)
+12
+Bit-field in the same uint16_t
+As above
+19
+motion_req_t source
+Buddy 2 / Buddy 5
+T6 or T5
+1
+Bit-field in the same uint16_t
+Checked by T4 against the active owner
+20
+Filtered pitch
+Buddy 4 (T3)
+±45.0°, tenths of a degree
+10 (signed)
+Bit-field in the terrain word
+Single writer T3
+21
+Turn rate
+Buddy 4 (T3)
+±500 °/s
+10 (signed)
+Bit-field in the terrain word
+Single writer T3; source is the gyro, or T4’s wheel differential if the kit IMU has none
+22
+Motion classification
+Buddy 4 (T3)
+6 values
+3
+Bit-field in the terrain word
+Single writer T3
+23
+Maximum hump peak height
+Buddy 4 (T3)
+0–127 mm, whole millimetres
+7
+Bit-field
+Single writer T3; 1 mm chosen because NFR13’s tolerance is ±5 mm
+24
+Echo pulse width + valid flag
+Buddy 5 (ISR_ECHO)
+0–32767 µs; 1 flag
+15 + 1
+One uint16_t, single aligned store
+Written only by ISR_ECHO before waking T5; rule (1) and rule (3)
+25
+Obstacle bearing
+Buddy 5 (T5)
+0–18 (10° steps)
+5
+Bit-field in the obstacle profile
+Profile stays under mtx_state (Version C correction): too large for one atomic store
+26
+Obstacle corrected width
+Buddy 5 (T5)
+0–1023 mm
+10
+Bit-field in the obstacle profile
+As above
+27
+Obstacle closest point
+Buddy 5 (T5)
+0–511 mm
+9
+Bit-field in the obstacle profile
+As above
+28
+Left / right clearance
+Buddy 5 (T5)
+0–1023 mm each
+10 + 10
+Bit-fields in the obstacle profile
+As above
+29
+Bypass plan decision
+Buddy 5 (T5)
+continue, left, right, reverse
+2
+Bit-field in the obstacle profile
+As above
+30
+Bypass retry count
+Buddy 5 (T5)
+0 or 1
+1
+Bit-field, T5-private
+Not shared
+31
+Fault mask
+Buddy 4
+9 defined, 7 reserved
+16
+volatile uint16_t g_faults
+Many writers including an ISR: fault_set() / fault_clear() mask interrupts (rule 2). FAULT_CRITICAL_MASK excludes WiFi loss
+32
+Pending barcode command + distance budget
+Buddy 1 (T6) / Buddy 3
+5 values; 0–511 mm
+3 + 9
+Bit-fields in the mission word
+Single writer T6; cleared on entry to S7 (Version C)
+33
+MQTT telemetry payload
+Buddy 1 (T7)
+see layout below
+156 bits → 20 bytes
+Explicit shifts and masks into a byte array, little-endian, never a C struct
+Built from one snapshot taken under mtx_state; version field first so an unknown layout is rejected
+34
+MQTT command payload
+Buddy 1 (T7)
+START/STOP/RESET/END + sequence
+2 + 6 → 1 byte
+Explicit mask and shift
+Anything not exactly one byte is rejected; RESET additionally gated on critical faults being clear
+Telemetry payload layout (20 bytes): version 4 · sequence 8 · mission state 4 · motion state 3 · left speed 10 · right speed 10 · left encoder count 16 · right encoder count 16 · line state 2 · line error 8 · last barcode 3 · reject reason 3 · hump max 7 · obstacle width 10 · obstacle closest 9 · obstacle bearing 5 · bypass decision 2 · total distance 15 · motion class 3 · turn rate 10 · fault mask 16. Encoder counts are sent as wrapping counters and unwrapped by the dashboard.
+Week 13 evidence plan. (1) This table, updated with measured widths once A2 is closed. (2) RAM comparison: linker map and arm-none-eabi-size output for tag cr1-baseline versus the final build, plus sizeof of every message and shared structure printed at boot in both. (3) Message size comparison: the Week 6 text telemetry record against the 20-byte binary payload, captured at the broker; motion_req_t before and after. (4) Correctness and performance: every Week 6 functional test re-run on the packed build, plus GPIO-toggle WCET traces for T2, T4 and T7 before and after — with T2’s trace taken in the first bench session rather than deferred to Week 13.

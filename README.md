@@ -1,5 +1,9 @@
 # INF2004 autonomous robotic car
 
+For future troubleshooting after the archived build, start with
+[the recovered context and handover](docs/RECOVERY_CONTEXT.md). It identifies
+surviving evidence, original reference text, and gaps in the available chat history.
+
 C11 firmware for Raspberry Pi Pico W on Cytron Robo Pico, using the supplied
 micro T-Kernel 3.0 template and its Pico C SDK / CYW43 / lwIP integration.
 The original kernel, BSP, build tree and five subsystem folders are retained.
