@@ -1,0 +1,9 @@
+offline: build completed; zero compiler warnings/errors
+65043	   1384	  12516	  78943	  1345f	mtk3pico_smp0_uart.elf
+diagnostics: build completed; zero compiler warnings/errors
+65214	   1384	  12524	  79122	  13512	mtk3pico_smp0_uart_test.elf
+network: build completed; zero compiler warnings/errors
+335662	    388	  72344	 408394	  63b4a	mtk3pico_smp0_uart_wifi_lwip_mqtt.elf
+mtk3pico_smp0_uart.uf2: 260 valid unique RP2040 UF2 blocks; sha256 30e02e96790341d913e6ff690055ca97d9da6db21be028f05329115b6ed0c2f3
+mtk3pico_smp0_uart_test.uf2: 261 valid unique RP2040 UF2 blocks; sha256 975626be9bee1a1df0b5c5df74185db938ca22e74caa06a9463de02cff761098
+mtk3pico_smp0_uart_wifi_lwip_mqtt.uf2: 1313 valid unique RP2040 UF2 blocks; sha256 d32c742a04671f2555eea9f3a576c60eb8d3acb737aeacac7f23955401a0f75f

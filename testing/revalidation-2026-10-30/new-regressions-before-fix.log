@@ -1,0 +1,2 @@
+test_robot: tests/test_robot.c:280: test_junction_noise: Assertion `ROBOT_FOLLOW == nav.mode' failed.
+Aborted

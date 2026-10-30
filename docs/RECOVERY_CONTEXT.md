@@ -174,3 +174,18 @@ The deck's generic GPIO choices do not override firmware assignments, and its
 HC-SR04 3.3 V supply annotation conflicts with the supplied 5 V module datasheet.
 WIRING.md retains the 5 V supply and ECHO divider, and now explains these
 differences. No firmware changes or new hardware qualification were performed.
+
+## Subsequent code testing
+
+The owner then supplied Brief Package.zip and Datasheets.zip and requested code
+checking and testing. Both files matched the original inventory's SHA-256
+hashes. Automated revalidation found and fixed two navigation issues: isolated
+both-black pulses accumulating into a junction, and ordinary line reacquisition
+remaining stuck in bypass-style recovery. Ordinary recovery now resumes line
+following within its distance/time budget; bypass recovery retains its separate
+crossing-width and heading-restoration behaviour.
+
+See [the test report](../testing/revalidation-2026-10-30/REPORT.md) for executed
+checks, logs, fresh firmware builds and limitations. This later step **does**
+change firmware behaviour. Use the current `build_make/` UF2s or rebuild the
+current sources; the original ZIP in `recovered-artifacts/` predates the fixes.

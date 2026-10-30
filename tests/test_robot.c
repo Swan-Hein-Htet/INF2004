@@ -112,6 +112,8 @@ static void test_barcodes(void)
             }
             assert((char)('A' + letter) ==
                    robot_barcode_decode(reverse, sizeof(reverse)));
+            memset(&reader, 0, sizeof(reader));
+            assert((char)('A' + letter) == test_stream(&reader, reverse, false));
             frame[0] = 255U;
             assert('\0' == robot_barcode_decode(frame, sizeof(frame)));
             assert('\0' == robot_barcode_decode(reverse, sizeof(reverse) - 1U));
@@ -191,7 +193,7 @@ static void test_navigation(void)
          "STOP/reset passed");
 }
 
-static void test_bypass(void)
+static void test_bypass_side(int8_t side)
 {
     robot_config_t config = test_config();
     robot_nav_t nav = {0};
@@ -204,12 +206,15 @@ static void test_bypass(void)
     input.profile.b_valid = true;
     input.profile.width_mm = 150U;
     input.profile.closest_mm = 150U;
-    input.profile.left_mm = 1000U;
+    input.profile.left_mm = (0 < side) ? 1000U : 500U;
+    input.profile.right_mm = (0 < side) ? 500U : 1000U;
     input.front_mm = 1000U;
     input.b_front_valid = true;
     input.line_word = 0x300U;
     robot_nav_step(&nav, &input, &config);
     assert(ROBOT_BYPASS == nav.mode);
+    assert(side == nav.side);
+    assert(90.0f * side == nav.goal_yaw_deg);
     for (index = 0U; 6U > index; ++index)
     {
         input.yaw_deg = nav.goal_yaw_deg;
@@ -258,6 +263,133 @@ static void test_bypass(void)
     assert(ROBOT_FINISHED == nav.mode);
     puts("bypass: full route, heading restoration, pending freeze, false-line "
          "rejection, proximity and END passed");
+}
+
+static void test_junction_noise(void)
+{
+    robot_config_t config = test_config();
+    robot_nav_t nav = {0};
+    robot_input_t input = {0};
+    uint32_t index = 0U;
+    nav.mode = ROBOT_FOLLOW;
+    nav.pending = 'A';
+    nav.pending_budget_mm = 500.0f;
+    for (index = 0U; 3U > index; ++index)
+    {
+        input.line_word = 0x200U;
+        robot_nav_step(&nav, &input, &config);
+        input.line_word = 0x100U;
+        robot_nav_step(&nav, &input, &config);
+        assert(ROBOT_FOLLOW == nav.mode);
+        assert('A' == nav.pending);
+    }
+    /* Only an uninterrupted three-observation black run is a junction. */
+    input.line_word = 0x200U;
+    for (index = 0U; 3U > index; ++index)
+    {
+        robot_nav_step(&nav, &input, &config);
+    }
+    input.line_word = 0x100U;
+    robot_nav_step(&nav, &input, &config);
+    assert(ROBOT_TURN == nav.mode);
+    assert(90.0f == nav.goal_yaw_deg);
+    puts("junction: isolated black noise does not consume a pending turn passed");
+}
+
+static void test_line_loss_recovery(void)
+{
+    robot_config_t config = test_config();
+    int32_t side = 0;
+    for (side = -1; 1 >= side; ++side)
+    {
+        robot_nav_t nav = {0};
+        robot_input_t input = {0};
+        nav.mode = ROBOT_FOLLOW;
+        nav.side = (int8_t)side; /* May retain a side from an earlier bypass. */
+        nav.pending = 'B';
+        nav.pending_budget_mm = 300.0f;
+        input.now_ms = 100U;
+        input.line_word = 0x300U;
+        robot_nav_step(&nav, &input, &config);
+        assert(ROBOT_RECOVER == nav.mode);
+        input.distance_mm = 10.0f;
+        input.line_word = 0x100U;
+        robot_nav_step(&nav, &input, &config);
+        assert(ROBOT_FOLLOW == nav.mode);
+        assert(0.0f == nav.left_mm_s);
+        assert(0.0f == nav.right_mm_s);
+        assert('B' == nav.pending);
+        assert(300.0f == nav.pending_budget_mm);
+    }
+    /* Seeing a line after the search budget expires must not resume motion. */
+    for (side = 0; 2 > side; ++side)
+    {
+        robot_nav_t nav = {0};
+        robot_input_t input = {0};
+        nav.mode = ROBOT_RECOVER;
+        nav.goal_distance_mm = 80.0f;
+        input.line_word = 0x100U;
+        input.now_ms = (0 == side) ? 8001U : 100U;
+        input.distance_mm = (0 == side) ? 10.0f : 81.0f;
+        robot_nav_step(&nav, &input, &config);
+        assert(ROBOT_FAULT == nav.mode);
+        assert(0U != (nav.fault_request & ROBOT_FAULT_LINE));
+        assert(0.0f == nav.left_mm_s);
+        assert(0.0f == nav.right_mm_s);
+    }
+    puts("recovery: ordinary line reacquisition resumes without a bypass turn passed");
+}
+
+static void test_safety_boundaries(void)
+{
+    robot_config_t config = test_config();
+    uint32_t mode = 0U;
+    for (mode = ROBOT_IDLE; ROBOT_FAULT >= mode; ++mode)
+    {
+        robot_nav_t nav = {0};
+        robot_input_t input = {0};
+        nav.mode = (robot_mode_t)mode;
+        nav.left_mm_s = 200.0f;
+        nav.right_mm_s = 200.0f;
+        nav.b_start = true;
+        nav.b_reset = true;
+        input.faults = ROBOT_FAULT_STOP;
+        robot_nav_step(&nav, &input, &config);
+        assert(ROBOT_FAULT == nav.mode);
+        assert(0.0f == nav.left_mm_s);
+        assert(0.0f == nav.right_mm_s);
+        input.faults = 0U;
+        input.b_pitch_valid = true;
+        input.b_front_valid = true;
+        input.front_mm = 1000U;
+        nav.b_reset = true;
+        nav.b_start = true;
+        robot_nav_step(&nav, &input, &config);
+        assert(ROBOT_IDLE == nav.mode); /* RESET needs a later START. */
+        robot_nav_step(&nav, &input, &config);
+        assert(ROBOT_IDLE == nav.mode);
+        nav.b_start = true;
+        robot_nav_step(&nav, &input, &config);
+        assert(ROBOT_FOLLOW == nav.mode);
+        input.front_mm = 79U;
+        robot_nav_step(&nav, &input, &config);
+        assert(ROBOT_FAULT == nav.mode);
+        assert(0.0f == nav.left_mm_s);
+        assert(0.0f == nav.right_mm_s);
+    }
+    /* Unsigned elapsed time must still expire a turn across uptime wrap. */
+    robot_nav_t nav = {0};
+    robot_input_t input = {0};
+    nav.mode = ROBOT_TURN;
+    nav.state_since_ms = UINT32_MAX - 100U;
+    nav.goal_yaw_deg = 90.0f;
+    input.now_ms = 12000U;
+    robot_nav_step(&nav, &input, &config);
+    assert(ROBOT_FAULT == nav.mode);
+    assert(0U != (nav.fault_request & ROBOT_FAULT_BYPASS));
+    assert(0.0f == nav.left_mm_s);
+    assert(0.0f == nav.right_mm_s);
+    puts("safety: STOP in every mode, separate RESET/START, proximity and timer wrap passed");
 }
 
 static void test_motion_api(void)
@@ -354,7 +486,11 @@ int main(void)
 {
     test_barcodes();
     test_navigation();
-    test_bypass();
+    test_bypass_side(1);
+    test_bypass_side(-1);
+    test_line_loss_recovery();
+    test_junction_noise();
+    test_safety_boundaries();
     test_motion_api();
     test_sensors();
     test_protocol();

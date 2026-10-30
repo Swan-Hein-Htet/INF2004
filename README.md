@@ -199,8 +199,11 @@ short black run**. More than 60 mm continuously both-black means FINISHED,
 including when a turn is pending. This resolves the otherwise impossible demand
 to distinguish a junction from an end marker before observing its length. Check
 sensor-to-axle offset on the actual course: the post-marker turning point may
-need a measured offset, which is not supplied. Short line losses creep forward
-for at most 80 mm / 8 s before faulting; there is no blind endless search.
+need a measured offset, which is not supplied. Junction qualification requires
+three consecutive both-black observations; separated noise pulses do not accumulate.
+Short line losses creep forward for at most 80 mm / 8 s before faulting. Seeing
+the line again within that budget resumes following without a bypass-restoration
+turn. Bypass recovery separately retains its crossing-width and heading checks.
 
 ## Obstacle behaviour and limitations
 
@@ -327,6 +330,10 @@ All three firmware profiles have been cross-compiled to ELF and UF2 in this
 workspace. Network compilation used placeholder settings; it is not a WiFi or
 broker connectivity test. See [VALIDATION.md](docs/VALIDATION.md) for actual
 results and mandatory bench evidence before autonomous use.
+The [30 October revalidation report](testing/revalidation-2026-10-30/REPORT.md)
+records the latest tests, two navigation fixes, rebuilt image sizes and remaining
+qualification gaps. The UF2s in `build_make/` include these fixes; the ZIP in
+`recovered-artifacts/` remains the original, older recovery snapshot.
 
 ## Design and coding decisions
 

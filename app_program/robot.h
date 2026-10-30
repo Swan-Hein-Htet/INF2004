@@ -136,6 +136,7 @@ typedef struct
     uint8_t junction_count;
     bool b_junction_latched;
     bool b_black_run;
+    bool b_bypass_recovery;
     bool b_start;
     bool b_reset;
     bool b_end;

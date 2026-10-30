@@ -1,0 +1,2 @@
+test_robot: tests/test_robot.c:315: test_line_loss_recovery: Assertion `ROBOT_FOLLOW == nav.mode' failed.
+Aborted

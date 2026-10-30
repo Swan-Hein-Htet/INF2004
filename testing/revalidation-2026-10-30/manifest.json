@@ -1,0 +1,40 @@
+{
+  "starting_commit": "9db68169862026e1c67198f2d67785a2c1389c5f",
+  "date": "2026-10-30",
+  "sources": [
+    {
+      "path": "app_program/robot.h",
+      "sha256": "0fefe479a33cbf3f8e5df4674f0250a3f6897c692666d21c1e6ddf898cc99b4f"
+    },
+    {
+      "path": "app_program/subsystem1/mission.c",
+      "sha256": "f7b3c3cf078fcca5079dad981467cc0b80367fe4a1708db0cfc35d0fa715afa0"
+    },
+    {
+      "path": "app_program/robot_config.c",
+      "sha256": "e940c4351e7e92527d2c8f13937cdaeb781844ec59f6a8790884ce2d66f9be5b"
+    },
+    {
+      "path": "tests/test_robot.c",
+      "sha256": "32b889c7a97583c02e2328e9b74c464b1f5690e6b1cae23e7c4697a5f90a1922"
+    }
+  ],
+  "firmware": [
+    {
+      "path": "build_make/mtk3pico_smp0_uart.uf2",
+      "bytes": 133120,
+      "sha256": "30e02e96790341d913e6ff690055ca97d9da6db21be028f05329115b6ed0c2f3"
+    },
+    {
+      "path": "build_make/mtk3pico_smp0_uart_test.uf2",
+      "bytes": 133632,
+      "sha256": "975626be9bee1a1df0b5c5df74185db938ca22e74caa06a9463de02cff761098"
+    },
+    {
+      "path": "build_make/mtk3pico_smp0_uart_wifi_lwip_mqtt.uf2",
+      "bytes": 672256,
+      "sha256": "d32c742a04671f2555eea9f3a576c60eb8d3acb737aeacac7f23955401a0f75f"
+    }
+  ],
+  "pico_sdk_commit": "a1438dff1d38bd9c65dbd693f0e5db4b9ae91779"
+}

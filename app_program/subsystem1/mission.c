@@ -10,6 +10,12 @@ static void mission_enter(robot_nav_t *p_nav, robot_mode_t mode,
     p_nav->state_since_ms = p_input->now_ms;
     p_nav->left_mm_s = 0.0f;
     p_nav->right_mm_s = 0.0f;
+    if (ROBOT_FOLLOW == mode)
+    {
+        p_nav->junction_count = 0U;
+        p_nav->b_black_run = false;
+        p_nav->b_junction_latched = false;
+    }
 }
 
 static void mission_turn(robot_nav_t *p_nav, robot_input_t const *p_input,
@@ -84,6 +90,7 @@ static void mission_bypass(robot_nav_t *p_nav, robot_input_t const *p_input)
             default:
                 mission_enter(p_nav, ROBOT_RECOVER, p_input);
                 p_nav->b_black_run = false;
+                p_nav->b_bypass_recovery = true;
                 p_nav->goal_distance_mm = p_input->distance_mm + 80.0f;
                 break;
         }
@@ -145,6 +152,10 @@ static void mission_follow(robot_nav_t *p_nav, robot_input_t const *p_input,
     {
         p_nav->b_black_run = false;
         p_nav->b_junction_latched = false;
+        if (3U > p_nav->junction_count)
+        {
+            p_nav->junction_count = 0U;
+        }
     }
     if ((2U != line_state) && (3U == p_nav->junction_count) &&
         (!p_nav->b_junction_latched))
@@ -169,6 +180,7 @@ static void mission_follow(robot_nav_t *p_nav, robot_input_t const *p_input,
     if (3U == line_state)
     {
         mission_enter(p_nav, ROBOT_RECOVER, p_input);
+        p_nav->b_bypass_recovery = false;
         p_nav->recovery_start_mm = p_input->distance_mm;
         p_nav->goal_distance_mm = p_input->distance_mm + 80.0f;
         return;
@@ -250,6 +262,18 @@ void robot_nav_step(robot_nav_t *p_nav, robot_input_t const *p_input,
             mission_bypass(p_nav, p_input);
             break;
         case ROBOT_RECOVER:
+            if ((p_input->distance_mm > p_nav->goal_distance_mm) ||
+                (8000U < p_input->now_ms - p_nav->state_since_ms))
+            {
+                p_nav->fault_request |= ROBOT_FAULT_LINE;
+                break;
+            }
+            if ((!p_nav->b_bypass_recovery) &&
+                ((1U == line_state) || (2U == line_state)))
+            {
+                mission_enter(p_nav, ROBOT_FOLLOW, p_input);
+                break;
+            }
             p_nav->left_mm_s = 80.0f;
             p_nav->right_mm_s = 80.0f;
             if ((2U == line_state) && (!p_nav->b_black_run))
@@ -266,11 +290,6 @@ void robot_nav_step(robot_nav_t *p_nav, robot_input_t const *p_input,
                     mission_enter(p_nav, ROBOT_TURN, p_input);
                     mission_turn(p_nav, p_input, 90.0f * p_nav->side);
                 }
-            }
-            if ((p_input->distance_mm > p_nav->goal_distance_mm) ||
-                (8000U < p_input->now_ms - p_nav->state_since_ms))
-            {
-                p_nav->fault_request |= ROBOT_FAULT_LINE;
             }
             break;
         case ROBOT_FINISHED:

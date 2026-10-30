@@ -1,0 +1,6 @@
+subsystem1/mission.c: exit 0
+subsystem1/protocol.c: exit 0
+subsystem2/motion.c: exit 0
+subsystem3/sensing.c: exit 0
+subsystem4/terrain.c: exit 0
+subsystem5/obstacle.c: exit 0

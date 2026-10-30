@@ -1,5 +1,10 @@
 # Validation record
 
+Latest revalidation: [30 October test report](../testing/revalidation-2026-10-30/REPORT.md).
+That run adds navigation regression tests, fixes two issues, and rebuilds all
+three profiles. Its image sizes supersede the original packaging sizes below.
+The bench qualification checklist below remains unexecuted.
+
 Performed in the cloud workspace on 30 October 2026. No robot, oscilloscope,
 logic analyser, WiFi access point or MQTT broker was attached.
 

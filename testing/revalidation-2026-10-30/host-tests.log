@@ -1,0 +1,12 @@
+barcode: 26 letters, 23 widths, both directions, stream + malformed frames passed
+mission: pending junction command, expiry, unknown letter, bypass, STOP/reset passed
+bypass: full route, heading restoration, pending freeze, false-line rejection, proximity and END passed
+bypass: full route, heading restoration, pending freeze, false-line rejection, proximity and END passed
+recovery: ordinary line reacquisition resumes without a bypass turn passed
+junction: isolated black noise does not consume a pending turn passed
+safety: STOP in every mode, separate RESET/START, proximity and timer wrap passed
+motion API: source ownership, reverse, right turn, bounds and timeout passed
+sensors: calibration gate, line, PID limits, terrain, scan rejection passed
+protocol: bounded packing, version, command duplicate/length rejection passed
+barcode oracle: 7280 independent jittered forward/reverse symbols; 10000 noise frames rejected
+protocol: 2000 independently decoded C packets and bad version/length cases passed
