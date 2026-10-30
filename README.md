@@ -79,6 +79,13 @@ status LED shows their mode; leave GP7's Grove signal disconnected. Full
 diagnostics also provides startup blink codes. See the [startup test report](testing/servo-startup-2026-10-30/REPORT.md)
 for the watchdog/init and PWM-order fixes and their verification limits.
 
+To progress from the isolated servo test to an integrated run, follow
+[FUNCTIONAL_RUN.md](docs/FUNCTIONAL_RUN.md). `tools/build.sh diagnostics-usb`
+builds `mtk3pico_smp0_usb_cdc_test.uf2` for direct Pico USB serial diagnostics
+without a UART adapter. Diagnostics now logs IR/encoder, raw IMU, range and
+barcode state, and runs its output task below control-task priorities. Physical
+USB enumeration and mission performance still need checking on the car.
+
 ## Layout and ownership
 
 | Folder | Responsibilities |

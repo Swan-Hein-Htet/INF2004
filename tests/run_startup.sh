@@ -12,7 +12,7 @@ for mode in 0 1 2; do
         app_program/subsystem3/sensing.c app_program/subsystem4/terrain.c \
         app_program/subsystem5/obstacle.c -lm -o "tests/build/startup_${mode}"
     if [ "$mode" -eq 0 ]; then
-        for scenario in healthy imu-fail mutex-fail safety-fail safety-start-fail task-fail pwm servo-range; do
+        for scenario in healthy imu-fail mutex-fail safety-fail safety-start-fail task-fail diagnostic-priority-fail pwm servo-range; do
             ASAN_OPTIONS=detect_leaks=0 "tests/build/startup_${mode}" "$scenario"
         done
     else

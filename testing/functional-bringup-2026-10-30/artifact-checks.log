@@ -1,0 +1,12 @@
+diagnostics-usb-build.log: zero compiler warnings/errors
+servo-hold-build.log: zero compiler warnings/errors
+network-build.log: zero compiler warnings/errors
+servo-off-build.log: zero compiler warnings/errors
+offline-build.log: zero compiler warnings/errors
+diagnostics-build.log: zero compiler warnings/errors
+mtk3pico_smp0_uart.uf2: 262 valid RP2040 UF2 blocks
+mtk3pico_smp0_uart_test.uf2: 265 valid RP2040 UF2 blocks
+mtk3pico_smp0_uart_test_servo_hold.uf2: 247 valid RP2040 UF2 blocks
+mtk3pico_smp0_uart_test_servo_off.uf2: 247 valid RP2040 UF2 blocks
+mtk3pico_smp0_uart_wifi_lwip_mqtt.uf2: 1314 valid RP2040 UF2 blocks
+mtk3pico_smp0_usb_cdc_test.uf2: 312 valid RP2040 UF2 blocks

@@ -1,5 +1,9 @@
 # Validation record
 
+Latest bring-up support: [functional bring-up report](../testing/functional-bringup-2026-10-30/REPORT.md).
+A direct-USB diagnostic profile and expanded readings were added. Tests/builds
+pass; no physical calibration or mission test has been performed in the cloud.
+
 Latest startup/servo investigation: [startup test report](../testing/servo-startup-2026-10-30/REPORT.md).
 It tests the real application/board startup against a host backend, corrects
 initialization failure/PWM ordering, and builds two isolated no-serial servo-test

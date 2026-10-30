@@ -1,0 +1,62 @@
+{
+  "starting_commit": "d6ee75f0685f72c79c18aa508070039dc56e04e9",
+  "date": "2026-10-30",
+  "sources": [
+    {
+      "path": "app_program/app_main.c",
+      "sha256": "b9f953314235a1a5f3e8883f44b7be946795e2c97f3ed5fc6fc5de33c4d4bc52"
+    },
+    {
+      "path": "app_program/robot_config.c",
+      "sha256": "e940c4351e7e92527d2c8f13937cdaeb781844ec59f6a8790884ce2d66f9be5b"
+    },
+    {
+      "path": "tools/build.sh",
+      "sha256": "af9c17e8423433d1a47a0580a30a6dd6cf02d35b111312c0cee33f6a45ae85f0"
+    },
+    {
+      "path": "tests/test_startup.c",
+      "sha256": "a1897a0890e34396fe87ed429335082a173bed855adbe1ffd2dfb96dd169eadc"
+    },
+    {
+      "path": "tests/run_startup.sh",
+      "sha256": "3f1a74dcdada71802527b5c3de72bf5401f6518e64e40bda8b714051fb35b022"
+    },
+    {
+      "path": "tests/stubs/tk/tkernel.h",
+      "sha256": "780596b971e2eab12726c590447d50a79fbb81d9cde6da7e7c11882e6eaab01e"
+    }
+  ],
+  "firmware": [
+    {
+      "path": "build_make/mtk3pico_smp0_uart.uf2",
+      "sha256": "e16db3f87ce8d77ceff4ddbd6082525eb6e7d3c700f9fdc6b575efb3e0422039",
+      "bytes": 134144
+    },
+    {
+      "path": "build_make/mtk3pico_smp0_uart_test.uf2",
+      "sha256": "94b9b5506535ef49e783449c25761e23596da86ece973a2fd6f8f63983ed89c1",
+      "bytes": 135680
+    },
+    {
+      "path": "build_make/mtk3pico_smp0_uart_test_servo_hold.uf2",
+      "sha256": "201b687029257a83304d0fbf0e9e05986b4322fce3c755033b996a7884e3745c",
+      "bytes": 126464
+    },
+    {
+      "path": "build_make/mtk3pico_smp0_uart_test_servo_off.uf2",
+      "sha256": "ff81b568d4dfe6af21bcdf940d4386484980c415b3fffc8f7f1ac729359c1132",
+      "bytes": 126464
+    },
+    {
+      "path": "build_make/mtk3pico_smp0_uart_wifi_lwip_mqtt.uf2",
+      "sha256": "06c6a0bb57e14c802456960406b5a885973fd9bf46d77ee050a212e92f9736b9",
+      "bytes": 672768
+    },
+    {
+      "path": "build_make/mtk3pico_smp0_usb_cdc_test.uf2",
+      "sha256": "920f369d533b82f4ee3232283cf331366a1241939c25e44fdf568476e830c178",
+      "bytes": 159744
+    }
+  ]
+}

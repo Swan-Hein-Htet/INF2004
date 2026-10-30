@@ -220,3 +220,11 @@ servo-off/hold isolation images and GP7 startup/mode blink codes were added.
 See [the no-serial procedure](SERVO_TROUBLESHOOTING.md). Battery voltage and the
 actual physical cause remain unconfirmed; neither software tests nor these
 images establish power quality or hardware qualification.
+
+The owner reported two GP7 blinks with a steady servo, described IR/tilt as
+looking fine, and requested a full functional run. They resupplied the Week 6
+review; its hash matches the earlier file. Page 19 leaves encoder scale as an
+open assumption and page 17 leaves body dimensions unmeasured. No numerical
+calibration was inferred or enabled from those assumptions. A direct-USB
+diagnostic profile and expanded readings were added to help collect real data;
+see [the functional-run guide](FUNCTIONAL_RUN.md) and its linked test report.

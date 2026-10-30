@@ -27,6 +27,9 @@ static bool g_reset_ok = true;
 static UINT g_delay_limit = 20U;
 static UINT g_delays = 0U;
 static UINT g_led_states[32];
+static bool g_sensor_log_seen = false;
+static PRI g_diagnostic_priority = 0;
+static bool g_fail_priority_change = false;
 static PRI g_fail_priority = 0;
 static PRI g_pending_priority = 0;
 static bool g_fail_start = false;
@@ -128,7 +131,30 @@ ER tk_sta_tsk(ID id, INT code)
 ID tk_cre_cyc(T_CCYC const *definition) { (void)definition; return 10; }
 ER tk_sta_cyc(ID id) { (void)id; return E_OK; }
 ER tk_def_int(UINT number, T_DINT const *definition) { (void)number; (void)definition; return E_OK; }
-INT tm_printf(UB const *format, ...) { (void)format; return 0; }
+ER tk_chg_pri(ID id, PRI priority)
+{
+    assert(TSK_SELF == id);
+    g_diagnostic_priority = priority;
+    return g_fail_priority_change ? E_SYS : E_OK;
+}
+INT tm_printf(UB const *format, ...)
+{
+    char line[512];
+    va_list args;
+    va_start(args, format);
+    (void)vsnprintf(line, sizeof(line), (char const *)format, args);
+    va_end(args);
+    if (NULL != strstr(line, "IMU_MG="))
+    {
+        assert(NULL != strstr(line, "IMU_OK="));
+        assert(NULL != strstr(line, "IMU_READY="));
+        assert(NULL != strstr(line, "PITCH_MRAD="));
+        assert(NULL != strstr(line, "RANGE_MM="));
+        assert(NULL != strstr(line, "RANGE_OK="));
+        g_sensor_log_seen = true;
+    }
+    return 0;
+}
 
 static void run_main_once(void)
 {
@@ -172,6 +198,7 @@ int main(int argc, char **argv)
     if (0 == strcmp(argv[1], "safety-fail")) { g_fail_priority = 2; }
     if (0 == strcmp(argv[1], "task-fail")) { g_fail_priority = 6; }
     g_fail_start = (0 == strcmp(argv[1], "safety-start-fail"));
+    g_fail_priority_change = (0 == strcmp(argv[1], "diagnostic-priority-fail"));
     g_reset_ok = (0 != strcmp(argv[1], "isolation-reset-fail"));
     run_main_once();
     if ((0 == strcmp(argv[1], "isolation")) || (!g_reset_ok))
@@ -195,7 +222,9 @@ int main(int argc, char **argv)
         puts("isolation: no sensor initialization or car tasks; watchdog fed; motor outputs zero; servo policy correct");
         return 0;
     }
-    check_blinks((!g_imu_ok || !g_mutex_ok) ? 3U : (((0 != g_fail_priority) || g_fail_start) ? 2U : 1U));
+    check_blinks((!g_imu_ok || !g_mutex_ok) ? 3U : (((0 != g_fail_priority) || g_fail_start || g_fail_priority_change) ? 2U : 1U));
+    assert(g_sensor_log_seen);
+    assert(11 == g_diagnostic_priority);
     if ((0 == strcmp(argv[1], "safety-fail")) || g_fail_start)
     {
         assert(!g_safety_started);
@@ -214,7 +243,7 @@ int main(int argc, char **argv)
         assert(before < g_watchdog_loads);
     }
     if (!g_mutex_ok) { assert(0U == g_locks); }
-    if ((!g_imu_ok) || (!g_mutex_ok) || (0 != g_fail_priority) || g_fail_start)
+    if ((!g_imu_ok) || (!g_mutex_ok) || (0 != g_fail_priority) || g_fail_start || g_fail_priority_change)
     {
         assert(0U == g_pwm_enabled[6]);
         assert(GPIO_MODE_OUT == g_pin_mode[12] && 0U == g_pin_level[12]);

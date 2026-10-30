@@ -19,6 +19,7 @@ typedef struct { UW hi; UW lo; } SYSTIM;
 #define E_OK 0
 #define E_SYS (-5)
 #define TMO_FEVR (-1)
+#define TSK_SELF 0
 #define TA_INHERIT 1U
 #define TA_HLNG 1U
 #define TA_RNG0 0U
@@ -37,4 +38,5 @@ ER tk_sta_tsk(ID id, INT code);
 ID tk_cre_cyc(T_CCYC const *definition);
 ER tk_sta_cyc(ID id);
 ER tk_def_int(UINT number, T_DINT const *definition);
+ER tk_chg_pri(ID id, PRI priority);
 #endif

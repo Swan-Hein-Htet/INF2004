@@ -35,6 +35,11 @@ static uint16_t g_run_generation = 0U;
 static float g_run_base_mm = 0.0f;
 static bool g_b_scan_requested = false;
 static bool g_b_scan_complete = false;
+#if APP_TEST
+static float g_accel_raw[3] = {0.0f, 0.0f, 0.0f};
+static bool g_b_accel_valid = false;
+static uint32_t g_barcode_count = 0U;
+#endif
 
 static void app_lock(void)
 {
@@ -296,6 +301,9 @@ static void app_line_task(INT code, void *p_context)
         {
             g_input.barcode = barcode;
             g_last_barcode = barcode;
+#if APP_TEST
+            ++g_barcode_count;
+#endif
         }
         g_bar_reject = reader.reject;
         app_unlock();
@@ -343,12 +351,21 @@ static void app_terrain_task(INT code, void *p_context)
             }
             app_lock();
             g_terrain = terrain;
+#if APP_TEST
+            memcpy(g_accel_raw, accel, sizeof(accel));
+            g_b_accel_valid = true;
+#endif
             g_input.pitch_rad = terrain.pitch_rad;
             g_input.b_pitch_valid = terrain.b_ready;
             app_unlock();
         }
         else
         {
+#if APP_TEST
+            app_lock();
+            g_b_accel_valid = false;
+            app_unlock();
+#endif
             ++failures;
             if (3U <= failures)
             {
@@ -699,6 +716,16 @@ INT usermain(void)
     {
         board_watchdog_start();
     }
+#if APP_TEST
+    /* Diagnostic formatting/UART output must not outrank the control tasks. */
+    if (E_OK != tk_chg_pri(TSK_SELF, 11))
+    {
+        robot_fault_set(ROBOT_FAULT_TIMING);
+        board_force_off();
+        board_servo_off();
+        status_pulses = 2U;
+    }
+#endif
     tm_printf((UB *)"Car boot: faults=%04x, calibration=%d startup=%u\n",
               robot_fault_get(), robot_config_valid(&g_robot_config), status_pulses);
     for (;;)
@@ -706,19 +733,47 @@ INT usermain(void)
 #if APP_TEST
         uint16_t raw[3] = {0U, 0U, 0U};
         uint16_t counts[2] = {0U, 0U};
+        float accel[3] = {0.0f, 0.0f, 0.0f};
+        uint16_t range = 0U;
+        bool b_range_valid = false;
+        bool b_imu_valid = false;
+        bool b_imu_ready = false;
+        int32_t pitch_mrad = 0;
+        uint16_t line_word = 0U;
+        char last_barcode = '-';
+        uint32_t barcode_count = 0U;
+        uint8_t bar_reject = 0U;
         if (0 < g_h_state)
         {
             app_lock();
             memcpy(raw, g_adc_raw, sizeof(raw));
             memcpy(counts, g_counts, sizeof(counts));
+            memcpy(accel, g_accel_raw, sizeof(accel));
+            range = g_input.front_mm;
+            b_range_valid = g_input.b_front_valid;
+            b_imu_valid = g_b_accel_valid;
+            b_imu_ready = g_terrain.b_ready;
+            line_word = g_input.line_word;
+            last_barcode = ('\0' == g_last_barcode) ? '-' : g_last_barcode;
+            barcode_count = g_barcode_count;
+            bar_reject = g_bar_reject;
+            pitch_mrad = (int32_t)robot_limit(g_terrain.pitch_rad * 1000.0f,
+                                            -3142.0f, 3142.0f);
             app_unlock();
         }
         board_status_led((status_step < status_pulses * 2U) &&
                          (0U == (status_step & 1U)));
         status_step = (status_step + 1U) % (status_pulses * 2U + 8U);
-        tm_printf((UB *)"ADC=%u,%u,%u ENC=%u,%u FAULT=%04x OVERRUN=%u\n",
+        tm_printf((UB *)"ADC=%u,%u,%u ENC=%u,%u FAULT=%04x OVERRUN=%u LINE=%u ERROR=%d LAST_BAR=%c BAR_COUNT=%u REJECT=%u\n",
                   raw[0], raw[1], raw[2], counts[0], counts[1],
-                  robot_fault_get(), g_overruns);
+                  robot_fault_get(), g_overruns, (line_word >> 8U) & 3U,
+                  (int32_t)(int8_t)(uint8_t)line_word, last_barcode,
+                  barcode_count, bar_reject);
+        tm_printf((UB *)"IMU_MG=%d,%d,%d IMU_OK=%u IMU_READY=%u PITCH_MRAD=%d RANGE_MM=%u RANGE_OK=%u\n",
+                  (int32_t)(accel[0] * 1000.0f), (int32_t)(accel[1] * 1000.0f),
+                  (int32_t)(accel[2] * 1000.0f), b_imu_valid ? 1U : 0U,
+                  b_imu_ready ? 1U : 0U, pitch_mrad, range,
+                  b_range_valid ? 1U : 0U);
         (void)tk_dly_tsk(200U);
 #else
         (void)tk_slp_tsk(TMO_FEVR);
