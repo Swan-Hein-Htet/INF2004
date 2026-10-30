@@ -1,8 +1,10 @@
 # Validation record
 
-Latest revalidation: [30 October test report](../testing/revalidation-2026-10-30/REPORT.md).
-That run adds navigation regression tests, fixes two issues, and rebuilds all
-three profiles. Its image sizes supersede the original packaging sizes below.
+Latest revalidation: [extended test report](../testing/extended-2026-10-30/REPORT.md).
+That run adds exhaustive/adversarial checks, a streaming barcode oracle and host
+MQTT callback tests, fixes three further issues, and rebuilds all three profiles.
+Its image sizes supersede the original packaging sizes below. The earlier
+[navigation revalidation](../testing/revalidation-2026-10-30/REPORT.md) is retained.
 The bench qualification checklist below remains unexecuted.
 
 Performed in the cloud workspace on 30 October 2026. No robot, oscilloscope,

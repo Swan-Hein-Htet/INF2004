@@ -1,0 +1,1 @@
+test_extended: tests/test_extended.c:196: test_critical_end: Assertion `ROBOT_FAULT == nav.mode' failed.

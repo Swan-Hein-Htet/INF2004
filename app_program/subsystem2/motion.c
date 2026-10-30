@@ -110,7 +110,8 @@ bool motion_begin(motion_job_t *p_job, uint16_t request, bool b_obstacle_owner,
         p_job->heading = yaw_deg;
         p_job->speed = (MOTION_SPEED == command) ? (float)argument : 150.0f;
         p_job->goal = position_mm;
-        p_job->b_active = (MOTION_STOP != command);
+        p_job->b_active = (MOTION_STOP != command) &&
+                          ((MOTION_SPEED != command) || (0U != argument));
         if ((MOTION_FORWARD == command) || (MOTION_BACKWARD == command))
         {
             p_job->goal += (MOTION_FORWARD == command) ? (float)argument

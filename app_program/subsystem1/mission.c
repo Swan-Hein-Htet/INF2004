@@ -199,6 +199,15 @@ void robot_nav_step(robot_nav_t *p_nav, robot_input_t const *p_input,
 
     p_nav->left_mm_s = 0.0f;
     p_nav->right_mm_s = 0.0f;
+    if ((!isfinite(p_input->distance_mm)) || (!isfinite(p_input->yaw_deg)))
+    {
+        p_nav->fault_request |= ROBOT_FAULT_ENCODER;
+        mission_enter(p_nav, ROBOT_FAULT, p_input);
+        p_nav->b_start = false;
+        p_nav->b_reset = false;
+        p_nav->b_end = false;
+        return;
+    }
     if (0U != (p_input->faults & ROBOT_CRITICAL_MASK))
     {
         mission_enter(p_nav, ROBOT_FAULT, p_input);
@@ -209,11 +218,13 @@ void robot_nav_step(robot_nav_t *p_nav, robot_input_t const *p_input,
         mission_enter(p_nav, ROBOT_IDLE, p_input);
     }
     p_nav->b_reset = false;
-    if (p_nav->b_end)
+    if (p_nav->b_end &&
+        (0U == (p_input->faults & ROBOT_CRITICAL_MASK)) &&
+        (0U == p_nav->fault_request))
     {
         mission_enter(p_nav, ROBOT_FINISHED, p_input);
-        p_nav->b_end = false;
     }
+    p_nav->b_end = false;
     switch (p_nav->mode)
     {
         case ROBOT_IDLE:

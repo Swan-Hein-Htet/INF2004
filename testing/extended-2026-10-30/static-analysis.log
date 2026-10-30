@@ -1,0 +1,7 @@
+app_program/subsystem1/mission.c: exit 0
+app_program/subsystem1/protocol.c: exit 0
+app_program/subsystem2/motion.c: exit 0
+app_program/subsystem3/sensing.c: exit 0
+app_program/subsystem4/terrain.c: exit 0
+app_program/subsystem5/obstacle.c: exit 0
+lib/liblwip/sysdepend/pico_rp2040/mqtt_utk.c: exit 0

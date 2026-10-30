@@ -194,3 +194,12 @@ The owner subsequently requested visual wiring instructions. WIRING.md now
 uses seven labelled diagrams instead of tables, with a printable A4-landscape
 PDF at `docs/wiring/WIRING.pdf` and SVG/PNG sheets beside it. The newly uploaded
 Datasheets.zip again matched the original hash. No firmware assignments changed.
+
+The owner requested another testing pass. The [extended test report](../testing/extended-2026-10-30/REPORT.md)
+records exhaustive motion/command tests, long randomized sensor/navigation runs,
+an independent streaming barcode oracle, and tests of the production MQTT callback
+unit using host stubs. Three further bugs were reproduced and fixed: non-finite
+odometry was not rejected by navigation; a zero-speed motion-library request
+could apply heading correction; END could mask a critical FAULT mode (while
+wheel targets remained zero). All profiles were rebuilt. These host tests do not
+establish physical performance, real RTOS integration or live network operation.

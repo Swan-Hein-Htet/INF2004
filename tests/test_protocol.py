@@ -41,4 +41,20 @@ with tempfile.TemporaryDirectory() as directory:
             pass
         else:
             raise AssertionError("invalid packet accepted")
-print("protocol: 2000 independently decoded C packets and bad version/length cases passed")
+    fields = (ctypes.c_uint32 * 24)(2, *([0] * 23))
+    native.robot_pack(buffer, 26, fields)
+    baseline = int.from_bytes(bytes(buffer), "little")
+    malformed = [(baseline | (1 << bit)).to_bytes(26, "little")
+                 for bit in range(202, 208)]
+    barcode_offset = sum(width for _, width, _ in protocol.FIELDS[:10])
+    malformed += [(baseline | (letter << barcode_offset)).to_bytes(26, "little")
+                  for letter in range(27, 32)]
+    for invalid in malformed:
+        try:
+            protocol.decode(invalid)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("reserved bits or invalid barcode accepted")
+print("protocol: 2000 independently decoded C packets; bad version/length, "
+      "all six reserved bits and all five invalid barcode values rejected")

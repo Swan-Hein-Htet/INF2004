@@ -1,0 +1,1 @@
+test_extended: tests/test_extended.c:169: test_zero_speed: Assertion `(0.0f == left) && (0.0f == right)' failed.

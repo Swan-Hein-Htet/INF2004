@@ -1,0 +1,80 @@
+{
+  "starting_commit": "fbb3099521fe08259fb85139941c7f874d32e7c3",
+  "date": "2026-10-30",
+  "sources": [
+    {
+      "path": "app_program/subsystem1/mission.c",
+      "sha256": "dcbeb6827723304d2ff2cd110aacf73b02ec7770819c216fc67f5b9d332c4b97"
+    },
+    {
+      "path": "app_program/subsystem2/motion.c",
+      "sha256": "152bc27934e3a5c5297b2c991933e526f92f0c271bfb005efe798b472861a7dd"
+    },
+    {
+      "path": "app_program/robot_config.c",
+      "sha256": "e940c4351e7e92527d2c8f13937cdaeb781844ec59f6a8790884ce2d66f9be5b"
+    },
+    {
+      "path": "tests/run.sh",
+      "sha256": "ef6af94faa088f459d059ba5989fe00ea9e50af2dfaccd8dd12349c57c72c5ff"
+    },
+    {
+      "path": "tests/test_extended.c",
+      "sha256": "18ee5919d8e6f0f42c036f0ba8834c15b38f03805d7abe5968bfc74152f0dff3"
+    },
+    {
+      "path": "tests/test_mqtt.c",
+      "sha256": "c3a373338dd5d7dbd82485e749d5d62cf09854560e97a8088fa8b9cb9d6c9315"
+    },
+    {
+      "path": "tests/test_barcode_stream.py",
+      "sha256": "22906325d890f9f0ea4fc144566599cb0ec7be6892b85a4b71b4fce54786b839"
+    },
+    {
+      "path": "tests/test_protocol.py",
+      "sha256": "9ac34e23dd9ff27381b7b8984fa2c1d835e6ced8fecef13134025540a48e36e9"
+    },
+    {
+      "path": "tools/check.sh",
+      "sha256": "0d7d9c2b476005ae76aca17b947bb1792b1a46745b4533f68efc42631556a99f"
+    },
+    {
+      "path": "tests/stubs/lwip/apps/mqtt.h",
+      "sha256": "5835af870283ffab901b36adb71451f718b253035fbff10f89b1f1a5ffb50520"
+    },
+    {
+      "path": "tests/stubs/lwip/ip_addr.h",
+      "sha256": "707cf7ca063518d1565b759630e09659bab8092094e3b79810e52bf8c7e25456"
+    },
+    {
+      "path": "tests/stubs/lwip/sys.h",
+      "sha256": "707cf7ca063518d1565b759630e09659bab8092094e3b79810e52bf8c7e25456"
+    },
+    {
+      "path": "tests/stubs/lwip/timeouts.h",
+      "sha256": "707cf7ca063518d1565b759630e09659bab8092094e3b79810e52bf8c7e25456"
+    },
+    {
+      "path": "tests/stubs/wifi_secrets.h",
+      "sha256": "11a2ef235706d681de8477b1ae1de2ab06b2e2b085af55fd1d3d50567a362695"
+    }
+  ],
+  "firmware": [
+    {
+      "path": "build_make/mtk3pico_smp0_uart.uf2",
+      "sha256": "e8542ae67d04bec3526a06b4baf8247d90e01c6272a12f683ddfc97fa63e2973",
+      "bytes": 133632
+    },
+    {
+      "path": "build_make/mtk3pico_smp0_uart_test.uf2",
+      "sha256": "32370f27b881d133c2941b900e44ebca78eed916d59c8a0a20bdb5549ba03ccb",
+      "bytes": 133632
+    },
+    {
+      "path": "build_make/mtk3pico_smp0_uart_wifi_lwip_mqtt.uf2",
+      "sha256": "1d423ceb7747ed4d5e42c88a3077ba9e1da6f1d0b2365e2ab4de6d3ba6ce22df",
+      "bytes": 672768
+    }
+  ],
+  "pico_sdk_commit": "a1438dff1d38bd9c65dbd693f0e5db4b9ae91779"
+}

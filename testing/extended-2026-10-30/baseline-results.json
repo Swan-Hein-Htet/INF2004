@@ -1,0 +1,9 @@
+{
+  "motion": 0,
+  "commands": 0,
+  "invalid_odometry": -6,
+  "zero_speed": -6,
+  "critical_end": -6,
+  "sensors": 0,
+  "navigation": 0
+}

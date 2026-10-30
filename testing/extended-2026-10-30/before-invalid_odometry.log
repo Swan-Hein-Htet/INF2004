@@ -1,0 +1,1 @@
+test_extended: tests/test_extended.c:149: test_invalid_odometry: Assertion `ROBOT_FAULT == nav.mode' failed.

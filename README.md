@@ -249,7 +249,8 @@ below. None is reported as passed from host simulation.
 The 16-bit request contains command[2:0], argument[14:3], owner[15]. Commands
 0–5 are forward mm, backward mm, left degrees, right degrees, set speed mm/s,
 and stop. Angles >180°, speed >350, malformed commands and an inactive owner
-are rejected. `motion_step` is nonblocking and writes signed wheel targets,
+are rejected. A zero-speed request completes with both wheel targets zero even
+if heading changes. `motion_step` is nonblocking and writes signed wheel targets,
 returning true on completion/timeout; its caller must distinguish a timeout by
 elapsed time. It requires **signed centre position**, not absolute total travel,
 for backwards motion. It belongs to the mission owner and is not a cross-task
@@ -262,7 +263,7 @@ encoder goals; it does not maintain the old two-producer motion queue.
 | --- | --- | --- |
 | 0 | STOP | GP21 or MQTT STOP; release GP21, explicit RESET, then separate START |
 | 1 | stall | target >50 mm/s with no encoder edges for >750 ms; inspect then reboot |
-| 2 | encoder | measured speed >1000 mm/s; inspect wiring/scale then reboot |
+| 2 | encoder | speed >1000 mm/s or non-finite odometry; inspect wiring/scale then reboot |
 | 3 | IMU | initialisation failure or three I2C read failures; inspect then reboot |
 | 4 | impact | acceleration norm >2.5 g; inspect then reboot |
 | 5 | range | invalid scan or three missed forward echoes; inspect then reboot |
@@ -282,6 +283,9 @@ Software cannot replace an independent power disconnect. Other faults are
 latched for investigation; RESET does not erase a still-unexplained hardware
 fault. The initial 750 ms stall threshold must be reduced if mechanical risk
 or stopping-distance measurements require it.
+Critical faults also take priority over END: the reported mode stays FAULT,
+rather than changing to FINISHED. Non-finite navigation distance/yaw requests
+an encoder fault, clears transient control requests and keeps wheel targets zero.
 
 ## MQTT binary schema
 
@@ -330,9 +334,10 @@ All three firmware profiles have been cross-compiled to ELF and UF2 in this
 workspace. Network compilation used placeholder settings; it is not a WiFi or
 broker connectivity test. See [VALIDATION.md](docs/VALIDATION.md) for actual
 results and mandatory bench evidence before autonomous use.
-The [30 October revalidation report](testing/revalidation-2026-10-30/REPORT.md)
-records the latest tests, two navigation fixes, rebuilt image sizes and remaining
-qualification gaps. The UF2s in `build_make/` include these fixes; the ZIP in
+The [extended test report](testing/extended-2026-10-30/REPORT.md) records the latest
+exhaustive/randomized tests, streaming barcode oracle, host MQTT callback tests,
+three further fixes and rebuilt images. The [earlier revalidation report](testing/revalidation-2026-10-30/REPORT.md)
+records the original two navigation fixes. The UF2s in `build_make/` include all these fixes; the ZIP in
 `recovered-artifacts/` remains the original, older recovery snapshot.
 
 ## Design and coding decisions
